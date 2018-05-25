@@ -7,11 +7,13 @@
     "email": "yourfriends@useiconic.com",
     "url": "https://useiconic.com/"
   },
-  "main": "dist/svg-injector.js",
-  "homepage": "https://github.com/iconic/SVGInjector",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "jsnext:main": "esm/index.js",
+  "homepage": "https://github.com/tanem/SVGInjector",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iconic/SVGInjector"
+    "url": "https://github.com/tanem/SVGInjector"
   },
   "keywords": [
     "SVG",
@@ -24,28 +26,34 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
     "babel-eslint": "^8.2.3",
+    "cross-env": "^5.1.6",
     "eslint": "^4.19.1",
     "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-flowtype": "^2.47.1",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.8.2",
-    "github-changes": "0.0.11",
     "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.59.3",
+    "rollup-plugin-babel": "^4.0.0-beta.2",
     "rollup-plugin-uglify": "^4.0.0",
     "uglify-js": "^2.4.13"
   },
   "scripts": {
-    "clean": "rimraf dist",
+    "build:commonjs": "cross-env BABEL_OUTPUT=commonjs babel src -d lib",
+    "build:esm": "babel src -d esm",
+    "build:umd": "rollup -c",
+    "clean": "rimraf dist esm lib",
+    "format": "prettier --write src/*.js",
+    "format:check": "prettier --list-different src/*.js",
     "lint": "eslint .",
-    "build": "rollup -c",
-    "changelog": "github-changes -o tanem -r SVGInjector -n ${npm_package_version} --use-commit-body --no-merges",
-    "changelog-post": "git add CHANGELOG.md && git commit -m 'Updated CHANGELOG'",
-    "release": "for TASK in (test build changelog changelog-post tag); do npm run $TASK; done",
-    "tag": "git tag ${npm_package_version} && git push --tags",
-    "test-version": "bash -c 'echo $npm_package_version'"
+    "postversion": "git push && git push --tags && npm publish --access=public",
+    "release": "npm version -m 'Release %s'",
+    "version": "for TASK in format:check lint clean build:commonjs build:esm build:umd; do npm run $TASK; done"
   }
 }
