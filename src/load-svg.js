@@ -46,12 +46,10 @@ const loadSvg = (url, callback) => {
           httpRequest.status === 200 ||
           (isLocal && httpRequest.status === 0)
         ) {
-          /* globals Document */
           if (httpRequest.responseXML instanceof Document) {
             // Cache it
             svgCache[url] = httpRequest.responseXML.documentElement
           }
-          /* globals -Document */
 
           // IE9 doesn't create a responseXML Document object from loaded SVG,
           // and throws a "DOM Exception: HIERARCHY_REQUEST_ERR (3)" error when injected.

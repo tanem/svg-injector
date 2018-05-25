@@ -104,7 +104,7 @@ const injectElement = (el, evalScripts, pngFallback, callback) => {
 
     // Copy all the data elements to the svg
     var imgData = [].filter.call(el.attributes, function(at) {
-      return /^data-\w[\w\-]*$/.test(at.name)
+      return /^data-\w[\w-]*$/.test(at.name)
     })
     Array.prototype.forEach.call(imgData, function(dataAttr) {
       if (dataAttr.name && dataAttr.value) {
@@ -149,6 +149,7 @@ const injectElement = (el, evalScripts, pngFallback, callback) => {
 
         // All of the properties that can reference this element type
         var referencingElements
+        // eslint-disable-next-line no-loop-func
         Array.prototype.forEach.call(properties, function(property) {
           // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
           referencingElements = svg.querySelectorAll(
@@ -230,7 +231,8 @@ const injectElement = (el, evalScripts, pngFallback, callback) => {
         //
         // Also, the code is evaluated in a closure and not in the global scope.
         // If you need to put something in global scope, use 'window'
-        new Function(scriptsToEval[l])(window) // jshint ignore:line
+        // eslint-disable-next-line no-new-func
+        new Function(scriptsToEval[l])(window)
       }
 
       // Remember we already ran scripts for this svg
