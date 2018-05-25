@@ -53,7 +53,7 @@
     "format:check": "prettier --list-different src/*.js",
     "lint": "eslint .",
     "postversion": "git push && git push --tags && npm publish --access=public",
-    "release": "npm version -m 'Release %s'",
+    "release": "npm version -m 'Release v%s'",
     "version": "for TASK in format:check lint clean build:commonjs build:esm build:umd; do npm run $TASK; done"
   }
 }
