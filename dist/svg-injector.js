@@ -23,8 +23,6 @@
           requestQueue[url][index](cloneSvg(svgCache[url]));
         }, 0);
       })(i);
-      /* jshint loopfunc: false */
-
     }
   };
 
@@ -63,13 +61,10 @@
 
 
           if (httpRequest.status === 200 || isLocal && httpRequest.status === 0) {
-            /* globals Document */
             if (httpRequest.responseXML instanceof Document) {
               // Cache it
               svgCache[url] = httpRequest.responseXML.documentElement;
-            }
-            /* globals -Document */
-            // IE9 doesn't create a responseXML Document object from loaded SVG,
+            } // IE9 doesn't create a responseXML Document object from loaded SVG,
             // and throws a "DOM Exception: HIERARCHY_REQUEST_ERR (3)" error when injected.
             //
             // So, we'll just create our own manually via the DOMParser using
@@ -208,7 +203,7 @@
 
 
       var imgData = [].filter.call(el.attributes, function (at) {
-        return /^data-\w[\w\-]*$/.test(at.name);
+        return /^data-\w[\w-]*$/.test(at.name);
       });
       Array.prototype.forEach.call(imgData, function (dataAttr) {
         if (dataAttr.name && dataAttr.value) {
@@ -248,7 +243,8 @@
           currentId = elementDefs[i].id;
           newId = currentId + '-' + injectCount; // All of the properties that can reference this element type
 
-          var referencingElements;
+          var referencingElements; // eslint-disable-next-line no-loop-func
+
           Array.prototype.forEach.call(properties, function (property) {
             // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
             referencingElements = svg.querySelectorAll('[' + property + '*="' + currentId + '"]');
@@ -305,7 +301,8 @@
           //
           // Also, the code is evaluated in a closure and not in the global scope.
           // If you need to put something in global scope, use 'window'
-          new Function(scriptsToEval[l])(window); // jshint ignore:line
+          // eslint-disable-next-line no-new-func
+          new Function(scriptsToEval[l])(window);
         } // Remember we already ran scripts for this svg
 
 

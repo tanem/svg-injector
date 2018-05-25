@@ -50,8 +50,11 @@
     "build:esm": "babel src -d esm",
     "build:umd": "rollup -c",
     "clean": "rimraf dist esm lib",
+    "format": "prettier --write src/*.js",
+    "format:check": "prettier --list-different src/*.js",
     "lint": "eslint .",
-    "release": "for TASK in (test build tag); do npm run $TASK; done",
-    "tag": "git tag ${npm_package_version} && git push --tags"
+    "postversion": "git push && git push --tags && npm publish --access=public",
+    "release": "npm version -m 'Release %s'",
+    "version": "for TASK in format:check lint clean build:commonjs build:esm build:umd; do npm run $TASK; done"
   }
 }
