@@ -4,7 +4,7 @@ import { uglify } from 'rollup-plugin-uglify'
 const devConfig = {
   input: 'src/index.js',
   output: {
-    file: 'dist/svg-injector.js',
+    file: 'umd/svg-injector.js',
     format: 'umd',
     name: 'SVGInjector'
   },
@@ -14,7 +14,7 @@ const devConfig = {
 const prodConfig = {
   input: 'src/index.js',
   output: {
-    file: 'dist/svg-injector.min.js',
+    file: 'umd/svg-injector.min.js',
     format: 'umd',
     name: 'SVGInjector'
   },

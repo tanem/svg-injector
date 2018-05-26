@@ -24,6 +24,11 @@
     "html",
     "DOM"
   ],
+  "files": [
+    "esm",
+    "lib",
+    "umd"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.49",
@@ -48,7 +53,7 @@
     "build:commonjs": "cross-env BABEL_OUTPUT=commonjs babel src -d lib",
     "build:esm": "babel src -d esm",
     "build:umd": "rollup -c",
-    "clean": "rimraf dist esm lib",
+    "clean": "rimraf esm lib umd",
     "format": "prettier --write src/*.js",
     "format:check": "prettier --list-different src/*.js",
     "lint": "eslint .",
