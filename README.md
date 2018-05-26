@@ -1,30 +1,31 @@
-SVGInjector
-=========
+# SVGInjector
 
 A fast, caching, dynamic inline SVG DOM injection library. Developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
 
 ## Why?
-There are a number of ways to use SVG on a page (`object`, `embed`, `iframe`, `img`, CSS `background-image`) but to unlock the full potential of SVG, including full element-level CSS styling and evaluation of embedded JavaScript, the full SVG markup must be included directly in the DOM. 
+
+There are a number of ways to use SVG on a page (`object`, `embed`, `iframe`, `img`, CSS `background-image`) but to unlock the full potential of SVG, including full element-level CSS styling and evaluation of embedded JavaScript, the full SVG markup must be included directly in the DOM.
 
 Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's idea of good time, so **SVGInjector** lets you work with simple `img` tag elements (or other tag of your choosing) and does the heavy lifting of swapping in the SVG markup inline for you.
 
 ## How?
+
 * Any DOM element, or array of elements, passed to **SVGInjector** with an SVG file `src` or `data-src` attribute will be replaced with the full SVG markup inline. The async loaded SVG is also cached so multiple uses of an SVG only requires a single server request.
 
 * Any embedded JavaScript in the SVG will optionally be extracted, cached and evaluated.
 
 > Development tip: The dynamic injection process uses AJAX calls to load SVG. If you are developing locally without running a local webserver, be aware that default browser security settings may [block these calls](http://wiki.fluidproject.org/display/fluid/Browser+settings+to+support+local+Ajax+calls).
 
-
 # Documentation
 
 ## Install
 
 > **SVGInjector** is compatible with:
-  * [CommonJS](http://commonjs.org/) via `module.exports` for use with [Browserify](http://browserify.org/) or [Node](http://nodejs.org/)/[PhantomJS](http://phantomjs.org/)
-  * [AMD API](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) usage with [RequireJS](http://requirejs.org/)
-  * Plain ol' JavaScript via creation of a global function
-  
+
+* [CommonJS](http://commonjs.org/) via `module.exports` for use with [Browserify](http://browserify.org/) or [Node](http://nodejs.org/)/[PhantomJS](http://phantomjs.org/)
+* [AMD API](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) usage with [RequireJS](http://requirejs.org/)
+* Plain ol' JavaScript via creation of a global function
+
 ### npm
 
     npm install svg-injector
@@ -32,11 +33,10 @@ Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's ide
 ### Bower
 
     bower install svg-injector
-    
+
 ### Manually
 
-Download the [dist/svg-injector.min.js](https://github.com/iconic/SVGInjector/blob/master/dist/svg-injector.min.js) file from this repository and add it to your project.
-
+Download the [umd/svg-injector.min.js](https://github.com/iconic/SVGInjector/blob/master/umd/svg-injector.min.js) file from this repository and add it to your project.
 
 ## Usage
 
@@ -69,13 +69,12 @@ Inject 'em.
 
 The `img` tags have now been replaced with the full SVG markup.
 
-
 ### Configuration
 
 In addition to passing elements to inject, an options object and callback function can optionally be defined.
 
 ```js
-SVGInjector(elements, options, callback);
+SVGInjector(elements, options, callback)
 ```
 
 #### `elements`
@@ -123,23 +122,23 @@ A function to call once all the requested SVG elements have been injected. Recei
 
 ```js
 // Elements to inject
-var mySVGsToInject = document.querySelectorAll('img.inject-me');
+var mySVGsToInject = document.querySelectorAll('img.inject-me')
 
 // Options
 var injectorOptions = {
   evalScripts: 'once',
   pngFallback: 'assets/png',
-  each: function (svg) {
+  each: function(svg) {
     // Callback after each SVG is injected
-    console.log('SVG injected: ' + svg.getAttribute('id'));
+    console.log('SVG injected: ' + svg.getAttribute('id'))
   }
-};
+}
 
 // Trigger the injection
-SVGInjector(mySVGsToInject, injectorOptions, function (totalSVGsInjected) {
+SVGInjector(mySVGsToInject, injectorOptions, function(totalSVGsInjected) {
   // Callback after all SVGs are injected
-  console.log('We injected ' + totalSVGsInjected + ' SVG(s)!');
-});
+  console.log('We injected ' + totalSVGsInjected + ' SVG(s)!')
+})
 ```
 
 ### Per-element PNG fallback
@@ -153,11 +152,10 @@ See [examples/fallbacks](https://github.com/iconic/SVGInjector/tree/master/examp
   .thumb-green {fill: #A6A93C;}
 </style>
 <img class="thumb-green inject-me" data-src="svg/thumb-up.svg" data-fallback="png/thumb-up-green.png">
-
 ```
 
-
 # Licence
+
 The MIT License (MIT)
 
 Copyright (c) 2014-2015 Waybury

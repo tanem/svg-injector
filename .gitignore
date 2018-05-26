@@ -1,7 +1,7 @@
 *.log
 .DS_Store
-dist
 esm
 lib
 node_modules
 npm-debug.log
+umd
