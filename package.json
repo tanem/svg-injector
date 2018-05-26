@@ -34,7 +34,9 @@
     "@babel/cli": "^7.0.0-beta.49",
     "@babel/core": "^7.0.0-beta.49",
     "@babel/preset-env": "^7.0.0-beta.49",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
+    "babel-jest": "^23.0.0",
     "cross-env": "^5.1.6",
     "eslint": "^4.19.1",
     "eslint-config-react-app": "^2.1.0",
@@ -42,11 +44,13 @@
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.8.2",
+    "jest": "^23.0.0",
     "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.59.3",
     "rollup-plugin-babel": "^4.0.0-beta.2",
     "rollup-plugin-uglify": "^4.0.0",
+    "sinon": "^5.0.10",
     "uglify-js": "^2.4.13"
   },
   "scripts": {
@@ -59,6 +63,8 @@
     "lint": "eslint .",
     "postversion": "git push && git push --tags && npm publish --access=public",
     "release": "npm version -m 'Release v%s'",
+    "test": "for TASK in test:commonjs; do npm run $TASK; done",
+    "test:commonjs": "cross-env BABEL_OUTPUT=commonjs jest --config scripts/jest/config.commonjs.js",
     "version": "for TASK in format:check lint clean build:commonjs build:esm build:umd; do npm run $TASK; done"
   }
 }
