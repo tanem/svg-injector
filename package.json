@@ -10,10 +10,10 @@
   "main": "lib/index.js",
   "module": "esm/index.js",
   "jsnext:main": "esm/index.js",
-  "homepage": "https://github.com/tanem/SVGInjector",
+  "homepage": "https://github.com/tanem/svg-injector",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tanem/SVGInjector"
+    "url": "https://github.com/tanem/svg-injector"
   },
   "keywords": [
     "SVG",
