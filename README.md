@@ -1,4 +1,4 @@
-# SVGInjector
+# svg-injector
 
 [![build status](https://img.shields.io/travis/tanem/svg-injector/master.svg?style=flat-square)](https://travis-ci.org/tanem/svg-injector)
 [![coverage status](https://img.shields.io/codecov/c/github/tanem/svg-injector.svg?style=flat-square)](https://codecov.io/gh/tanem/svg-injector)
