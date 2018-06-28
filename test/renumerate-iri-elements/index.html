@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SVGInjector Test: Renumerate IRI Elements</title>
+  <style>
+    body {
+      margin: 50px;
+    }
+
+    .test-icon {
+      width: 64px;
+      height: 64px;
+      display: block;
+      float: left;
+      margin-right: 25px;
+    }
+
+    section {
+      clear: both;
+      margin: 25px 0;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section>
+    <p>renumerate iri elements</p>
+    <img id="renumerate-one" class="renumerate test-icon" data-src="assets/svg/fill.svg">
+    <img id="renumerate-two" class="renumerate test-icon" data-src="assets/svg/fill.svg">
+  </section>
+
+  <section>
+    <p>don't renumerate iri elements</p>
+    <img id="renumerate-three" class="dont-renumerate test-icon" data-src="assets/svg/fill.svg">
+    <img id="renumerate-four" class="dont-renumerate test-icon" data-src="assets/svg/fill.svg">
+  </section>
+
+  <script src="../../umd/svg-injector.min.js"></script>
+  <script>
+    SVGInjector(document.querySelectorAll('img.renumerate'));
+    SVGInjector(document.querySelectorAll('img.dont-renumerate'), {
+      renumerateIRIElements: false
+    });
+  </script>
+</body>
+
+</html>
