@@ -75,7 +75,8 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
 {
   evalScripts: [always|once|never],
   pngFallback: [PNG directory],
-  each: [function]
+  each: [function],
+  renumerateIRIElements: [true|false]
 }
 ```
 
@@ -96,6 +97,13 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
 * `each(svg)` - function
 
   A function to call after each SVG is injected. Receives the newly injected SVG DOM element as a parameter.
+
+* `renumerateIRIElements` - boolean
+
+  Should we renumerate all of the SVG IRI addressable elements?
+
+  * `true` - [default] Renumerate.
+  * `false` - Don't renumerate.
 
 **`callback`**
 

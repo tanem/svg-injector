@@ -9,7 +9,13 @@ const ranScripts = {} // Script running status
 let injectCount = 0
 
 // Inject a single element
-const injectElement = (el, evalScripts, pngFallback, callback) => {
+const injectElement = (
+  el,
+  evalScripts,
+  pngFallback,
+  renumerateIRIElements,
+  callback
+) => {
   const hasSvgSupport = document.implementation.hasFeature(
     'http://www.w3.org/TR/SVG11/feature#BasicStructure',
     '1.1'
@@ -112,75 +118,84 @@ const injectElement = (el, evalScripts, pngFallback, callback) => {
       }
     })
 
-    // Make sure any internally referenced clipPath ids and their
-    // clip-path references are unique.
-    //
-    // This addresses the issue of having multiple instances of the
-    // same SVG on a page and only the first clipPath id is referenced.
-    //
-    // Browsers often shortcut the SVG Spec and don't use clipPaths
-    // contained in parent elements that are hidden, so if you hide the first
-    // SVG instance on the page, then all other instances lose their clipping.
-    // Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=376027
+    if (renumerateIRIElements) {
+      // Make sure any internally referenced clipPath ids and their
+      // clip-path references are unique.
+      //
+      // This addresses the issue of having multiple instances of the
+      // same SVG on a page and only the first clipPath id is referenced.
+      //
+      // Browsers often shortcut the SVG Spec and don't use clipPaths
+      // contained in parent elements that are hidden, so if you hide the first
+      // SVG instance on the page, then all other instances lose their clipping.
+      // Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=376027
 
-    // Handle all defs elements that have iri capable attributes as defined by w3c: http://www.w3.org/TR/SVG/linking.html#processingIRI
-    // Mapping IRI addressable elements to the properties that can reference them:
-    var iriElementsAndProperties = {
-      clipPath: ['clip-path'],
-      'color-profile': ['color-profile'],
-      cursor: ['cursor'],
-      filter: ['filter'],
-      linearGradient: ['fill', 'stroke'],
-      marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
-      mask: ['mask'],
-      pattern: ['fill', 'stroke'],
-      radialGradient: ['fill', 'stroke']
-    }
-
-    var element, elementDefs, properties, currentId, newId
-    Object.keys(iriElementsAndProperties).forEach(function(key) {
-      element = key
-      properties = iriElementsAndProperties[key]
-
-      elementDefs = svg.querySelectorAll('defs ' + element + '[id]')
-      for (var i = 0, elementsLen = elementDefs.length; i < elementsLen; i++) {
-        currentId = elementDefs[i].id
-        newId = currentId + '-' + injectCount
-
-        // All of the properties that can reference this element type
-        var referencingElements
-        // eslint-disable-next-line no-loop-func
-        Array.prototype.forEach.call(properties, function(property) {
-          // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
-          referencingElements = svg.querySelectorAll(
-            '[' + property + '*="' + currentId + '"]'
-          )
-          for (
-            var j = 0, referencingElementLen = referencingElements.length;
-            j < referencingElementLen;
-            j++
-          ) {
-            referencingElements[j].setAttribute(property, 'url(#' + newId + ')')
-          }
-        })
-
-        var allLinks = svg.querySelectorAll('[*|href]')
-        var links = []
-        for (var k = 0, allLinksLen = allLinks.length; k < allLinksLen; k++) {
-          if (
-            allLinks[k].getAttributeNS(xlinkNamespace, 'href').toString() ===
-            '#' + elementDefs[i].id
-          ) {
-            links.push(allLinks[k])
-          }
-        }
-        for (var l = 0, linksLen = links.length; l < linksLen; l++) {
-          links[l].setAttributeNS(xlinkNamespace, 'href', '#' + newId)
-        }
-
-        elementDefs[i].id = newId
+      // Handle all defs elements that have iri capable attributes as defined by w3c: http://www.w3.org/TR/SVG/linking.html#processingIRI
+      // Mapping IRI addressable elements to the properties that can reference them:
+      var iriElementsAndProperties = {
+        clipPath: ['clip-path'],
+        'color-profile': ['color-profile'],
+        cursor: ['cursor'],
+        filter: ['filter'],
+        linearGradient: ['fill', 'stroke'],
+        marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
+        mask: ['mask'],
+        pattern: ['fill', 'stroke'],
+        radialGradient: ['fill', 'stroke']
       }
-    })
+
+      var element, elementDefs, properties, currentId, newId
+      Object.keys(iriElementsAndProperties).forEach(function(key) {
+        element = key
+        properties = iriElementsAndProperties[key]
+
+        elementDefs = svg.querySelectorAll('defs ' + element + '[id]')
+        for (
+          var i = 0, elementsLen = elementDefs.length;
+          i < elementsLen;
+          i++
+        ) {
+          currentId = elementDefs[i].id
+          newId = currentId + '-' + injectCount
+
+          // All of the properties that can reference this element type
+          var referencingElements
+          // eslint-disable-next-line no-loop-func
+          Array.prototype.forEach.call(properties, function(property) {
+            // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
+            referencingElements = svg.querySelectorAll(
+              '[' + property + '*="' + currentId + '"]'
+            )
+            for (
+              var j = 0, referencingElementLen = referencingElements.length;
+              j < referencingElementLen;
+              j++
+            ) {
+              referencingElements[j].setAttribute(
+                property,
+                'url(#' + newId + ')'
+              )
+            }
+          })
+
+          var allLinks = svg.querySelectorAll('[*|href]')
+          var links = []
+          for (var k = 0, allLinksLen = allLinks.length; k < allLinksLen; k++) {
+            if (
+              allLinks[k].getAttributeNS(xlinkNamespace, 'href').toString() ===
+              '#' + elementDefs[i].id
+            ) {
+              links.push(allLinks[k])
+            }
+          }
+          for (var l = 0, linksLen = links.length; l < linksLen; l++) {
+            links[l].setAttributeNS(xlinkNamespace, 'href', '#' + newId)
+          }
+
+          elementDefs[i].id = newId
+        }
+      })
+    }
 
     // Remove any unwanted/invalid namespaces that might have been added by SVG editing tools
     svg.removeAttribute('xmlns:a')
