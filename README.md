@@ -1,5 +1,9 @@
 # svg-injector
 
+[![npm version](https://img.shields.io/npm/v/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
+[![npm downloads](https://img.shields.io/npm/dm/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/umd/svg-injector.min.js?compression=gzip&label=gzip%20size&style=flat-square)](https://unpkg.com/@tanem/svg-injector/umd/)
+
 > A fast, caching, dynamic inline SVG DOM injection library.
 
 This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
