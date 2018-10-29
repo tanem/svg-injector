@@ -98,9 +98,9 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
 
   For additional flexibility, since you might be using a single SVG styled in multiple ways, you can also define per-element fallbacks by adding a `data-fallback` or `data-png` attribute to your `img` tags to define a unique PNG for each context. Refer to the [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v) example.
 
-* `each(svg)` - function
+* `each(error, svg)` - function
 
-  A function to call after each SVG is injected. Receives the newly injected SVG DOM element as a parameter.
+  A function to call after each SVG is injected. If an error occurred it will be passed as the first parameter. Otherwise the first parameter will be null, and the second will be the newly injected SVG DOM element.
 
 * `renumerateIRIElements` - boolean
 
@@ -128,9 +128,10 @@ var mySVGsToInject = document.querySelectorAll('img.inject-me')
 var injectorOptions = {
   evalScripts: 'once',
   pngFallback: 'assets/png',
-  each: function(svg) {
-    // Callback after each SVG is injected
-    console.log('SVG injected: ' + svg.getAttribute('id'))
+  each: function(error, svg) {
+    if (!error) {
+      console.log('SVG injected: ' + svg.getAttribute('id'))
+    }
   }
 }
 
