@@ -30,16 +30,13 @@ const loadSvg = (url, callback) => {
       if (httpRequest.readyState === 4) {
         // Handle status
         if (httpRequest.status === 404 || httpRequest.responseXML === null) {
-          callback(new Error('Unable to load SVG file: ' + url))
-
-          if (isLocal)
-            callback(
-              new Error(
-                'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
-              )
+          callback(
+            new Error(
+              isLocal
+                ? 'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
+                : 'Unable to load SVG file: ' + url
             )
-
-          callback(new Error())
+          )
           return false
         }
 
