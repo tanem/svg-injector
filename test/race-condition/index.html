@@ -35,9 +35,9 @@
     var x = 0;
     while (x < 1000) {
       SVGInjector(document.querySelectorAll('img.inject-me'), {
-        each: function (svg) {
+        each: function (error, svg) {
           // Callback after each SVG is injected
-          if (svg) {
+          if (!error) {
             console.log('[Stress Test] SVG injected: ' + svg.getAttribute('id'));
             svg.setAttribute('style', 'fill:plum');
           }
@@ -54,9 +54,9 @@
     // Trigger an injection.
     // Inject all the SVGs a first time... should make them Plum colored
     SVGInjector(document.querySelectorAll('img.inject-me-once, img.inject-me-twice, img.inject-me-three-times'), {
-      each: function (svg) {
+      each: function (error, svg) {
         // Callback after each SVG is injected
-        if (svg) {
+        if (!error) {
           console.log('[One] SVG injected: ' + svg.getAttribute('id'));
           svg.setAttribute('style', 'fill:plum');
         }
@@ -69,9 +69,9 @@
     // Trigger another injection of the second and third SVG in attempt to cause a race condition
     // These should not trigger since ideally the previous injection already did it (or is doing it)
     SVGInjector(document.querySelectorAll('img.inject-me-twice, img.inject-me-three-times'), {
-      each: function (svg) {
+      each: function (error, svg) {
         // Callback after each SVG is injected
-        if (svg) {
+        if (!error) {
           console.log('[Two] SVG injected: ' + svg.getAttribute('id'));
           svg.setAttribute('style', 'fill:wheat');
         }
@@ -84,9 +84,9 @@
     // Trigger yet another injection of the third SVG in attempt to cause a race condition.
     // ...this too should be skipped
     SVGInjector(document.querySelectorAll('img.inject-me-three-times'), {
-      each: function (svg) {
+      each: function (error, svg) {
         // Callback after each SVG is injected
-        if (svg) {
+        if (!error) {
           console.log('[Three] SVG injected: ' + svg.getAttribute('id'));
           svg.setAttribute('style', 'fill:maroon');
         }
