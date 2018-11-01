@@ -83,9 +83,9 @@
   <script>
     console.time('inject-performance');
     SVGInjector(document.querySelectorAll('img.inject-me'), {
-      each: function (svg) {
+      each: function (error, svg) {
         // Callback after each SVG is injected
-        if (svg) {
+        if (!error) {
           console.log('[IRI References] SVG injected: ' + svg.getAttribute('id'));
         }
       }
