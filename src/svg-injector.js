@@ -12,10 +12,10 @@ const SVGInjector = (
   {
     evalScripts = 'always',
     pngFallback = false,
-    each: eachCallback,
+    each: eachCallback = () => undefined,
     renumerateIRIElements = true
   } = {},
-  done
+  done = () => undefined
 ) => {
   if (elements.length !== undefined) {
     let elementsLoaded = 0
@@ -25,10 +25,17 @@ const SVGInjector = (
         evalScripts,
         pngFallback,
         renumerateIRIElements,
-        svg => {
-          if (eachCallback && typeof eachCallback === 'function')
-            eachCallback(svg)
-          if (done && elements.length === ++elementsLoaded) done(elementsLoaded)
+        (error, svg) => {
+          if (error) {
+            eachCallback(error)
+            return
+          }
+
+          eachCallback(svg)
+
+          if (elements.length === ++elementsLoaded) {
+            done(elementsLoaded)
+          }
         }
       )
     })
@@ -39,15 +46,21 @@ const SVGInjector = (
         evalScripts,
         pngFallback,
         renumerateIRIElements,
-        svg => {
-          if (eachCallback && typeof eachCallback === 'function')
-            eachCallback(svg)
-          if (done) done(1)
+        (error, svg) => {
+          if (error) {
+            eachCallback(error)
+            return
+          }
+
+          eachCallback(svg)
+
+          done(1)
+
           elements = null
         }
       )
     } else {
-      if (done) done(0)
+      done(0)
     }
   }
 }

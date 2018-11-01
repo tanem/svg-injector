@@ -8,14 +8,14 @@ const loadSvg = (url, callback) => {
   if (svgCache[url] !== undefined) {
     if (svgCache[url] instanceof SVGSVGElement) {
       // We already have it in cache, so use it
-      callback(cloneSvg(svgCache[url]))
+      callback(null, cloneSvg(svgCache[url]))
     } else {
       // We don't have it in cache yet, but we are loading it, so queue this request
       queueRequest(url, callback)
     }
   } else {
     if (!window.XMLHttpRequest) {
-      callback('Browser does not support XMLHttpRequest')
+      callback(new Error('Browser does not support XMLHttpRequest'))
       return false
     }
 
@@ -30,14 +30,16 @@ const loadSvg = (url, callback) => {
       if (httpRequest.readyState === 4) {
         // Handle status
         if (httpRequest.status === 404 || httpRequest.responseXML === null) {
-          callback('Unable to load SVG file: ' + url)
+          callback(new Error('Unable to load SVG file: ' + url))
 
           if (isLocal)
             callback(
-              'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
+              new Error(
+                'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
+              )
             )
 
-          callback()
+          callback(new Error())
           return false
         }
 
@@ -71,7 +73,7 @@ const loadSvg = (url, callback) => {
             }
 
             if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length) {
-              callback('Unable to parse SVG file: ' + url)
+              callback(new Error('Unable to parse SVG file: ' + url))
               return false
             } else {
               // Cache it
@@ -83,10 +85,12 @@ const loadSvg = (url, callback) => {
           processRequestQueue(url)
         } else {
           callback(
-            'There was a problem injecting the SVG: ' +
-              httpRequest.status +
-              ' ' +
-              httpRequest.statusText
+            new Error(
+              'There was a problem injecting the SVG: ' +
+                httpRequest.status +
+                ' ' +
+                httpRequest.statusText
+            )
           )
           return false
         }

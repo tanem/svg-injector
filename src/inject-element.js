@@ -24,7 +24,11 @@ const injectElement = (
 
   // We can only inject SVG.
   if (!/\.svg/i.test(imgUrl)) {
-    callback('Attempted to inject a file with a non-svg extension: ' + imgUrl)
+    callback(
+      new Error(
+        'Attempted to inject a file with a non-svg extension: ' + imgUrl
+      )
+    )
     return
   }
 
@@ -38,7 +42,7 @@ const injectElement = (
     // Per-element specific PNG fallback defined, so use that
     if (perElementFallback) {
       el.setAttribute('src', perElementFallback)
-      callback(null)
+      callback()
     } else if (pngFallback) {
       // Global PNG fallback directoriy defined, use the same-named PNG
       el.setAttribute(
@@ -50,11 +54,13 @@ const injectElement = (
             .pop()
             .replace('.svg', '.png')
       )
-      callback(null)
+      callback()
     } else {
       // um...
       callback(
-        'This browser does not support SVG and no PNG fallback was defined.'
+        new Error(
+          'This browser does not support SVG and no PNG fallback was defined.'
+        )
       )
     }
 
@@ -77,9 +83,9 @@ const injectElement = (
   el.setAttribute('src', '')
 
   // Load it up
-  loadSvg(imgUrl, function(svg) {
-    if (typeof svg === 'undefined' || typeof svg === 'string') {
-      callback(svg)
+  loadSvg(imgUrl, function(error, svg) {
+    if (error) {
+      callback(error)
       return false
     }
 
@@ -278,7 +284,7 @@ const injectElement = (
     // Increment the injected count
     injectCount++
 
-    callback(svg)
+    callback(null, svg)
   })
 }
 

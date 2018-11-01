@@ -13,7 +13,7 @@ export const processRequestQueue = url => {
     // Make these calls async so we avoid blocking the page/renderer
     ;(function(index) {
       setTimeout(function() {
-        requestQueue[url][index](cloneSvg(svgCache[url]))
+        requestQueue[url][index](null, cloneSvg(svgCache[url]))
       }, 0)
     })(i)
   }
