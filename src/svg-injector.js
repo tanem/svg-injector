@@ -1,4 +1,5 @@
 import injectElement from './inject-element'
+import { callbackify } from 'util';
 
 /**
  * :NOTE: We are using get/setAttribute with SVG because the SVG DOM spec
@@ -26,12 +27,7 @@ const SVGInjector = (
         pngFallback,
         renumerateIRIElements,
         (error, svg) => {
-          if (error) {
-            eachCallback(error)
-            return
-          }
-
-          eachCallback(svg)
+          eachCallback(error, svg);
 
           if (elements.length === ++elementsLoaded) {
             done(elementsLoaded)
@@ -47,15 +43,8 @@ const SVGInjector = (
         pngFallback,
         renumerateIRIElements,
         (error, svg) => {
-          if (error) {
-            eachCallback(error)
-            return
-          }
-
-          eachCallback(svg)
-
+          eachCallback(error, svg)
           done(1)
-
           elements = null
         }
       )
