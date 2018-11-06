@@ -1,5 +1,5 @@
-import cloneSvg from './clone-svg'
-import svgCache from './svg-cache'
+import cloneSvg from './clone-svg.js'
+import svgCache from './svg-cache.js'
 
 const requestQueue = []
 
