@@ -1,3 +1,3 @@
-import SVGInjector from './svg-injector'
+import SVGInjector from './svg-injector.js'
 
 export default SVGInjector
