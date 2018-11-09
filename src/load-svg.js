@@ -30,13 +30,11 @@ const loadSvg = (url, callback) => {
       if (httpRequest.readyState === 4) {
         // Handle status
         if (httpRequest.status === 404 || httpRequest.responseXML === null) {
-          callback(
-            new Error(
-              isLocal
-                ? 'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
-                : 'Unable to load SVG file: ' + url
-            )
-          )
+          processRequestQueue(url, new Error(
+            isLocal
+              ? 'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
+              : 'Unable to load SVG file: ' + url
+          ))
           return false
         }
 
@@ -70,7 +68,7 @@ const loadSvg = (url, callback) => {
             }
 
             if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length) {
-              callback(new Error('Unable to parse SVG file: ' + url))
+              processRequestQueue(url, new Error('Unable to parse SVG file: ' + url))
               return false
             } else {
               // Cache it
@@ -81,14 +79,12 @@ const loadSvg = (url, callback) => {
           // We've loaded a new asset, so process any requests waiting for it
           processRequestQueue(url)
         } else {
-          callback(
-            new Error(
-              'There was a problem injecting the SVG: ' +
-                httpRequest.status +
-                ' ' +
-                httpRequest.statusText
-            )
-          )
+          processRequestQueue(url, new Error(
+            'There was a problem injecting the SVG: ' +
+              httpRequest.status +
+              ' ' +
+              httpRequest.statusText
+          ))
           return false
         }
       }

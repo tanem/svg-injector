@@ -11,10 +11,12 @@
     import SVGInjector from '../../esm/index.js';
     SVGInjector(document.querySelectorAll('img.inject-me'), {
       each: function (error, svg) {
-        if (!error) {
-          console.log('SVG injected: ' + svg.getAttribute('id'));
-          svg.setAttribute('style', 'fill:plum');
+        if (error) {
+          console.error('error', error);
+          return
         }
+        console.log('SVG injected: ' + svg.getAttribute('id'));
+        svg.setAttribute('style', 'fill:plum');
       }
     }, function (totalSVGsInjected) {
       console.log('We injected ' + totalSVGsInjected + ' SVG(s)!');
