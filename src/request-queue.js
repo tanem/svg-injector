@@ -14,11 +14,19 @@ export const processRequestQueue = (url, error) => {
     ;(function(index) {
       setTimeout(function() {
         const cb = requestQueue[url][index]
-        if (error) {
-          cb(error)
+
+        if (svgCache[url] instanceof SVGSVGElement) {
+          cb(null, cloneSvg(svgCache[url]))
           return
         }
-        cb(null, cloneSvg(svgCache[url]))
+
+        if (svgCache[url] instanceof Error) {
+          cb(svgCache[url])
+          return
+        }
+
+        // Not sure how we'd get here, but if so, we're processing with a
+        // freshly seeded cached (`{}`)... :-/
       }, 0)
     })(i)
   }
