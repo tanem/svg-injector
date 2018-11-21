@@ -147,21 +147,18 @@ const injectElement = (
         marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
         mask: ['mask'],
         pattern: ['fill', 'stroke'],
-        radialGradient: ['fill', 'stroke']
+        radialGradient: ['fill', 'stroke'],
+        path: []
       }
 
-      var element, elementDefs, properties, currentId, newId
+      var element, elements, properties, currentId, newId
       Object.keys(iriElementsAndProperties).forEach(function(key) {
         element = key
         properties = iriElementsAndProperties[key]
 
-        elementDefs = svg.querySelectorAll('defs ' + element + '[id]')
-        for (
-          var i = 0, elementsLen = elementDefs.length;
-          i < elementsLen;
-          i++
-        ) {
-          currentId = elementDefs[i].id
+        elements = svg.querySelectorAll(element + '[id]')
+        for (var i = 0, elementsLen = elements.length; i < elementsLen; i++) {
+          currentId = elements[i].id
           newId = currentId + '-' + injectCount
 
           // All of the properties that can reference this element type
@@ -189,7 +186,7 @@ const injectElement = (
           for (var k = 0, allLinksLen = allLinks.length; k < allLinksLen; k++) {
             if (
               allLinks[k].getAttributeNS(xlinkNamespace, 'href').toString() ===
-              '#' + elementDefs[i].id
+              '#' + elements[i].id
             ) {
               links.push(allLinks[k])
             }
@@ -198,7 +195,7 @@ const injectElement = (
             links[l].setAttributeNS(xlinkNamespace, 'href', '#' + newId)
           }
 
-          elementDefs[i].id = newId
+          elements[i].id = newId
         }
       })
     }
