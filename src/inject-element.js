@@ -147,7 +147,8 @@ const injectElement = (
         marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
         mask: ['mask'],
         pattern: ['fill', 'stroke'],
-        radialGradient: ['fill', 'stroke']
+        radialGradient: ['fill', 'stroke'],
+        path: []
       }
 
       var element, elementDefs, properties, currentId, newId
