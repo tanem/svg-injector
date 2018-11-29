@@ -1,5 +1,5 @@
-import loadSvg from './load-svg.js'
-import uniqueClasses from './unique-classes.js'
+import loadSvg from './load-svg'
+import uniqueClasses from './unique-classes'
 
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'

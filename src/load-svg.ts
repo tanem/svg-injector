@@ -1,6 +1,6 @@
-import cloneSvg from './clone-svg.js'
-import { processRequestQueue, queueRequest } from './request-queue.js'
-import svgCache from './svg-cache.js'
+import cloneSvg from './clone-svg'
+import { processRequestQueue, queueRequest } from './request-queue'
+import svgCache from './svg-cache'
 
 const loadSvg = (url, callback) => {
   const isLocal = window.location.protocol === 'file:'

@@ -1,4 +1,4 @@
-import injectElement from './inject-element.js'
+import injectElement from './inject-element'
 
 /**
  * :NOTE: We are using get/setAttribute with SVG because the SVG DOM spec

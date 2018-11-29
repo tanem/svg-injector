@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/renumerate-iri-elements.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">src/</a> renumerate-iri-elements.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">45.45% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>10/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>6/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>9/21</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function(global){global.wrappers['/Users/644205/Code/Personal/svg-injector/src/renumerate-iri-elements.ts']=[function(require,module,exports,__dirname,__filename){ "use strict";
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : <span class="branch-1 cbranch-no" title="branch not covered" >{ "default": mod };</span>
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const unique_id_1 = __importDefault(require("./unique-id"));
+const xlinkNamespace = 'http://www.w3.org/1999/xlink';
+exports.iriElementsAndProperties = new Map([
+    // ['color-profile', ['color-profile']],
+    // ['cursor', ['cursor']]
+    ['clipPath', ['clip-path']],
+    ['filter', ['filter']],
+    ['linearGradient', ['fill', 'stroke']],
+    ['marker', ['marker', 'marker-start', 'marker-mid', 'marker-end']],
+    ['mask', ['mask']],
+    ['pattern', ['fill', 'stroke']],
+    ['radialGradient', ['fill', 'stroke']],
+    ['path', []]
+]);
+const renumerateIRIElements = (svg) =&gt; {
+<span class="cstat-no" title="statement not covered" >    for (const [element, properties] of exports.iriElementsAndProperties.entries()) {</span>
+<span class="cstat-no" title="statement not covered" >        svg.querySelectorAll(`${element}[id]`).forEach(elem =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            const currentId = elem.id;</span>
+<span class="cstat-no" title="statement not covered" >            const newId = `${currentId}-${unique_id_1.default()}`;</span>
+<span class="cstat-no" title="statement not covered" >            properties.forEach(property =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                svg</span>
+                    .querySelectorAll(`[${property}*="${currentId}"]`)
+                    .forEach(referencingElement =&gt; {
+<span class="cstat-no" title="statement not covered" >                    referencingElement.setAttribute(property, `url(#${newId})`);</span>
+                });
+            });
+<span class="cstat-no" title="statement not covered" >            Array.from(svg.querySelectorAll('[*|href]'))</span>
+                .filter(link =&gt; {
+<span class="cstat-no" title="statement not covered" >                const attr = link.getAttributeNS(xlinkNamespace, 'href');</span>
+<span class="cstat-no" title="statement not covered" >                return attr &amp;&amp; attr.toString() === `#${currentId}`;</span>
+            })
+                .forEach(link =&gt; {
+<span class="cstat-no" title="statement not covered" >                link.setAttributeNS(xlinkNamespace, 'href', `#${newId}`);</span>
+            });
+<span class="cstat-no" title="statement not covered" >            elem.id = newId;</span>
+        });
+    }
+};
+exports.default = renumerateIRIElements;
+&nbsp;
+},'src/renumerate-iri-elements.ts',{"./unique-id":"/Users/644205/Code/Personal/svg-injector/src/unique-id.ts"}];})(this);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVudW1lcmF0ZS1pcmktZWxlbWVudHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJyZW51bWVyYXRlLWlyaS1lbGVtZW50cy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLDREQUFrQztBQUVsQyxNQUFNLGNBQWMsR0FBRyw4QkFBOEIsQ0FBQTtBQUV4QyxRQUFBLHdCQUF3QixHQUFHLElBQUksR0FBRyxDQUFDO0lBQzdDLHdDQUF3QztJQUN6Qyx5QkFBeUI7SUFFekIsQ0FBQyxVQUFVLEVBQUUsQ0FBQyxXQUFXLENBQUMsQ0FBQztJQUMzQixDQUFDLFFBQVEsRUFBRSxDQUFDLFFBQVEsQ0FBQyxDQUFDO0lBQ3RCLENBQUMsZ0JBQWdCLEVBQUUsQ0FBQyxNQUFNLEVBQUUsUUFBUSxDQUFDLENBQUM7SUFDdEMsQ0FBQyxRQUFRLEVBQUUsQ0FBQyxRQUFRLEVBQUUsY0FBYyxFQUFFLFlBQVksRUFBRSxZQUFZLENBQUMsQ0FBQztJQUNsRSxDQUFDLE1BQU0sRUFBRSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQ2xCLENBQUMsU0FBUyxFQUFFLENBQUMsTUFBTSxFQUFFLFFBQVEsQ0FBQyxDQUFDO0lBQy9CLENBQUMsZ0JBQWdCLEVBQUUsQ0FBQyxNQUFNLEVBQUUsUUFBUSxDQUFDLENBQUM7SUFDdEMsQ0FBQyxNQUFNLEVBQUUsRUFBRSxDQUFDO0NBQ2IsQ0FBQyxDQUFBO0FBRUYsTUFBTSxxQkFBcUIsR0FBRyxDQUFDLEdBQWdCLEVBQUUsRUFBRTtJQUNqRCxLQUFLLE1BQU0sQ0FBQyxPQUFPLEVBQUUsVUFBVSxDQUFDLElBQUksZ0NBQXdCLENBQUMsT0FBTyxFQUFFLEVBQUU7UUFDdEUsR0FBRyxDQUFDLGdCQUFnQixDQUFDLEdBQUcsT0FBTyxNQUFNLENBQUMsQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLEVBQUU7WUFDcEQsTUFBTSxTQUFTLEdBQUcsSUFBSSxDQUFDLEVBQUUsQ0FBQTtZQUN6QixNQUFNLEtBQUssR0FBRyxHQUFHLFNBQVMsSUFBSSxtQkFBUSxFQUFFLEVBQUUsQ0FBQTtZQUUxQyxVQUFVLENBQUMsT0FBTyxDQUFDLFFBQVEsQ0FBQyxFQUFFO2dCQUM1QixHQUFHO3FCQUNBLGdCQUFnQixDQUFDLElBQUksUUFBUSxNQUFNLFNBQVMsSUFBSSxDQUFDO3FCQUNqRCxPQUFPLENBQUMsa0JBQWtCLENBQUMsRUFBRTtvQkFDNUIsa0JBQWtCLENBQUMsWUFBWSxDQUFDLFFBQVEsRUFBRSxRQUFRLEtBQUssR0FBRyxDQUFDLENBQUE7Z0JBQzdELENBQUMsQ0FBQyxDQUFBO1lBQ04sQ0FBQyxDQUFDLENBQUE7WUFFRixLQUFLLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxnQkFBZ0IsQ0FBQyxVQUFVLENBQUMsQ0FBQztpQkFDekMsTUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFO2dCQUNiLE1BQU0sSUFBSSxHQUFHLElBQUksQ0FBQyxjQUFjLENBQUMsY0FBYyxFQUFFLE1BQU0sQ0FBQyxDQUFBO2dCQUN4RCxPQUFPLElBQUksSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFLEtBQUssSUFBSSxTQUFTLEVBQUUsQ0FBQTtZQUNwRCxDQUFDLENBQUM7aUJBQ0QsT0FBTyxDQUFDLElBQUksQ0FBQyxFQUFFO2dCQUNkLElBQUksQ0FBQyxjQUFjLENBQUMsY0FBYyxFQUFFLE1BQU0sRUFBRSxJQUFJLEtBQUssRUFBRSxDQUFDLENBQUE7WUFDMUQsQ0FBQyxDQUFDLENBQUE7WUFFSixJQUFJLENBQUMsRUFBRSxHQUFHLEtBQUssQ0FBQTtRQUNqQixDQUFDLENBQUMsQ0FBQTtLQUNIO0FBQ0gsQ0FBQyxDQUFBO0FBRUQsa0JBQWUscUJBQXFCLENBQUEiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgdW5pcXVlSWQgZnJvbSAnLi91bmlxdWUtaWQnXG5cbmNvbnN0IHhsaW5rTmFtZXNwYWNlID0gJ2h0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsnXG5cbmV4cG9ydCBjb25zdCBpcmlFbGVtZW50c0FuZFByb3BlcnRpZXMgPSBuZXcgTWFwKFtcbiAgIC8vIFsnY29sb3ItcHJvZmlsZScsIFsnY29sb3ItcHJvZmlsZSddXSxcbiAgLy8gWydjdXJzb3InLCBbJ2N1cnNvciddXVxuXG4gIFsnY2xpcFBhdGgnLCBbJ2NsaXAtcGF0aCddXSxcbiAgWydmaWx0ZXInLCBbJ2ZpbHRlciddXSxcbiAgWydsaW5lYXJHcmFkaWVudCcsIFsnZmlsbCcsICdzdHJva2UnXV0sXG4gIFsnbWFya2VyJywgWydtYXJrZXInLCAnbWFya2VyLXN0YXJ0JywgJ21hcmtlci1taWQnLCAnbWFya2VyLWVuZCddXSxcbiAgWydtYXNrJywgWydtYXNrJ11dLFxuICBbJ3BhdHRlcm4nLCBbJ2ZpbGwnLCAnc3Ryb2tlJ11dLFxuICBbJ3JhZGlhbEdyYWRpZW50JywgWydmaWxsJywgJ3N0cm9rZSddXSxcbiAgWydwYXRoJywgW11dXG5dKVxuXG5jb25zdCByZW51bWVyYXRlSVJJRWxlbWVudHMgPSAoc3ZnOiBIVE1MRWxlbWVudCkgPT4ge1xuICBmb3IgKGNvbnN0IFtlbGVtZW50LCBwcm9wZXJ0aWVzXSBvZiBpcmlFbGVtZW50c0FuZFByb3BlcnRpZXMuZW50cmllcygpKSB7XG4gICAgc3ZnLnF1ZXJ5U2VsZWN0b3JBbGwoYCR7ZWxlbWVudH1baWRdYCkuZm9yRWFjaChlbGVtID0+IHtcbiAgICAgIGNvbnN0IGN1cnJlbnRJZCA9IGVsZW0uaWRcbiAgICAgIGNvbnN0IG5ld0lkID0gYCR7Y3VycmVudElkfS0ke3VuaXF1ZUlkKCl9YFxuXG4gICAgICBwcm9wZXJ0aWVzLmZvckVhY2gocHJvcGVydHkgPT4ge1xuICAgICAgICBzdmdcbiAgICAgICAgICAucXVlcnlTZWxlY3RvckFsbChgWyR7cHJvcGVydHl9Kj1cIiR7Y3VycmVudElkfVwiXWApXG4gICAgICAgICAgLmZvckVhY2gocmVmZXJlbmNpbmdFbGVtZW50ID0+IHtcbiAgICAgICAgICAgIHJlZmVyZW5jaW5nRWxlbWVudC5zZXRBdHRyaWJ1dGUocHJvcGVydHksIGB1cmwoIyR7bmV3SWR9KWApXG4gICAgICAgICAgfSlcbiAgICAgIH0pXG5cbiAgICAgIEFycmF5LmZyb20oc3ZnLnF1ZXJ5U2VsZWN0b3JBbGwoJ1sqfGhyZWZdJykpXG4gICAgICAgIC5maWx0ZXIobGluayA9PiB7XG4gICAgICAgICAgY29uc3QgYXR0ciA9IGxpbmsuZ2V0QXR0cmlidXRlTlMoeGxpbmtOYW1lc3BhY2UsICdocmVmJylcbiAgICAgICAgICByZXR1cm4gYXR0ciAmJiBhdHRyLnRvU3RyaW5nKCkgPT09IGAjJHtjdXJyZW50SWR9YFxuICAgICAgICB9KVxuICAgICAgICAuZm9yRWFjaChsaW5rID0+IHtcbiAgICAgICAgICBsaW5rLnNldEF0dHJpYnV0ZU5TKHhsaW5rTmFtZXNwYWNlLCAnaHJlZicsIGAjJHtuZXdJZH1gKVxuICAgICAgICB9KVxuXG4gICAgICBlbGVtLmlkID0gbmV3SWRcbiAgICB9KVxuICB9XG59XG5cbmV4cG9ydCBkZWZhdWx0IHJlbnVtZXJhdGVJUklFbGVtZW50c1xuIl19
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Nov 24 2018 20:06:01 GMT+1300 (New Zealand Daylight Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
