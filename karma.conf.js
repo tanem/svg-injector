@@ -4,10 +4,8 @@ module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai', 'karma-typescript'],
     files: [
-      // {pattern: 'node_modules/prettier/standalone.js', watched: false, included: true, served: true, nocache: false},
       'src/*.ts',
-      {pattern: 'test/fixtures/*.svg', watched: false, included: false, served: true, nocache: false},
-      // 'test/fixtures/*.ts',
+      { pattern: 'test/fixtures/*.svg', watched: false, included: false, served: true, nocache: false},
       'test/index.spec.ts',
     ],    
     reporters: ['spec', 'coverage', 'karma-typescript'],
@@ -16,7 +14,7 @@ module.exports = function(config) {
     logLevel: config.LOG_WARN,
     browsers: ['ChromeHeadless'],
     autoWatch: true,
-    // singleRun: true,
+    singleRun: true,
     concurrency: Infinity,
     preprocessors: {
       'src/*.ts': ['karma-typescript', 'coverage'],
