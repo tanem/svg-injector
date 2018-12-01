@@ -1,8 +1,8 @@
-import SVGInjector from '../src';
-import prettier from 'prettier/standalone';
-import htmlParser from 'prettier/parser-html';
-import sinon from 'sinon';
 import * as uniqueId from '../src/unique-id';
+import SVGInjector from '../src';
+import htmlParser from 'prettier/parser-html';
+import prettier from 'prettier/standalone';
+import sinon from 'sinon';
 
 sinon.stub(uniqueId, 'default').returns(1)
 
@@ -28,6 +28,7 @@ const cleanup = () => {
 // TODO: Test script exec.
 // TODO: Use loop like test.each?
 // TODO: Travis setup.
+// TODO: Tighten up TS config.
 
 test('clip-path', (done) => {
   render('clip-path')
