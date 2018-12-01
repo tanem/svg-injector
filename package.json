@@ -1,7 +1,7 @@
 {
   "name": "@tanem/svg-injector",
   "description": "Fast, caching, dynamic inline SVG DOM injection library",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0",
   "author": {
     "name": "Iconic",
     "email": "yourfriends@useiconic.com",
