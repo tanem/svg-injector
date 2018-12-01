@@ -26,6 +26,8 @@ const cleanup = () => {
 // TODO: Test done is called once.
 // TODO: Get the actual SVG content from the DOM, not the callback.
 // TODO: Test script exec.
+// TODO: Use loop like test.each?
+// TODO: Travis setup.
 
 test('clip-path', (done) => {
   render('clip-path')
