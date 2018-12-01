@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": ".",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    // "strict": true,
+    "target": "esnext"
+  },
+  "exclude": ["node_modules", "dist"],
+  "include": ["src", "types"]
+}

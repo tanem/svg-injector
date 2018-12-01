@@ -1,25 +1,20 @@
+const PORT = 9876;
+
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai', 'karma-typescript'],
     files: [
-      // 'src/unique-id.ts',
-      // 'src/unique-classes.ts',
-      // 'src/clone-svg.ts',
-      // 'src/svg-cache.ts',
-      // 'src/request-queue.ts',
-      // 'src/renumerate-iri-elements.ts',
-      // 'src/svg-injector.ts',
+      // {pattern: 'node_modules/prettier/standalone.js', watched: false, included: true, served: true, nocache: false},
       'src/*.ts',
-      'test/helpers/*',
-      'test/fixtures/path*ts',
-      'test/fixtures/index.ts',
-      'test/*.spec.ts',
+      {pattern: 'test/fixtures/*.svg', watched: false, included: false, served: true, nocache: false},
+      // 'test/fixtures/*.ts',
+      'test/index.spec.ts',
     ],    
-    reporters: ['progress', 'coverage', 'karma-typescript'],
-    port: 9876,
+    reporters: ['spec', 'coverage', 'karma-typescript'],
+    port: PORT,
     colors: true,
-    logLevel: config.LOG_TRACE,
-    browsers: ['Chrome'],
+    logLevel: config.LOG_WARN,
+    browsers: ['ChromeHeadless'],
     autoWatch: true,
     // singleRun: true,
     concurrency: Infinity,
@@ -29,6 +24,14 @@ module.exports = function(config) {
     },
     karmaTypescriptConfig: {
       tsconfig: './tsconfig.test.json'
+    },
+    proxies: {
+      '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
+    },
+    client: {
+      mocha: {
+        ui: 'tdd'
+      }
     }
   })
 }

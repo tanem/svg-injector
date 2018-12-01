@@ -20,7 +20,7 @@ const loadSvg = (url, callback) => {
     // request.
     queueRequest(url, callback)
   } else {
-    if (!window.XMLHttpRequest) {
+    if (!XMLHttpRequest) {
       callback(new Error('Browser does not support XMLHttpRequest'))
       return false
     }

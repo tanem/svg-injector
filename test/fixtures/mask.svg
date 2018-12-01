@@ -4,7 +4,6 @@
       <rect x="0" y="0" width="64" height="32" style="stroke:none; fill:white"/>
     </mask>
   </defs>
-
   <rect x="1" y="1" width="64" height="64" stroke="none" fill="plum"/>
   <rect x="1" y="1" width="64" height="64" stroke="none" fill="gray" mask="url(#MaskTest)"/>
 </svg>

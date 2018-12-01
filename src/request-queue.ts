@@ -8,7 +8,7 @@ export const queueRequest = (url, callback) => {
   requestQueue[url].push(callback)
 }
 
-export const processRequestQueue = (url, error) => {
+export const processRequestQueue = (url) => {
   for (let i = 0, len = requestQueue[url].length; i < len; i++) {
     // Make these calls async so we avoid blocking the page/renderer
     ;(function(index) {

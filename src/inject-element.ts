@@ -1,12 +1,11 @@
 import loadSvg from './load-svg'
 import uniqueClasses from './unique-classes'
+import uniqueId from './unique-id'
 
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 const injectedElements = []
 const ranScripts = {} // Script running status
-
-let injectCount = 0
 
 // Inject a single element
 const injectElement = (
@@ -159,7 +158,7 @@ const injectElement = (
         elements = svg.querySelectorAll(element + '[id]')
         for (var i = 0, elementsLen = elements.length; i < elementsLen; i++) {
           currentId = elements[i].id
-          newId = currentId + '-' + injectCount
+          newId = currentId + '-' + uniqueId()
 
           // All of the properties that can reference this element type
           var referencingElements
@@ -277,9 +276,6 @@ const injectElement = (
     // to the original element so it can be GC'd
     delete injectedElements[injectedElements.indexOf(el)]
     el = null
-
-    // Increment the injected count
-    injectCount++
 
     callback(null, svg)
   })

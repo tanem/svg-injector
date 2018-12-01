@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src", "test"],
+  "compilerOptions": {
+    // "allowJs": true,
+    "module": "commonjs",
+    "sourceMap": true
+  }
+}

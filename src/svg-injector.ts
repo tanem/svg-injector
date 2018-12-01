@@ -11,11 +11,16 @@ const SVGInjector = (
   elements,
   {
     evalScripts = 'always',
-    pngFallback = false,
-    each: eachCallback = () => undefined,
+    pngFallback = '',
+    each = () => undefined,
     renumerateIRIElements = true
+  }: {
+    evalScripts?: 'always' | 'once' | 'never',
+    pngFallback?: string,
+    each?: (error: null | Error, svg?: SVGSVGElement) => void,
+    renumerateIRIElements?: boolean 
   } = {},
-  done = () => undefined
+  done: (elementsLoaded: number) => void = () => undefined
 ) => {
   if (elements.length !== undefined) {
     let elementsLoaded = 0
@@ -26,7 +31,7 @@ const SVGInjector = (
         pngFallback,
         renumerateIRIElements,
         (error, svg) => {
-          eachCallback(error, svg)
+          each(error, svg)
 
           if (elements.length === ++elementsLoaded) {
             done(elementsLoaded)
@@ -42,7 +47,7 @@ const SVGInjector = (
         pngFallback,
         renumerateIRIElements,
         (error, svg) => {
-          eachCallback(error, svg)
+          each(error, svg)
           done(1)
           elements = null
         }
