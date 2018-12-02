@@ -1,8 +1,8 @@
-import * as uniqueId from '../src/unique-id';
-import SVGInjector from '../src';
 import htmlParser from 'prettier/parser-html';
 import prettier from 'prettier/standalone';
 import sinon from 'sinon';
+import SVGInjector from '../src/svg-injector';
+import * as uniqueId from '../src/unique-id';
 
 sinon.stub(uniqueId, 'default').returns(1)
 

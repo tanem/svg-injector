@@ -6,7 +6,7 @@ module.exports = function(config) {
     files: [
       'src/*.ts',
       { pattern: 'test/fixtures/*.svg', watched: false, included: false, served: true, nocache: false},
-      'test/index.spec.ts',
+      'test/svg-injector.spec.ts',
     ],    
     reporters: ['spec', 'coverage', 'karma-typescript'],
     port: PORT,
