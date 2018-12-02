@@ -21,7 +21,11 @@ module.exports = function(config) {
       'test/**/*.ts': ['karma-typescript']
     },
     karmaTypescriptConfig: {
-      tsconfig: './tsconfig.test.json'
+      tsconfig: './tsconfig.test.json',
+      reports: {
+        lcovonly: 'coverage',
+        text: ''
+      }
     },
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
