@@ -23,7 +23,11 @@ module.exports = function(config) {
     karmaTypescriptConfig: {
       tsconfig: './tsconfig.test.json',
       reports: {
-        lcovonly: 'coverage',
+        lcovonly: {
+          directory: 'coverage',
+          filename: 'lcov.info',
+          subdirectory: '.'
+        },
         text: ''
       }
     },
