@@ -91,7 +91,8 @@
     "postcompile": "del '*.d.ts' '!svg-injector.d.ts'",
     "postversion": "git push && git push --tags && npm publish --access=public",
     "release": "npm version -m 'Release v%s'",
-    "test": "karma start",
+    "test:karma": "karma start",
+    "test": "run-s check:* lint build test:karma",
     "version": "run-s test changelog authors && git add ."
   }
 }
