@@ -21,7 +21,7 @@ const getExternal = bundleType => {
     case CJS_DEV:
     case CJS_PROD:
     case ES:
-      return Object.keys(pkg.dependencies) 
+      return Object.keys(pkg.dependencies)
     default:
       return []
   }
@@ -37,9 +37,7 @@ const getBabelConfig = () => ({
     ['@babel/env', { loose: true, modules: false }],
     '@babel/typescript'
   ],
-  plugins: [
-    '@babel/transform-runtime'
-  ],
+  plugins: ['@babel/transform-runtime'],
   runtimeHelpers: true,
   extensions: [...DEFAULT_EXTENSIONS, '.ts']
 })
@@ -107,7 +105,6 @@ export default [
   getUmdConfig(UMD_DEV),
   getUmdConfig(UMD_PROD)
 ]
-
 
 // import babel from 'rollup-plugin-babel'
 // import { uglify } from 'rollup-plugin-uglify'

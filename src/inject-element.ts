@@ -162,7 +162,6 @@ const injectElement = (
 
           // All of the properties that can reference this element type
           var referencingElements
-          // eslint-disable-next-line no-loop-func
           Array.prototype.forEach.call(properties, function(property) {
             // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
             referencingElements = svg.querySelectorAll(
@@ -248,7 +247,6 @@ const injectElement = (
         //
         // Also, the code is evaluated in a closure and not in the global scope.
         // If you need to put something in global scope, use 'window'
-        // eslint-disable-next-line no-new-func
         new Function(scriptsToEval[l])(window)
       }
 

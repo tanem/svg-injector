@@ -15,10 +15,10 @@ const SVGInjector = (
     each = () => undefined,
     renumerateIRIElements = true
   }: {
-    evalScripts?: 'always' | 'once' | 'never',
-    pngFallback?: string,
-    each?: (error: null | Error, svg?: SVGSVGElement) => void,
-    renumerateIRIElements?: boolean 
+    evalScripts?: 'always' | 'once' | 'never'
+    pngFallback?: string
+    each?: (error: null | Error, svg?: SVGSVGElement) => void
+    renumerateIRIElements?: boolean
   } = {},
   done: (elementsLoaded: number) => void = () => undefined
 ) => {

@@ -1,13 +1,19 @@
-const PORT = 9876;
+const PORT = 9876
 
 module.exports = function(config) {
   config.set({
     frameworks: ['mocha', 'chai', 'karma-typescript'],
     files: [
       'src/*.ts',
-      { pattern: 'test/fixtures/*.svg', watched: false, included: false, served: true, nocache: false},
-      'test/svg-injector.spec.ts',
-    ],    
+      {
+        pattern: 'test/fixtures/*.svg',
+        watched: false,
+        included: false,
+        served: true,
+        nocache: false
+      },
+      'test/svg-injector.spec.ts'
+    ],
     reporters: ['spec', 'coverage', 'karma-typescript'],
     port: PORT,
     colors: true,

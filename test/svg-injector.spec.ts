@@ -1,14 +1,14 @@
-import htmlParser from 'prettier/parser-html';
-import prettier from 'prettier/standalone';
-import sinon from 'sinon';
-import SVGInjector from '../src/svg-injector';
-import * as uniqueId from '../src/unique-id';
+import htmlParser from 'prettier/parser-html'
+import prettier from 'prettier/standalone'
+import sinon from 'sinon'
+import SVGInjector from '../src/svg-injector'
+import * as uniqueId from '../src/unique-id'
 
 sinon.stub(uniqueId, 'default').returns(1)
 
 const render = (name: string) => {
   document.body.insertAdjacentHTML(
-    'beforeend', 
+    'beforeend',
     `<div id="container"><div id="inject-me" data-src="/fixtures/${name}.svg" /></div>`
   )
 }
@@ -18,7 +18,7 @@ const format = (svg: string) =>
   prettier.format(svg, { parser: 'html', plugins: [htmlParser] })
 
 const cleanup = () => {
-  document.body.removeChild(document.getElementById('container'));
+  document.body.removeChild(document.getElementById('container'))
 }
 
 // TODO: Hat-tip react-inlinesvg for the "style" test
@@ -30,10 +30,10 @@ const cleanup = () => {
 // TODO: Travis setup.
 // TODO: Tighten up TS config.
 
-test('clip-path', (done) => {
+test('clip-path', done => {
   render('clip-path')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -63,14 +63,14 @@ test('clip-path', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('fill', (done) => {
+test('fill', done => {
   render('fill')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -136,14 +136,14 @@ test('fill', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('filter', (done) => {
+test('filter', done => {
   render('filter')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -174,14 +174,14 @@ test('filter', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('marker', (done) => {
+test('marker', done => {
   render('marker')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -233,14 +233,14 @@ test('marker', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('mask', (done) => {
+test('mask', done => {
   render('mask')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -278,14 +278,14 @@ test('mask', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('thumb-up', (done) => {
+test('thumb-up', done => {
   render('thumb-up')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -305,14 +305,14 @@ test('thumb-up', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test.skip('style', (done) => {
+test.skip('style', done => {
   render('style')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -346,14 +346,14 @@ test.skip('style', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('dashboard', (done) => {
+test('dashboard', done => {
   render('dashboard')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -390,14 +390,14 @@ test('dashboard', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('notifications', (done) => {
+test('notifications', done => {
   render('notifications')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -434,14 +434,14 @@ test('notifications', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 
-test('poll', (done) => {
+test('poll', done => {
   render('poll')
   const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML);
+    const actual = format(svg.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -478,6 +478,6 @@ test('poll', (done) => {
     expect(actual).to.equal(expected)
     cleanup()
     done()
-  };
+  }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
