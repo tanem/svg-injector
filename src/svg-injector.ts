@@ -1,4 +1,13 @@
 import injectElement from './inject-element'
+import { DoneCallback, Errback } from './types'
+
+interface IOptionalArgs {
+  done?: DoneCallback
+  each?: Errback
+  evalScripts?: 'always' | 'once' | 'never'
+  pngFallback?: string
+  renumerateIRIElements?: boolean
+}
 
 /**
  * :NOTE: We are using get/setAttribute with SVG because the SVG DOM spec
@@ -8,54 +17,57 @@ import injectElement from './inject-element'
  * instead of simple string like with HTML Elements.
  */
 const SVGInjector = (
-  elements,
+  elements: NodeListOf<HTMLElement> | HTMLElement | null,
   {
-    evalScripts = 'always',
-    pngFallback = '',
+    done = () => undefined,
     each = () => undefined,
+    evalScripts = 'never',
+    pngFallback = '',
     renumerateIRIElements = true
-  }: {
-    evalScripts?: 'always' | 'once' | 'never'
-    pngFallback?: string
-    each?: (error: null | Error, svg?: SVGSVGElement) => void
-    renumerateIRIElements?: boolean
-  } = {},
-  done: (elementsLoaded: number) => void = () => undefined
+  }: IOptionalArgs = {}
 ) => {
-  if (elements.length !== undefined) {
+  if (elements instanceof NodeList) {
     let elementsLoaded = 0
-    Array.prototype.forEach.call(elements, element => {
+    for (const element of elements) {
       injectElement(
         element,
-        evalScripts,
-        pngFallback,
-        renumerateIRIElements,
-        (error, svg) => {
+        (error: Error | null, svg?: SVGSVGElement) => {
           each(error, svg)
-
-          if (elements.length === ++elementsLoaded) {
+          if (
+            elements instanceof NodeList &&
+            elements.length === ++elementsLoaded
+          ) {
             done(elementsLoaded)
           }
+        },
+        {
+          evalScripts,
+          pngFallback,
+          renumerateIRIElements
         }
       )
-    })
-  } else {
-    if (elements) {
-      injectElement(
-        elements,
+    }
+    return
+  }
+
+  if (elements) {
+    injectElement(
+      elements,
+      (error: Error | null, svg?: SVGSVGElement) => {
+        each(error, svg)
+        done(1)
+        elements = null
+      },
+      {
         evalScripts,
         pngFallback,
-        renumerateIRIElements,
-        (error, svg) => {
-          each(error, svg)
-          done(1)
-          elements = null
-        }
-      )
-    } else {
-      done(0)
-    }
+        renumerateIRIElements
+      }
+    )
+    return
   }
+
+  done(0)
 }
 
 export default SVGInjector

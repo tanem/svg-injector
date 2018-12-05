@@ -1,7 +1,8 @@
 import htmlParser from 'prettier/parser-html'
 import prettier from 'prettier/standalone'
-import sinon from 'sinon'
+import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
+import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
 
 sinon.stub(uniqueId, 'default').returns(1)
@@ -9,7 +10,7 @@ sinon.stub(uniqueId, 'default').returns(1)
 const render = (name: string) => {
   document.body.insertAdjacentHTML(
     'beforeend',
-    `<div id="container"><div id="inject-me" data-src="/fixtures/${name}.svg" /></div>`
+    `<div id="container"><div class="div-one div-two" id="inject-me" data-src="/fixtures/${name}.svg" /></div>`
   )
 }
 
@@ -18,22 +19,112 @@ const format = (svg: string) =>
   prettier.format(svg, { parser: 'html', plugins: [htmlParser] })
 
 const cleanup = () => {
-  document.body.removeChild(document.getElementById('container'))
+  document.body.removeChild(document.getElementById('container')!)
 }
 
 // TODO: Hat-tip react-inlinesvg for the "style" test
-// TODO: Test each is called once.
-// TODO: Test done is called once.
 // TODO: Get the actual SVG content from the DOM, not the callback.
 // TODO: Test script exec.
 // TODO: Use loop like test.each?
-// TODO: Travis setup.
-// TODO: Tighten up TS config.
+
+/*
+interface IOptionalArgs {
+  done?: (elementsLoaded: number) => void
+  each?: Errback
+  evalScripts?: 'always' | 'once' | 'never'
+  pngFallback?: string
+  renumerateIRIElements?: boolean
+}
+*/
+
+test('done callback', done => {
+  render('thumb-up')
+  const injectorDone: DoneCallback = elementsLoaded => {
+    expect(elementsLoaded).to.equal(1)
+    cleanup()
+    done()
+  }
+  SVGInjector(document.getElementById('inject-me'), { done: injectorDone })
+})
+
+test('each callback', done => {
+  render('thumb-up')
+  const each: Errback = (error, svg) => {
+    expect(error).to.be.a('null')
+    const rendered = format(document.getElementById('inject-me')!.outerHTML)
+    expect(rendered).to.equal(format(svg!.outerHTML))
+    cleanup()
+    done()
+  }
+  SVGInjector(document.getElementById('inject-me'), { each })
+})
+
+test('error handling', done => {
+  render('notfound')
+  const injectorDone: DoneCallback = elementsLoaded => {
+    expect(elementsLoaded).to.equal(1)
+    cleanup()
+    done()
+  }
+  const each: Errback = error => {
+    expect(error)
+      .to.be.a('error')
+      .with.property(
+        'message',
+        'Unable to load SVG file: /fixtures/notfound.svg'
+      )
+  }
+  SVGInjector(document.getElementById('inject-me'), {
+    done: injectorDone,
+    each
+  })
+})
+
+/*
+test('classes', done => {
+  render('classes')
+  const each = (error: Error | null) => {
+    expect(error).to.be.a('null')
+    // const actual = format(svg!.outerHTML)
+    console.log(document.getElementById('inject-me'))
+    // const expected = format(`
+    //   <svg
+    //     xmlns="http://www.w3.org/2000/svg"
+    //     class="svg-one svg-two injected-svg div-one div-two"
+    //     width="64"
+    //     height="64"
+    //     viewBox="0 0 64 64"
+    //     id="inject-me"
+    //     data-src="/fixtures/classes.svg"
+    //     xmlns:xlink="http://www.w3.org/1999/xlink"
+    //   >
+    //     <defs>
+    //       <clipPath id="clipPathTest-1">
+    //         <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
+    //       </clipPath>
+    //     </defs>
+    //     <circle
+    //       cx="32"
+    //       cy="32"
+    //       r="18"
+    //       stroke="1"
+    //       style="fill:wheat;stroke:red;"
+    //       clip-path="url(#clipPathTest-1)"
+    //     ></circle>
+    //   </svg>
+    // `)
+    // expect(actual).to.equal(expected)
+    cleanup()
+    done()
+  }
+  SVGInjector(document.getElementById('inject-me'), { each })
+})
 
 test('clip-path', done => {
   render('clip-path')
-  const each = (_, svg: SVGSVGElement) => {
-    const actual = format(svg.outerHTML)
+  const each = (error: Error | null, svg?: SVGSVGElement) => {
+    expect(error).to.be.a('null')
+    const actual = format(svg!.outerHTML)
     const expected = format(`
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +132,7 @@ test('clip-path', done => {
         height="64"
         viewBox="0 0 64 64"
         id="inject-me"
-        class="injected-svg"
+        class="injected-svg div-one div-two"
         data-src="/fixtures/clip-path.svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
       >
@@ -481,3 +572,4 @@ test('poll', done => {
   }
   SVGInjector(document.getElementById('inject-me'), { each })
 })
+*/

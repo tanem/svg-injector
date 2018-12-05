@@ -12,7 +12,7 @@ module.exports = function(config) {
         served: true,
         nocache: false
       },
-      'test/svg-injector.spec.ts'
+      'test/*.spec.ts'
     ],
     reporters: ['spec', 'coverage', 'karma-typescript'],
     port: PORT,
@@ -20,11 +20,11 @@ module.exports = function(config) {
     logLevel: config.LOG_WARN,
     browsers: ['ChromeHeadless'],
     autoWatch: true,
-    singleRun: true,
+    // singleRun: true,
     concurrency: Infinity,
     preprocessors: {
       'src/*.ts': ['karma-typescript', 'coverage'],
-      'test/**/*.ts': ['karma-typescript']
+      'test/*.ts': ['karma-typescript']
     },
     karmaTypescriptConfig: {
       tsconfig: './tsconfig.test.json',
