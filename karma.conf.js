@@ -17,7 +17,7 @@ module.exports = function(config) {
     reporters: ['spec', 'coverage', 'karma-typescript'],
     port: PORT,
     colors: true,
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_ERROR,
     browsers: ['ChromeHeadless'],
     autoWatch: true,
     // singleRun: true,
@@ -39,11 +39,11 @@ module.exports = function(config) {
     },
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
-    },
-    client: {
-      mocha: {
-        ui: 'tdd'
-      }
     }
+    // client: {
+    //   mocha: {
+    //     ui: 'tdd'
+    //   }
+    // }
   })
 }

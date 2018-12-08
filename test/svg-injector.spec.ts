@@ -22,11 +22,6 @@ const cleanup = () => {
   document.body.removeChild(document.getElementById('container')!)
 }
 
-// TODO: Hat-tip react-inlinesvg for the "style" test
-// TODO: Get the actual SVG content from the DOM, not the callback.
-// TODO: Test script exec.
-// TODO: Use loop like test.each?
-
 /*
 interface IOptionalArgs {
   done?: (elementsLoaded: number) => void
@@ -37,50 +32,265 @@ interface IOptionalArgs {
 }
 */
 
-test('done callback', done => {
-  render('thumb-up')
-  const injectorDone: DoneCallback = elementsLoaded => {
-    expect(elementsLoaded).to.equal(1)
-    cleanup()
-    done()
-  }
-  SVGInjector(document.getElementById('inject-me'), { done: injectorDone })
-})
+describe('SVGInjector', () => {
+  let logStub: sinon.SinonStub
 
-test('each callback', done => {
-  render('thumb-up')
-  const each: Errback = (error, svg) => {
-    expect(error).to.be.a('null')
-    const rendered = format(document.getElementById('inject-me')!.outerHTML)
-    expect(rendered).to.equal(format(svg!.outerHTML))
-    cleanup()
-    done()
-  }
-  SVGInjector(document.getElementById('inject-me'), { each })
-})
-
-test('error handling', done => {
-  render('notfound')
-  const injectorDone: DoneCallback = elementsLoaded => {
-    expect(elementsLoaded).to.equal(1)
-    cleanup()
-    done()
-  }
-  const each: Errback = error => {
-    expect(error)
-      .to.be.a('error')
-      .with.property(
-        'message',
-        'Unable to load SVG file: /fixtures/notfound.svg'
-      )
-  }
-  SVGInjector(document.getElementById('inject-me'), {
-    done: injectorDone,
-    each
+  beforeEach(() => {
+    logStub = sinon.stub(console, 'log')
   })
-})
 
-/*
+  afterEach(() => {
+    logStub.restore()
+  })
+
+  it('handles single elements', done => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+      <div id="container">
+        <div id="one" class="inject-me" data-src="/fixtures/thumb-up.svg" />
+      </div>
+    `
+    )
+    const each = sinon.stub()
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(each.callCount).to.equal(1)
+      expect(each.firstCall.args).to.have.lengthOf(2)
+      expect(each.firstCall.args[0]).to.be.a('null')
+      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" id="one" class="injected-svg inject-me" data-src="/fixtures/thumb-up.svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <path d="M4.47 0c-.19.02-.37.15-.47.34-.13.26-1.09 2.19-1.28 2.38-.19.19-.44.28-.72.28v4h3.5c.21 0 .39-.13.47-.31 0 0 1.03-2.91 1.03-3.19 0-.28-.22-.5-.5-.5h-1.5c-.28 0-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47 3v4h1v-4h-1z"></path>
+        </svg>
+      `)
+      )
+      expect(elementsLoaded).to.equal(1)
+      cleanup()
+      done()
+    }
+    SVGInjector(document.querySelectorAll('.inject-me'), {
+      done: injectorDone,
+      each
+    })
+  })
+
+  it('handles multiple elements', done => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+    <div id="container">
+      <div id="one" class="inject-me" data-src="/fixtures/thumb-up.svg" />
+      <div id="two" class="inject-me" data-src="/fixtures/thumb-up.svg" />
+    </div>
+    `
+    )
+    const each = sinon.stub()
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(each.callCount).to.equal(2)
+      expect(each.firstCall.args).to.have.lengthOf(2)
+      expect(each.firstCall.args[0]).to.be.a('null')
+      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" id="one" class="injected-svg inject-me" data-src="/fixtures/thumb-up.svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <path d="M4.47 0c-.19.02-.37.15-.47.34-.13.26-1.09 2.19-1.28 2.38-.19.19-.44.28-.72.28v4h3.5c.21 0 .39-.13.47-.31 0 0 1.03-2.91 1.03-3.19 0-.28-.22-.5-.5-.5h-1.5c-.28 0-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47 3v4h1v-4h-1z"></path>
+        </svg>
+      `)
+      )
+      expect(each.secondCall.args).to.have.lengthOf(2)
+      expect(each.secondCall.args[0]).to.be.a('null')
+      expect(format(each.secondCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" id="two" class="injected-svg inject-me" data-src="/fixtures/thumb-up.svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <path d="M4.47 0c-.19.02-.37.15-.47.34-.13.26-1.09 2.19-1.28 2.38-.19.19-.44.28-.72.28v4h3.5c.21 0 .39-.13.47-.31 0 0 1.03-2.91 1.03-3.19 0-.28-.22-.5-.5-.5h-1.5c-.28 0-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47 3v4h1v-4h-1z"></path>
+        </svg>
+      `)
+      )
+      expect(elementsLoaded).to.equal(2)
+      cleanup()
+      done()
+    }
+    SVGInjector(document.querySelectorAll('.inject-me'), {
+      done: injectorDone,
+      each
+    })
+  })
+
+  it('handles errors', done => {
+    render('notfound')
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(elementsLoaded).to.equal(1)
+      cleanup()
+      done()
+    }
+    const each: Errback = error => {
+      expect(error)
+        .to.be.a('error')
+        .with.property(
+          'message',
+          'Unable to load SVG file: /fixtures/notfound.svg'
+        )
+    }
+    SVGInjector(document.getElementById('inject-me'), {
+      done: injectorDone,
+      each
+    })
+  })
+
+  it('handles script execution: never', done => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+    <div id="container">
+      <div id="one" class="inject-me" data-src="/fixtures/script.svg" />
+    </div>
+    `
+    )
+    const each = sinon.stub()
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(each.callCount).to.equal(1)
+      expect(each.firstCall.args).to.have.lengthOf(2)
+      expect(each.firstCall.args[0]).to.be.a('null')
+      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          viewBox="0 0 100 100"
+          id="one"
+          class="injected-svg inject-me"
+          data-src="/fixtures/script.svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <circle cx="50" cy="50" r="15" fill="green"></circle>
+        </svg>
+      `)
+      )
+
+      expect(elementsLoaded).to.equal(1)
+      cleanup()
+      done()
+    }
+    SVGInjector(document.querySelectorAll('.inject-me'), {
+      done: injectorDone,
+      each,
+      evalScripts: 'never'
+    })
+  })
+
+  it('handles script execution: once', done => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+    <div id="container">
+      <div id="one" class="inject-me" data-src="/fixtures/script.svg" />
+    </div>
+    `
+    )
+    const each = sinon.stub()
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(each.callCount).to.equal(1)
+      expect(each.firstCall.args).to.have.lengthOf(2)
+      expect(each.firstCall.args[0]).to.be.a('null')
+      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          viewBox="0 0 100 100"
+          id="one"
+          class="injected-svg inject-me"
+          data-src="/fixtures/script.svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <circle cx="50" cy="50" r="15" fill="green"></circle>
+        </svg>
+      `)
+      )
+
+      expect(logStub.callCount).to.equal(1)
+      expect(logStub.firstCall.args).to.deep.equal(['ran script'])
+
+      expect(elementsLoaded).to.equal(1)
+
+      cleanup()
+      done()
+    }
+    SVGInjector(document.querySelectorAll('.inject-me'), {
+      done: injectorDone,
+      each,
+      evalScripts: 'once'
+    })
+  })
+
+  it('handles script execution: always', done => {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `
+    <div id="container">
+      <div id="one" class="inject-me" data-src="/fixtures/script.svg" />
+      <div id="two" class="inject-me" data-src="/fixtures/script.svg" />
+    </div>
+    `
+    )
+    const each = sinon.stub()
+    const injectorDone: DoneCallback = elementsLoaded => {
+      expect(each.callCount).to.equal(2)
+      expect(each.firstCall.args).to.have.lengthOf(2)
+      expect(each.firstCall.args[0]).to.be.a('null')
+      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          viewBox="0 0 100 100"
+          id="one"
+          class="injected-svg inject-me"
+          data-src="/fixtures/script.svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <circle cx="50" cy="50" r="15" fill="green"></circle>
+        </svg>
+      `)
+      )
+      expect(each.secondCall.args).to.have.lengthOf(2)
+      expect(each.secondCall.args[0]).to.be.a('null')
+      expect(format(each.secondCall.args[1].outerHTML)).to.equal(
+        format(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+          viewBox="0 0 100 100"
+          id="two"
+          class="injected-svg inject-me"
+          data-src="/fixtures/script.svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <circle cx="50" cy="50" r="15" fill="green"></circle>
+        </svg>
+      `)
+      )
+
+      expect(logStub.callCount).to.equal(2)
+      expect(logStub.firstCall.args).to.deep.equal(['ran script'])
+      expect(logStub.secondCall.args).to.deep.equal(['ran script'])
+
+      expect(elementsLoaded).to.equal(2)
+
+      cleanup()
+      done()
+    }
+    SVGInjector(document.querySelectorAll('.inject-me'), {
+      done: injectorDone,
+      each,
+      evalScripts: 'always'
+    })
+  })
+
+  /*
 test('classes', done => {
   render('classes')
   const each = (error: Error | null) => {
@@ -573,3 +783,4 @@ test('poll', done => {
   SVGInjector(document.getElementById('inject-me'), { each })
 })
 */
+})

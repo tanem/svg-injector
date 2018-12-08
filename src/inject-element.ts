@@ -241,7 +241,8 @@ const injectElement = (
       if (
         !scriptType ||
         scriptType === 'application/ecmascript' ||
-        scriptType === 'application/javascript'
+        scriptType === 'application/javascript' ||
+        scriptType === 'text/javascript'
       ) {
         // innerText for IE, textContent for other browsers.
         script = scripts[i].innerText || scripts[i].textContent
