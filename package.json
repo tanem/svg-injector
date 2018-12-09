@@ -68,6 +68,7 @@
     "shelljs": "^0.8.3",
     "shelljs-plugin-authors": "^2.0.6",
     "sinon": "^7.1.1",
+    "testdouble": "^3.9.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.1"

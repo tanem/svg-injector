@@ -17,7 +17,7 @@ interface IOptionalArgs {
  * instead of simple string like with HTML Elements.
  */
 const SVGInjector = (
-  elements: NodeListOf<HTMLElement> | HTMLElement | null,
+  elements: HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null,
   {
     done = () => undefined,
     each = () => undefined,
@@ -26,7 +26,7 @@ const SVGInjector = (
     renumerateIRIElements = true
   }: IOptionalArgs = {}
 ) => {
-  if (elements instanceof NodeList) {
+  if (elements && !(elements instanceof Element)) {
     let elementsLoaded = 0
     for (const element of elements) {
       injectElement(
@@ -34,7 +34,8 @@ const SVGInjector = (
         (error: Error | null, svg?: SVGSVGElement) => {
           each(error, svg)
           if (
-            elements instanceof NodeList &&
+            elements &&
+            !(elements instanceof Element) &&
             elements.length === ++elementsLoaded
           ) {
             done(elementsLoaded)

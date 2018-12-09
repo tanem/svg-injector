@@ -2,7 +2,7 @@ import loadSvg from './load-svg'
 import { Errback } from './types'
 import uniqueId from './unique-id'
 
-const injectedElements: HTMLElement[] = []
+const injectedElements: Array<HTMLElement | Element> = []
 const ranScripts: { [key: string]: boolean } = {}
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
@@ -14,7 +14,7 @@ interface IOptionalArgs {
 }
 
 const injectElement = (
-  el: HTMLElement | null,
+  el: Element | HTMLElement | null,
   callback: Errback,
   { evalScripts, pngFallback, renumerateIRIElements }: IOptionalArgs = {}
 ) => {
@@ -192,7 +192,7 @@ const injectElement = (
               b < referencingElementLen;
               b++
             ) {
-              referencingElements[a].setAttribute(
+              referencingElements[b].setAttribute(
                 property,
                 'url(#' + newId + ')'
               )

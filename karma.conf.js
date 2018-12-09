@@ -6,18 +6,19 @@ module.exports = function(config) {
     files: [
       'src/*.ts',
       {
-        pattern: 'test/fixtures/*.svg',
+        pattern: 'test/fixtures/*',
         watched: false,
         included: false,
         served: true,
         nocache: false
       },
+      'test/helpers.ts',
       'test/*.spec.ts'
     ],
     reporters: ['spec', 'coverage', 'karma-typescript'],
     port: PORT,
     colors: true,
-    logLevel: config.LOG_ERROR,
+    logLevel: config.LOG_WARN,
     browsers: ['ChromeHeadless'],
     autoWatch: true,
     // singleRun: true,
@@ -39,11 +40,11 @@ module.exports = function(config) {
     },
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
+    },
+    client: {
+      mocha: {
+        ui: 'tdd'
+      }
     }
-    // client: {
-    //   mocha: {
-    //     ui: 'tdd'
-    //   }
-    // }
   })
 }
