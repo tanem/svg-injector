@@ -5,6 +5,6 @@
 cjs
 coverage
 es
-index.d.ts
 node_modules
+svg-injector.d.ts
 umd

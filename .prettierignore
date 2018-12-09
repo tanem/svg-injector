@@ -1,6 +1,6 @@
 cjs
 coverage
 es
-index.d.ts
 package.json
+svg-injector.d.ts
 umd
