@@ -21,7 +21,7 @@ module.exports = function(config) {
     logLevel: config.LOG_WARN,
     browsers: ['ChromeHeadless'],
     autoWatch: true,
-    // singleRun: true,
+    singleRun: true,
     concurrency: Infinity,
     preprocessors: {
       'src/*.ts': ['karma-typescript', 'coverage'],
