@@ -23,11 +23,6 @@ const loadSvg = (
     // request.
     queueRequest(url, callback)
   } else {
-    if (!XMLHttpRequest) {
-      callback(new Error('Browser does not support XMLHttpRequest'))
-      return
-    }
-
     // Seed the cache to indicate we are loading this URL already.
     svgCache[url] = {}
     queueRequest(url, callback)
@@ -45,7 +40,6 @@ const loadSvg = (
             )
           }
 
-          // 200 success from server, or 0 when using file:// protocol locally.
           if (
             httpRequest.status === 200 ||
             (isLocal && httpRequest.status === 0)
@@ -54,39 +48,7 @@ const loadSvg = (
               if (httpRequest.responseXML.documentElement) {
                 svgCache[url] = httpRequest.responseXML.documentElement
               }
-            } else if (DOMParser && DOMParser instanceof Function) {
-              // IE9 doesn't create a responseXML Document object from loaded
-              // SVG, and throws a "DOM Exception: HIERARCHY_REQUEST_ERR (3)"
-              // error when injected.
-              //
-              // So, we'll just create our own manually via the DOMParser using
-              // the the raw XML responseText.
-              //
-              // :NOTE: IE8 and older doesn't have DOMParser, but they can't do
-              // SVG either, so...
-              let xmlDoc
-              try {
-                const parser = new DOMParser()
-                xmlDoc = parser.parseFromString(
-                  httpRequest.responseText,
-                  'text/xml'
-                )
-              } catch (e) {
-                xmlDoc = undefined
-              }
-
-              if (
-                !xmlDoc ||
-                xmlDoc.getElementsByTagName('parsererror').length
-              ) {
-                throw new Error('Unable to parse SVG file: ' + url)
-              }
-
-              if (xmlDoc.documentElement) {
-                svgCache[url] = xmlDoc.documentElement
-              }
             }
-
             processRequestQueue(url)
           } else {
             throw new Error(

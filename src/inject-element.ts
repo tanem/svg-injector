@@ -14,15 +14,10 @@ interface IOptionalArgs {
 }
 
 const injectElement = (
-  el: Element | HTMLElement | null,
+  el: Element | HTMLElement,
   callback: Errback,
   { evalScripts, pngFallback, renumerateIRIElements }: IOptionalArgs = {}
 ) => {
-  if (!el) {
-    callback(new Error('Element to inject is null'))
-    return
-  }
-
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
   if (!imgUrl || !/\.svg/i.test(imgUrl)) {
@@ -78,6 +73,9 @@ const injectElement = (
   // :NOTE: Using indexOf() only _after_ we check for SVG support and bail, so
   // no need for IE8 indexOf() polyfill.
   if (injectedElements.indexOf(el) !== -1) {
+    // TODO: Extract.
+    injectedElements.splice(injectedElements.indexOf(el), 1)
+    ;(el as Element | HTMLElement | null) = null
     return
   }
 
@@ -88,15 +86,12 @@ const injectElement = (
   // Try to avoid loading the orginal image src if possible.
   el.setAttribute('src', '')
 
-  // Load it up.
   loadSvg(imgUrl, (error, svg) => {
     if (!svg) {
+      // TODO: Extract.
+      injectedElements.splice(injectedElements.indexOf(el), 1)
+      ;(el as Element | HTMLElement | null) = null
       callback(error)
-      return
-    }
-
-    if (!el) {
-      callback(new Error('loadSvg: Element to inject is null'))
       return
     }
 
@@ -301,8 +296,9 @@ const injectElement = (
 
     // Now that we no longer need it, drop references to the original element so
     // it can be GC'd.
-    delete injectedElements[injectedElements.indexOf(el)]
-    el = null
+    // TODO: Extract
+    injectedElements.splice(injectedElements.indexOf(el), 1)
+    ;(el as Element | HTMLElement | null) = null
 
     callback(null, svg)
   })

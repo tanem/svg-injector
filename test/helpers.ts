@@ -1,8 +1,8 @@
 import htmlParser from 'prettier/parser-html'
 import prettier from 'prettier/standalone'
 
-const CONTAINER_ID = 'container'
-const ELEMENT_CLASS = 'inject-me'
+export const CONTAINER_ID = 'container'
+export const ELEMENT_CLASS = 'inject-me'
 
 export const render = (names: string[]) => {
   document.body.insertAdjacentHTML(
@@ -27,5 +27,8 @@ export const getElements = () => document.querySelectorAll(`.${ELEMENT_CLASS}`)
 export const getActual = () => document.getElementById(CONTAINER_ID)!.innerHTML
 
 export const cleanup = () => {
-  document.body.removeChild(document.getElementById(CONTAINER_ID)!)
+  const container = document.getElementById(CONTAINER_ID)
+  if (container) {
+    document.body.removeChild(container)
+  }
 }
