@@ -12,14 +12,15 @@ This is a fork of a [library](https://github.com/iconic/SVGInjector) originally 
 
 ## table of contents
 
-* [why](#why)
-* [how](#how)
-* [basic example](#basic-example)
-* [api](#api)
-* [full example](#full-example)
-* [codesandbox examples](#codesandbox-examples)
-* [usage with react](#usage-with-react)
-* [license](#license)
+- [why](#why)
+- [how](#how)
+- [basic example](#basic-example)
+- [api](#api)
+- [full example](#full-example)
+- [codesandbox examples](#codesandbox-examples)
+- [usage with react](#usage-with-react)
+- [credits](#credits)
+- [license](#license)
 
 ## why
 
@@ -29,8 +30,8 @@ Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's ide
 
 ## how
 
-* Any DOM element, or array of elements, passed to **SVGInjector** with an SVG file `src` or `data-src` attribute will be replaced with the full SVG markup inline. The async loaded SVG is also cached so multiple uses of an SVG only requires a single server request.
-* Any embedded JavaScript in the SVG will optionally be extracted, cached and evaluated.
+- Any DOM element, or array of elements, passed to **SVGInjector** with an SVG file `src` or `data-src` attribute will be replaced with the full SVG markup inline. The async loaded SVG is also cached so multiple uses of an SVG only requires a single server request.
+- Any embedded JavaScript in the SVG will optionally be extracted, cached and evaluated.
 
 :warning: The dynamic injection process uses AJAX calls to load SVG. If you are developing locally without running a local webserver, be aware that default browser security settings may [block these calls](http://wiki.fluidproject.org/display/fluid/Browser+settings+to+support+local+Ajax+calls).
 
@@ -45,8 +46,8 @@ Include the **SVGInjector** script on your page.
 Add some SVG `img` tags.
 
 ```html
-<img class="inject-me" src="image-one.svg">
-<img class="inject-me" src="image-two.svg">
+<img class="inject-me" src="image-one.svg" />
+<img class="inject-me" src="image-two.svg" />
 ```
 
 Inject 'em.
@@ -86,30 +87,30 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
 }
 ```
 
-* `evalScript` - String
+- `evalScript` - String
 
   Should we run any script blocks found in the SVG?
 
-  * `always` - Run them every time.
-  * `once` - [default] Only run scripts once for each SVG file, even if it is used on a page more than once.
-  * `[false|'never']` - Ignore scripts
+  - `always` - Run them every time.
+  - `once` - [default] Only run scripts once for each SVG file, even if it is used on a page more than once.
+  - `[false|'never']` - Ignore scripts
 
-* `pngFallback` - String
+- `pngFallback` - String
 
   The directory where fallback PNGs are located for use if the browser doesn't [support SVG](http://caniuse.com/svg). This will look for a file with a `.png` extension matching the SVG filename defined in the `src` (or `data-src`).
 
   For additional flexibility, since you might be using a single SVG styled in multiple ways, you can also define per-element fallbacks by adding a `data-fallback` or `data-png` attribute to your `img` tags to define a unique PNG for each context. Refer to the [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v) example.
 
-* `each(error, svg)` - function
+- `each(error, svg)` - function
 
   A function to call after each SVG is injected. If an error occurred it will be passed as the first parameter. Otherwise the first parameter will be null, and the second will be the newly injected SVG DOM element.
 
-* `renumerateIRIElements` - boolean
+- `renumerateIRIElements` - boolean
 
   Should we renumerate all of the SVG IRI addressable elements?
 
-  * `true` - [default] Renumerate.
-  * `false` - Don't renumerate.
+  - `true` - [default] Renumerate.
+  - `false` - Don't renumerate.
 
 **`callback`**
 
@@ -118,8 +119,8 @@ A function to call once all the requested SVG elements have been injected. Recei
 ## full example
 
 ```html
-<img id="image-one" class="inject-me" data-src="image-one.svg">
-<img id="image-two" class="inject-me" data-src="image-two.svg">
+<img id="image-one" class="inject-me" data-src="image-one.svg" />
+<img id="image-two" class="inject-me" data-src="image-two.svg" />
 ```
 
 ```js
@@ -146,13 +147,17 @@ SVGInjector(mySVGsToInject, injectorOptions, function(totalSVGsInjected) {
 
 ## codesandbox examples
 
-* [All the things](https://codesandbox.io/s/lxnnro2k2z)
-* [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v)
-* [Simple](https://codesandbox.io/s/py6oml23wx)
+- [All the things](https://codesandbox.io/s/lxnnro2k2z)
+- [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v)
+- [Simple](https://codesandbox.io/s/py6oml23wx)
 
 ## usage with react
 
-* [react-svg](https://github.com/tanem/react-svg)
+- [react-svg](https://github.com/tanem/react-svg)
+
+## credits
+
+[![browserstack logo](browserstack.png)](https://www.browserstack.com)
 
 ## license
 
