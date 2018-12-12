@@ -303,10 +303,14 @@ suite('svg injector', () => {
     render(['not-found'])
     SVGInjector(getElements(), {
       done: _ => {
+        cleanup()
         render(['not-found'])
         SVGInjector(getElements(), {
           // tslint:disable-next-line:no-shadowed-variable
-          done: _ => done(),
+          done: _ => {
+            fakeXHR.restore()
+            done()
+          },
           each: error => {
             expect(error)
               .to.be.a('error')
@@ -316,9 +320,32 @@ suite('svg injector', () => {
               )
           }
         })
-        fakeXHR.restore()
       }
     })
     requests[0].respond(404, {}, '')
+  })
+
+  test('500 error handling', done => {
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const requests: sinon.SinonFakeXMLHttpRequest[] = []
+    fakeXHR.onCreate = xhr => {
+      requests.push(xhr)
+    }
+    render(['500'])
+    SVGInjector(getElements(), {
+      done: _ => {
+        fakeXHR.restore()
+        done()
+      },
+      each: error => {
+        expect(error)
+          .to.be.a('error')
+          .with.property(
+            'message',
+            'There was a problem injecting the SVG: 500 Internal Server Error'
+          )
+      }
+    })
+    requests[0].respond(500, {}, '<svg></svg>')
   })
 })

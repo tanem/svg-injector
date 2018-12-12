@@ -19,7 +19,7 @@ interface IOptionalArgs {
 const SVGInjector = (
   elements: HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null,
   {
-    done = () => undefined,
+    done,
     each = () => undefined,
     evalScripts = 'never',
     pngFallback = '',
@@ -38,7 +38,9 @@ const SVGInjector = (
             !(elements instanceof Element) &&
             elements.length === ++elementsLoaded
           ) {
-            done(elementsLoaded)
+            if (typeof done === 'function') {
+              done(elementsLoaded)
+            }
           }
         },
         {
@@ -56,7 +58,9 @@ const SVGInjector = (
       elements,
       (error: Error | null, svg?: SVGSVGElement) => {
         each(error, svg)
-        done(1)
+        if (typeof done === 'function') {
+          done(1)
+        }
         elements = null
       },
       {
@@ -68,7 +72,9 @@ const SVGInjector = (
     return
   }
 
-  done(0)
+  if (typeof done === 'function') {
+    done(0)
+  }
 }
 
 export default SVGInjector
