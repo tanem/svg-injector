@@ -9,9 +9,6 @@
     "noUnusedParameters": true,
     "strict": true,
     "target": "esnext"
-    // "allowSyntheticDefaultImports": true,
-    // "esModuleInterop": true,
-    // "noFallthroughCasesInSwitch": true,
   },
   "exclude": ["dist", "node_modules"],
   "include": ["src", "types"]
