@@ -1,0 +1,15 @@
+<svg
+  width="150"
+  height="150"
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <style>
+    circle {
+      fill: orange;
+      stroke: black;
+      stroke-width: 10px;
+    }
+  </style>
+  <circle cx="50" cy="50" r="40" />
+</svg>

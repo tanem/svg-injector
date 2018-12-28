@@ -1,0 +1,15 @@
+language: node_js
+notifications:
+  email: false
+dist: trusty
+sudo: required
+addons:
+  chrome: stable
+cache:
+  directories:
+    - node_modules
+install:
+  - npm i
+script:
+  - npm t
+  - $(npm bin)/codecov

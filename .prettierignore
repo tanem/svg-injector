@@ -1,2 +1,6 @@
+cjs
+coverage
+es
 package.json
+svg-injector.d.ts
 umd

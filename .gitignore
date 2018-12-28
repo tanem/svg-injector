@@ -1,7 +1,10 @@
 *.log
+*.tgz
 .DS_Store
-esm
-lib
+.vscode
+cjs
+coverage
+es
 node_modules
-npm-debug.log
+svg-injector.d.ts
 umd
