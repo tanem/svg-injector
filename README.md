@@ -19,7 +19,6 @@ This is a fork of a [library](https://github.com/iconic/SVGInjector) originally 
 - [full example](#full-example)
 - [codesandbox examples](#codesandbox-examples)
 - [usage with react](#usage-with-react)
-- [credits](#credits)
 - [license](#license)
 
 ## why
@@ -154,10 +153,6 @@ SVGInjector(mySVGsToInject, injectorOptions, function(totalSVGsInjected) {
 ## usage with react
 
 - [react-svg](https://github.com/tanem/react-svg)
-
-## credits
-
-[![browserstack logo](browserstack.png)](https://www.browserstack.com)
 
 ## license
 
