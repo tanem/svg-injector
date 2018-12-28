@@ -1,6 +1,15 @@
 # Changelog
 
-## [v4.0.0](https://github.com/tanem/svg-injector/tree/v4.0.0) (2018-12-29)
+## [v4.0.1](https://github.com/tanem/svg-injector/tree/v4.0.1) (2018-12-29)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v4.0.0...v4.0.1)
+
+**Merged pull requests:**
+
+- Update keywords [\#20](https://github.com/tanem/svg-injector/pull/20) ([tanem](https://github.com/tanem))
+- Update license [\#19](https://github.com/tanem/svg-injector/pull/19) ([tanem](https://github.com/tanem))
+- Add .mailmap [\#18](https://github.com/tanem/svg-injector/pull/18) ([tanem](https://github.com/tanem))
+
+## [v4.0.0](https://github.com/tanem/svg-injector/tree/v4.0.0) (2018-12-28)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v3.0.0...v4.0.0)
 
 **Merged pull requests:**
