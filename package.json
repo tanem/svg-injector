@@ -17,13 +17,14 @@
   "bugs": "https://github.com/tanem/svg-injector/issues",
   "repository": "github:tanem/svg-injector",
   "keywords": [
-    "SVG",
-    "Scalable Vector Graphics",
-    "SVG injector",
+    "dom",
+    "html",
     "images",
     "img",
-    "html",
-    "DOM"
+    "javascript",
+    "scalable-vector-graphics",
+    "svg",
+    "typescript"
   ],
   "license": "MIT",
   "dependencies": {
