@@ -1,3 +1,4 @@
+import hasSvgSupport from './has-svg-support'
 import loadSvg from './load-svg'
 import { Errback } from './types'
 import uniqueId from './unique-id'
@@ -29,15 +30,10 @@ const injectElement = (
     return
   }
 
-  const hasSvgSupport = document.implementation.hasFeature(
-    'http://www.w3.org/TR/SVG11/feature#BasicStructure',
-    '1.1'
-  )
-
   // If we don't have SVG support try to fall back to a png, either defined
   // per-element via data-fallback or data-png, or globally via the pngFallback
   // directory setting.
-  if (!hasSvgSupport) {
+  if (!hasSvgSupport()) {
     const perElementFallback =
       el.getAttribute('data-fallback') || el.getAttribute('data-png')
 
@@ -269,6 +265,7 @@ const injectElement = (
         //
         // Also, the code is evaluated in a closure and not in the global scope.
         // If you need to put something in global scope, use 'window'.
+        // tslint:disable-next-line:function-constructor
         new Function(scriptsToEval[l])(window)
       }
 

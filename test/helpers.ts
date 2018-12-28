@@ -1,5 +1,4 @@
-import htmlParser from 'prettier/parser-html'
-import prettier from 'prettier/standalone'
+import prettyhtml from '@starptech/prettyhtml'
 
 export const CONTAINER_ID = 'container'
 export const ELEMENT_CLASS = 'inject-me'
@@ -19,8 +18,9 @@ export const render = (names: string[]) => {
 }
 
 export const format = (svg: string) =>
-  // @ts-ignore
-  prettier.format(svg, { parser: 'html', plugins: [htmlParser] })
+  prettyhtml(svg, {
+    sortAttributes: true
+  }).contents
 
 export const getElements = () => document.querySelectorAll(`.${ELEMENT_CLASS}`)
 

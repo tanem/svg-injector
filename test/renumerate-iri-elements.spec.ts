@@ -60,12 +60,12 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 64 64"
           class="injected-svg inject-me"
           data-src="/fixtures/fill.svg"
+          height="64"
+          viewBox="0 0 64 64"
+          width="64"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
@@ -74,10 +74,10 @@ suite('renumerate iri elements', () => {
               <stop offset="95%" stop-color="#FF6"></stop>
             </linearGradient>
             <radialGradient
-              id="radial-gradient-1"
-              gradientUnits="userSpaceOnUse"
               cx="32"
               cy="32"
+              gradientUnits="userSpaceOnUse"
+              id="radial-gradient-1"
               r="32"
             >
               <stop offset="0%" stop-color="SlateGray"></stop>
@@ -85,37 +85,32 @@ suite('renumerate iri elements', () => {
               <stop offset="100%" stop-color="olive"></stop>
             </radialGradient>
             <pattern
+              height="20"
               id="pattern-1"
+              patternUnits="userSpaceOnUse"
+              width="20"
               x="0"
               y="0"
-              width="20"
-              height="20"
-              patternUnits="userSpaceOnUse"
             >
-              <circle
-                cx="10"
-                cy="10"
-                r="10"
-                style="stroke: none; fill: #0000ff"
-              ></circle>
+              <circle cx="10" cy="10" r="10" style="stroke: none; fill: #0000ff"></circle>
             </pattern>
           </defs>
           <rect
+            fill="url(#radial-gradient-1)"
+            height="64"
+            stroke="url(#linear-gradient-1)"
+            stroke-width="5"
+            width="64"
             x="0"
             y="0"
-            width="64"
-            height="64"
-            stroke-width="5"
-            stroke="url(#linear-gradient-1)"
-            fill="url(#radial-gradient-1)"
           ></rect>
           <circle
             cx="32"
             cy="32"
-            r="18"
-            stroke-width="4"
-            stroke="url(#pattern-1)"
             fill="url(#linear-gradient-1)"
+            r="18"
+            stroke="url(#pattern-1)"
+            stroke-width="4"
           ></circle>
         </svg>
       `)
@@ -131,28 +126,28 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 64 64"
           class="injected-svg inject-me"
           data-src="/fixtures/filter.svg"
+          height="200"
+          width="200"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
-            <filter id="blurFilter-1">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3"></feGaussianBlur>
+            <filter height="180" id="offset-1" width="180">
+              <feOffset dx="60" dy="60" in="SourceGraphic"></feOffset>
             </filter>
           </defs>
-          <circle
-            cx="32"
-            cy="32"
-            r="18"
-            stroke="none"
-            fill="olive"
-            filter="url(#blurFilter-1)"
-          ></circle>
-          <circle cx="32" cy="32" r="10" stroke="none" fill="silver"></circle>
+          <rect fill="green" height="100" stroke="black" width="100" x="0" y="0"></rect>
+          <rect
+            fill="green"
+            filter="url(#offset-1)"
+            height="100"
+            stroke="black"
+            width="100"
+            x="0"
+            y="0"
+          ></rect>
         </svg>
       `)
       expect(actual).to.equal(expected)
@@ -167,48 +162,48 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 64 64"
           class="injected-svg inject-me"
           data-src="/fixtures/marker.svg"
+          height="64"
+          viewBox="0 0 64 64"
+          width="64"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
             <marker
               id="markerSquare-1"
-              markerWidth="7"
               markerHeight="7"
+              markerWidth="7"
+              orient="auto"
               refX="4"
               refY="4"
-              orient="auto"
             >
               <rect
-                x="1"
-                y="1"
-                width="5"
                 height="5"
                 style="stroke: none; fill:#000000;"
+                width="5"
+                x="1"
+                y="1"
               ></rect>
             </marker>
             <marker
               id="markerArrow-1"
-              markerWidth="13"
               markerHeight="13"
+              markerWidth="13"
+              orient="auto"
               refX="2"
               refY="7"
-              orient="auto"
             >
               <path d="M2,2 L2,13 L8,7 L2,2" style="fill: #000000;"></path>
             </marker>
           </defs>
           <path
             d="M10,10 l20,0 0,45 l20,0"
-            style="stroke: #0000cc; stroke-width: 1px; fill: none;"
-            marker-start="url(#markerSquare-1)"
-            marker-mid="url(#markerSquare-1)"
             marker-end="url(#markerArrow-1)"
+            marker-mid="url(#markerSquare-1)"
+            marker-start="url(#markerSquare-1)"
+            style="stroke: #0000cc; stroke-width: 1px; fill: none;"
           ></path>
         </svg>
       `)
@@ -267,12 +262,12 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="8"
-          height="8"
-          viewBox="0 0 8 8"
           class="injected-svg inject-me"
           data-src="/fixtures/thumb-up.svg"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <path
@@ -331,31 +326,29 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
           class="injected-svg inject-me"
           data-src="/fixtures/dashboard.svg"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
             <path
-              id="a-1"
               d="M0 10h8V0H0v10zm0 8h8v-6H0v6zm10 0h8V8h-8v10zm0-18v6h8V0h-8z"
+              id="a-1"
             ></path>
           </defs>
           <g fill="none" fill-rule="evenodd">
             <path d="M0 0h24v24H0z"></path>
             <g transform="translate(3 3)">
-              <mask id="b-1" fill="#fff"><use xlink:href="#a-1"></use></mask>
-              <use fill="#000" fill-opacity=".7" xlink:href="#a-1"></use>
+              <mask fill="#fff" id="b-1">
+                <use xlink:href="#a-1"></use>
+              </mask>
+              <use fill="#000" fill-opacity="0.7" xlink:href="#a-1"></use>
               <g mask="url(#b-1)">
-                <path
-                  fill="#004876"
-                  fill-rule="nonzero"
-                  d="M-103-11535H-3v100h-100z"
-                ></path>
+                <path d="M-103-11535H-3v100h-100z" fill="#004876" fill-rule="nonzero"></path>
               </g>
             </g>
           </g>
@@ -373,31 +366,29 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
           class="injected-svg inject-me"
           data-src="/fixtures/notifications.svg"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
             <path
-              id="a-1"
               d="M8.5 20c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6.5-6V8.5c0-3.07-2.13-5.64-5-6.32V1.5C10 .67 9.33 0 8.5 0S7 .67 7 1.5v.68c-2.87.68-5 3.25-5 6.32V14l-2 2v1h17v-1l-2-2z"
+              id="a-1"
             ></path>
           </defs>
           <g fill="none" fill-rule="evenodd">
             <path d="M0 0h24v24H0z"></path>
             <g transform="translate(3 2)">
-              <mask id="b-1" fill="#fff"><use xlink:href="#a-1"></use></mask>
-              <use fill="#000" fill-opacity=".7" xlink:href="#a-1"></use>
+              <mask fill="#fff" id="b-1">
+                <use xlink:href="#a-1"></use>
+              </mask>
+              <use fill="#000" fill-opacity="0.7" xlink:href="#a-1"></use>
               <g mask="url(#b-1)">
-                <path
-                  fill="#004876"
-                  fill-rule="nonzero"
-                  d="M-103-89406H-3v100h-100z"
-                ></path>
+                <path d="M-103-89406H-3v100h-100z" fill="#004876" fill-rule="nonzero"></path>
               </g>
             </g>
           </g>
@@ -415,30 +406,32 @@ suite('renumerate iri elements', () => {
       const actual = format(getActual())
       const expected = format(`
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
           class="injected-svg inject-me"
           data-src="/fixtures/poll.svg"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <defs>
             <path
+              d="M 16 0 H 2 C 0.9 0 0 0.9 0 2 v 14 c 0 1.1 0.9 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 2 c 0 -1.1 -0.9 -2 -2 -2 Z M 6 14 H 4 V 7 h 2 v 7 Z m 4 0 H 8 V 4 h 2 v 10 Z m 4 0 h -2 v -4 h 2 v 4 Z"
               id="a-1"
-              d="M16 0H2C.9 0 0 .9 0 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zM6 14H4V7h2v7zm4 0H8V4h2v10zm4 0h-2v-4h2v4z"
             ></path>
           </defs>
           <g fill="none" fill-rule="evenodd">
-            <path d="M0 0h24v24H0z"></path>
+            <path d="M 0 0 h 24 v 24 H 0 Z"></path>
             <g transform="translate(3 3)">
-              <mask id="b-1" fill="#fff"><use xlink:href="#a-1"></use></mask>
-              <use fill="#000" fill-opacity=".7" xlink:href="#a-1"></use>
+              <mask fill="#fff" id="b-1">
+                <use xlink:href="#a-1"></use>
+              </mask>
+              <use fill="#000" fill-opacity="0.7" xlink:href="#a-1"></use>
               <g mask="url(#b-1)">
                 <path
+                  d="M -103 -91019 H -3 v 100 h -100 Z"
                   fill="#004876"
                   fill-rule="nonzero"
-                  d="M-103-91019H-3v100h-100z"
                 ></path>
               </g>
             </g>

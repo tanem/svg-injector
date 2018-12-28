@@ -1,49 +1,79 @@
+const path = require('path')
+
 const PORT = 9876
 
 module.exports = function(config) {
   config.set({
-    frameworks: ['mocha', 'chai', 'karma-typescript'],
+    autoWatch: true,
+    browsers: ['ChromeHeadless'],
+    client: {
+      mocha: {
+        ui: 'tdd'
+      }
+    },
+    colors: true,
+    concurrency: Infinity,
+    coverageIstanbulReporter: {
+      reports: ['lcov', 'text'],
+      dir: path.join(__dirname, 'coverage'),
+      fixWebpackSourcePaths: true
+    },
     files: [
-      'src/*.ts',
       {
         pattern: 'test/fixtures/*',
         watched: false,
-        included: false,
-        served: true,
-        nocache: false
+        included: false
       },
-      'test/helpers.ts',
-      'test/*.spec.ts'
+      'test/index.ts'
     ],
-    reporters: ['spec', 'coverage', 'karma-typescript'],
-    port: PORT,
-    colors: true,
+    frameworks: ['mocha', 'chai'],
     logLevel: config.LOG_WARN,
-    browsers: ['ChromeHeadless'],
-    autoWatch: true,
-    singleRun: true,
-    concurrency: Infinity,
+    port: PORT,
     preprocessors: {
-      'src/*.ts': ['karma-typescript', 'coverage'],
-      'test/*.ts': ['karma-typescript']
-    },
-    karmaTypescriptConfig: {
-      tsconfig: './tsconfig.test.json',
-      reports: {
-        lcovonly: {
-          directory: 'coverage',
-          filename: 'lcov.info',
-          subdirectory: '.'
-        },
-        text: ''
-      }
+      'test/index.ts': ['webpack']
     },
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
     },
-    client: {
-      mocha: {
-        ui: 'tdd'
+    reporters: ['spec', 'coverage-istanbul'],
+    singleRun: true,
+    webpack: {
+      mode: 'development',
+      node: {
+        fs: 'empty',
+        module: 'empty'
+      },
+      resolve: {
+        alias: {
+          sinon: 'sinon/pkg/sinon.js'
+        },
+        extensions: ['.json', '.js', '.ts']
+      },
+      module: {
+        rules: [
+          {
+            test: require.resolve('prettier'),
+            use: 'null-loader'
+          },
+          {
+            test: /\.(ts|js)$/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env', '@babel/typescript']
+              }
+            }
+          },
+          {
+            test: /\.ts$/,
+            exclude: [path.resolve(__dirname, 'test')],
+            enforce: 'post',
+            use: {
+              loader: 'istanbul-instrumenter-loader',
+              options: { esModules: true }
+            }
+          }
+        ]
       }
     }
   })

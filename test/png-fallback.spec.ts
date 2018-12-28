@@ -1,19 +1,19 @@
 import * as sinon from 'sinon'
+import * as hasSvgSupport from '../src/has-svg-support'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import { cleanup, format, getActual, getElements } from './helpers'
 
 suite('png fallback', () => {
-  let hasFeatureStub: sinon.SinonStub
+  let hasSvgSupportStub: sinon.SinonStub
 
   suiteSetup(() => {
-    hasFeatureStub = sinon
-      .stub(document.implementation, 'hasFeature')
-      .callsFake((): any => false)
+    // @ts-ignore
+    hasSvgSupportStub = sinon.stub(hasSvgSupport, 'default').returns(false)
   })
 
   suiteTeardown(() => {
-    hasFeatureStub.restore()
+    hasSvgSupportStub.restore()
   })
 
   teardown(() => {
