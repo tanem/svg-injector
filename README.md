@@ -80,7 +80,6 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
 ```js
 {
   evalScripts: [always|once|never],
-  pngFallback: [PNG directory],
   each: [function],
   renumerateIRIElements: [true|false]
 }
@@ -93,12 +92,6 @@ A single DOM element or array of elements, with `src` or `data-src` attributes d
   - `always` - Run them every time.
   - `once` - [default] Only run scripts once for each SVG file, even if it is used on a page more than once.
   - `[false|'never']` - Ignore scripts
-
-- `pngFallback` - String
-
-  The directory where fallback PNGs are located for use if the browser doesn't [support SVG](http://caniuse.com/svg). This will look for a file with a `.png` extension matching the SVG filename defined in the `src` (or `data-src`).
-
-  For additional flexibility, since you might be using a single SVG styled in multiple ways, you can also define per-element fallbacks by adding a `data-fallback` or `data-png` attribute to your `img` tags to define a unique PNG for each context. Refer to the [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v) example.
 
 - `each(error, svg)` - function
 
@@ -129,7 +122,6 @@ var mySVGsToInject = document.querySelectorAll('img.inject-me')
 // Options
 var injectorOptions = {
   evalScripts: 'once',
-  pngFallback: 'assets/png',
   each: function(error, svg) {
     if (!error) {
       console.log('SVG injected: ' + svg.getAttribute('id'))

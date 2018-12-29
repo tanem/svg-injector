@@ -5,7 +5,6 @@ interface IOptionalArgs {
   done?: DoneCallback
   each?: Errback
   evalScripts?: 'always' | 'once' | 'never'
-  pngFallback?: string
   renumerateIRIElements?: boolean
 }
 
@@ -22,7 +21,6 @@ const SVGInjector = (
     done,
     each = () => undefined,
     evalScripts = 'never',
-    pngFallback = '',
     renumerateIRIElements = true
   }: IOptionalArgs = {}
 ) => {
@@ -45,7 +43,6 @@ const SVGInjector = (
         },
         {
           evalScripts,
-          pngFallback,
           renumerateIRIElements
         }
       )
@@ -65,7 +62,6 @@ const SVGInjector = (
       },
       {
         evalScripts,
-        pngFallback,
         renumerateIRIElements
       }
     )
