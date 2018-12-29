@@ -4,148 +4,86 @@
 [![build status](https://img.shields.io/travis/tanem/svg-injector/master.svg?style=flat-square)](https://travis-ci.org/tanem/svg-injector)
 [![coverage status](https://img.shields.io/codecov/c/github/tanem/svg-injector.svg?style=flat-square)](https://codecov.io/gh/tanem/svg-injector)
 [![npm downloads](https://img.shields.io/npm/dm/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/umd/svg-injector.min.js?compression=gzip&label=gzip%20size&style=flat-square)](https://unpkg.com/@tanem/svg-injector/umd/)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/umd/svg-injector.production.min.js?compression=gzip&label=gzip%20size&style=flat-square)](https://unpkg.com/@tanem/svg-injector/umd/)
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
-This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
-
-## table of contents
-
-- [why](#why)
-- [how](#how)
-- [basic example](#basic-example)
-- [api](#api)
-- [full example](#full-example)
-- [codesandbox examples](#codesandbox-examples)
-- [usage with react](#usage-with-react)
-- [license](#license)
-
-## why
+## Background
 
 There are a number of ways to use SVG on a page (`object`, `embed`, `iframe`, `img`, CSS `background-image`) but to unlock the full potential of SVG, including full element-level CSS styling and evaluation of embedded JavaScript, the full SVG markup must be included directly in the DOM.
 
-Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's idea of good time, so **SVGInjector** lets you work with simple `img` tag elements (or other tag of your choosing) and does the heavy lifting of swapping in the SVG markup inline for you.
+Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's idea of good time, so `SVGInjector` lets you work with simple tag elements and does the heavy lifting of swapping in the SVG markup inline for you.
 
-## how
-
-- Any DOM element, or array of elements, passed to **SVGInjector** with an SVG file `src` or `data-src` attribute will be replaced with the full SVG markup inline. The async loaded SVG is also cached so multiple uses of an SVG only requires a single server request.
-- Any embedded JavaScript in the SVG will optionally be extracted, cached and evaluated.
-
-:warning: The dynamic injection process uses AJAX calls to load SVG. If you are developing locally without running a local webserver, be aware that default browser security settings may [block these calls](http://wiki.fluidproject.org/display/fluid/Browser+settings+to+support+local+Ajax+calls).
-
-## basic example
-
-Include the **SVGInjector** script on your page.
+## Basic Usage
 
 ```html
-<script src="https://unpkg.com/@tanem/svg-injector/umd/svg-injector.min.js"></script>
-```
-
-Add some SVG `img` tags.
-
-```html
-<img class="inject-me" src="image-one.svg" />
-<img class="inject-me" src="image-two.svg" />
-```
-
-Inject 'em.
-
-```html
-<script>
-  // Elements to inject
-  var mySVGsToInject = document.querySelectorAll('img.inject-me')
-
-  // Do the injection
-  SVGInjector(mySVGsToInject)
-</script>
-```
-
-The `img` tags have now been replaced with the full SVG markup.
-
-## api
-
-In addition to passing elements to inject, an options object and callback function can optionally be defined.
-
-```js
-SVGInjector(elements, options, callback)
-```
-
-**`elements`**
-
-A single DOM element or array of elements, with `src` or `data-src` attributes defined, to inject.
-
-**`options`**
-
-```js
-{
-  evalScripts: [always|once|never],
-  each: [function],
-  renumerateIRIElements: [true|false]
-}
-```
-
-- `evalScript` - String
-
-  Should we run any script blocks found in the SVG?
-
-  - `always` - Run them every time.
-  - `once` - [default] Only run scripts once for each SVG file, even if it is used on a page more than once.
-  - `[false|'never']` - Ignore scripts
-
-- `each(error, svg)` - function
-
-  A function to call after each SVG is injected. If an error occurred it will be passed as the first parameter. Otherwise the first parameter will be null, and the second will be the newly injected SVG DOM element.
-
-- `renumerateIRIElements` - boolean
-
-  Should we renumerate all of the SVG IRI addressable elements?
-
-  - `true` - [default] Renumerate.
-  - `false` - Don't renumerate.
-
-**`callback`**
-
-A function to call once all the requested SVG elements have been injected. Receives a count of the total SVGs injected as a parameter.
-
-## full example
-
-```html
-<img id="image-one" class="inject-me" data-src="image-one.svg" />
-<img id="image-two" class="inject-me" data-src="image-two.svg" />
+<div id="inject-me" data-src="icon.svg"></div>
 ```
 
 ```js
-// Elements to inject
-var mySVGsToInject = document.querySelectorAll('img.inject-me')
+import SVGInjector from '@tanem/svg-injector'
 
-// Options
-var injectorOptions = {
-  evalScripts: 'once',
-  each: function(error, svg) {
-    if (!error) {
-      console.log('SVG injected: ' + svg.getAttribute('id'))
+SVGInjector(document.getElementById('inject-me'))
+```
+
+## Live Examples
+
+- Basic Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/basic-usage)
+- API Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/api-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/api-usage)
+- UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
+- UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)
+
+## API
+
+**Arguments**
+
+- `elements` - A single DOM element or array of elements, with `src` or `data-src` attributes defined, to inject.
+- `options` - _Optional_ An object containing the optional arguments defined below. Defaults to `{}`.
+  - `done(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `undefined`.
+  - `each(err, svg)` - _Optional_ A callback which is called when each element is processed. `svg` is the newly injected SVG DOM element. Defaults to `() => undefined`.
+  - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
+  - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
+
+**Example**
+
+```html
+<div class="inject-me" data-src="icon-one.svg"></div>
+<div class="inject-me" data-src="icon-two.svg"></div>
+```
+
+```js
+import SVGInjector from '@tanem/svg-injector'
+
+SVGInjector(document.getElementsByClassName('inject-me'), {
+  done(elementsLoaded) {
+    console.log(`injected ${elementsLoaded} elements`)
+  },
+  each(err, svg) {
+    if (err) {
+      throw err
     }
-  }
-}
-
-// Trigger the injection
-SVGInjector(mySVGsToInject, injectorOptions, function(totalSVGsInjected) {
-  // Callback after all SVGs are injected
-  console.log('We injected ' + totalSVGsInjected + ' SVG(s)!')
+    console.log(`injected ${svg.outerHTML}`)
+  },
+  evalScripts: 'once',
+  renumerateIRIElements: 'false'
 })
 ```
 
-## codesandbox examples
+## Installation
 
-- [All the things](https://codesandbox.io/s/lxnnro2k2z)
-- [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v)
-- [Simple](https://codesandbox.io/s/py6oml23wx)
+```
+$ npm install @tanem/svg-injector
+```
 
-## usage with react
+There are also UMD builds available via [unpkg](https://unpkg.com/):
 
-- [react-svg](https://github.com/tanem/react-svg)
+- https://unpkg.com/@tanem/svg-injector/umd/svg-injector.development.js
+- https://unpkg.com/@tanem/svg-injector/umd/svg-injector.production.min.js
 
-## license
+## Credits
+
+This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
+
+## License
 
 MIT

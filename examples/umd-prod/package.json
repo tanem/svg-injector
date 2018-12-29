@@ -1,0 +1,10 @@
+{
+  "name": "umd-prod",
+  "description": "SVGInjector UMD Prod Example",
+  "keywords": [
+    "@tanem/svg-injector"
+  ],
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.html"
+}
