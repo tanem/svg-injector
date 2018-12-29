@@ -33,10 +33,6 @@ SVGInjector(document.getElementById('inject-me'))
 - UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
 - UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)
 
-- [All the things](https://codesandbox.io/s/lxnnro2k2z)
-- [Fallbacks](https://codesandbox.io/s/0xlkw2nw3v)
-- [Simple](https://codesandbox.io/s/py6oml23wx)
-
 ## API
 
 **Arguments**
@@ -46,7 +42,7 @@ SVGInjector(document.getElementById('inject-me'))
   - `done(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `undefined`.
   - `each(err, svg)` - _Optional_ A callback which is called when each element is processed. `svg` is the newly injected SVG DOM element. Defaults to `() => undefined`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
-- `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
+  - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
 
 **Example**
 
