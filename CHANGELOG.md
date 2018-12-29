@@ -1,6 +1,14 @@
 # Changelog
 
-## [v4.0.1](https://github.com/tanem/svg-injector/tree/v4.0.1) (2018-12-29)
+## [v5.0.0](https://github.com/tanem/svg-injector/tree/v5.0.0) (2018-12-30)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v4.0.1...v5.0.0)
+
+**Merged pull requests:**
+
+- Update README and add UMD examples [\#22](https://github.com/tanem/svg-injector/pull/22) ([tanem](https://github.com/tanem))
+- Remove png fallback option [\#21](https://github.com/tanem/svg-injector/pull/21) ([tanem](https://github.com/tanem))
+
+## [v4.0.1](https://github.com/tanem/svg-injector/tree/v4.0.1) (2018-12-28)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v4.0.0...v4.0.1)
 
 **Merged pull requests:**
