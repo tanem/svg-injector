@@ -1,4 +1,3 @@
-import hasSvgSupport from './has-svg-support'
 import loadSvg from './load-svg'
 import { Errback } from './types'
 import uniqueId from './unique-id'
@@ -10,14 +9,13 @@ const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
 interface IOptionalArgs {
   evalScripts?: 'always' | 'once' | 'never'
-  pngFallback?: string
   renumerateIRIElements?: boolean
 }
 
 const injectElement = (
   el: Element | HTMLElement,
   callback: Errback,
-  { evalScripts, pngFallback, renumerateIRIElements }: IOptionalArgs = {}
+  { evalScripts, renumerateIRIElements }: IOptionalArgs = {}
 ) => {
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
@@ -25,40 +23,6 @@ const injectElement = (
     callback(
       new Error(
         'Attempted to inject a file with a non-svg extension: ' + imgUrl
-      )
-    )
-    return
-  }
-
-  // If we don't have SVG support try to fall back to a png, either defined
-  // per-element via data-fallback or data-png, or globally via the pngFallback
-  // directory setting.
-  if (!hasSvgSupport()) {
-    const perElementFallback =
-      el.getAttribute('data-fallback') || el.getAttribute('data-png')
-
-    // Per-element specific PNG fallback defined, so use that.
-    if (perElementFallback) {
-      el.setAttribute('src', perElementFallback)
-      callback(null)
-      return
-    }
-
-    // Global PNG fallback directory defined, use the same-named PNG.
-    if (pngFallback) {
-      el.setAttribute(
-        'src',
-        pngFallback +
-          '/' +
-          (imgUrl.split('/').pop() as string).replace('.svg', '.png')
-      )
-      callback(null)
-      return
-    }
-
-    callback(
-      new Error(
-        'This browser does not support SVG and no PNG fallback was defined.'
       )
     )
     return
