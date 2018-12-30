@@ -1,6 +1,13 @@
 # Changelog
 
-## [v5.0.0](https://github.com/tanem/svg-injector/tree/v5.0.0) (2018-12-30)
+## [v5.0.1](https://github.com/tanem/svg-injector/tree/v5.0.1) (2018-12-30)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.0...v5.0.1)
+
+**Merged pull requests:**
+
+- Update deps [\#23](https://github.com/tanem/svg-injector/pull/23) ([tanem](https://github.com/tanem))
+
+## [v5.0.0](https://github.com/tanem/svg-injector/tree/v5.0.0) (2018-12-29)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v4.0.1...v5.0.0)
 
 **Merged pull requests:**
