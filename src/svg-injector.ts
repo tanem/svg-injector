@@ -24,11 +24,11 @@ const SVGInjector = (
     renumerateIRIElements = true
   }: IOptionalArgs = {}
 ) => {
-  if (elements && !(elements instanceof Element)) {
+  if (elements && 'length' in elements) {
     let elementsLoaded = 0
-    for (const element of elements) {
+    for (let i = 0, j = elements.length; i < j; i++) {
       injectElement(
-        element,
+        elements[i],
         (error: Error | null, svg?: SVGSVGElement) => {
           each(error, svg)
           if (
