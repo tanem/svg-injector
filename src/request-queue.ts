@@ -16,11 +16,13 @@ export const processRequestQueue = (url: string) => {
       setTimeout(() => {
         const cb = requestQueue[url][index]
 
+        /* istanbul ignore else */
         if (svgCache[url] instanceof SVGSVGElement) {
           cb(null, cloneSvg(svgCache[url] as SVGSVGElement))
           return
         }
 
+        /* istanbul ignore else */
         if (svgCache[url] instanceof Error) {
           cb(svgCache[url] as Error)
           return
