@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
@@ -16,7 +15,7 @@ suite('svg injector', () => {
   let uniqueIdStub: sinon.SinonStub
 
   suiteSetup(() => {
-    uniqueIdStub = sinon.stub(uniqueId, 'default').returns(1)
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
   suiteTeardown(() => {
@@ -29,7 +28,7 @@ suite('svg injector', () => {
 
   test('single element', done => {
     render(['thumb-up'])
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       const actual = format(getActual())
       const expected = format(`
@@ -63,7 +62,7 @@ suite('svg injector', () => {
 
   test('multiple elements', done => {
     render(['thumb-up', 'thumb-up'])
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       const actual = format(getActual())
       const expected = format(`
@@ -136,7 +135,7 @@ suite('svg injector', () => {
   })
 
   test('null element', done => {
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       expect(elementsLoaded).to.equal(0)
       expect(each.callCount).to.equal(0)
@@ -176,7 +175,7 @@ suite('svg injector', () => {
   })
 
   test('injection in progress', () => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
@@ -296,7 +295,7 @@ suite('svg injector', () => {
   })
 
   test('cached errors', done => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
@@ -327,7 +326,7 @@ suite('svg injector', () => {
   })
 
   test('500 error handling', done => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)

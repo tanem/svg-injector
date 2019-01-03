@@ -1,4 +1,4 @@
-import prettyhtml from '@starptech/prettyhtml'
+import * as prettyhtml from '@starptech/prettyhtml'
 
 export const CONTAINER_ID = 'container'
 export const ELEMENT_CLASS = 'inject-me'

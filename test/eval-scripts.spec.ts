@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
@@ -9,7 +8,7 @@ suite('eval scripts', () => {
   let uniqueIdStub: sinon.SinonStub
 
   suiteSetup(() => {
-    uniqueIdStub = sinon.stub(uniqueId, 'default').returns(1)
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
   suiteTeardown(() => {
@@ -17,7 +16,7 @@ suite('eval scripts', () => {
   })
 
   setup(() => {
-    logStub = sinon.stub(console, 'log')
+    logStub = window.sinon.stub(console, 'log')
     render(['script', 'script'])
   })
 

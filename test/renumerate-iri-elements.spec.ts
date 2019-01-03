@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
@@ -8,7 +7,7 @@ suite('renumerate iri elements', () => {
   let uniqueIdStub: sinon.SinonStub
 
   suiteSetup(() => {
-    uniqueIdStub = sinon.stub(uniqueId, 'default').returns(1)
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
   suiteTeardown(() => {
