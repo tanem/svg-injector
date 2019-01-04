@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
@@ -16,7 +15,7 @@ suite('svg injector', () => {
   let uniqueIdStub: sinon.SinonStub
 
   suiteSetup(() => {
-    uniqueIdStub = sinon.stub(uniqueId, 'default').returns(1)
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
   suiteTeardown(() => {
@@ -29,7 +28,7 @@ suite('svg injector', () => {
 
   test('single element', done => {
     render(['thumb-up'])
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       const actual = format(getActual())
       const expected = format(`
@@ -63,7 +62,7 @@ suite('svg injector', () => {
 
   test('multiple elements', done => {
     render(['thumb-up', 'thumb-up'])
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       const actual = format(getActual())
       const expected = format(`
@@ -136,7 +135,7 @@ suite('svg injector', () => {
   })
 
   test('null element', done => {
-    const each = sinon.stub()
+    const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
       expect(elementsLoaded).to.equal(0)
       expect(each.callCount).to.equal(0)
@@ -176,7 +175,7 @@ suite('svg injector', () => {
   })
 
   test('injection in progress', () => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
@@ -265,30 +264,33 @@ suite('svg injector', () => {
     SVGInjector(document.querySelectorAll('#thumb-up'), { done: injectorDone })
   })
 
-  test.skip('style tag', done => {
+  test('style tag', done => {
     render(['style-tag'])
     const injectorDone: DoneCallback = () => {
-      const actual = format(getActual())
-      const expected = format(`
+      const actual = format(getActual(), { usePrettier: false })
+      const expected = format(
+        `
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="150"
-          height="150"
-          viewBox="0 0 100 100"
           class="injected-svg inject-me"
           data-src="/fixtures/style-tag.svg"
+          height="150"
+          viewBox="0 0 100 100"
+          width="150"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <style>
-            circle {
-              fill: orange;
-              stroke: black;
-              stroke-width: 10px;
-            }
-          </style>
+    circle {
+      fill: orange;
+      stroke: black;
+      stroke-width: 10px;
+    }
+  </style>
           <circle cx="50" cy="50" r="40"></circle>
         </svg>
-      `)
+      `,
+        { usePrettier: false }
+      )
       expect(actual).to.equal(expected)
       done()
     }
@@ -296,7 +298,7 @@ suite('svg injector', () => {
   })
 
   test('cached errors', done => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
@@ -327,7 +329,7 @@ suite('svg injector', () => {
   })
 
   test('500 error handling', done => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)

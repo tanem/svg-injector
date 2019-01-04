@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": ".",
+    "declarationDir": "lib",
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitReturns": true,
@@ -10,6 +10,6 @@
     "strict": true,
     "target": "esnext"
   },
-  "exclude": ["dist", "node_modules"],
-  "include": ["src"]
+  "exclude": ["node_modules"],
+  "include": ["src/**/*", "test/**/*", "types/**/*"]
 }

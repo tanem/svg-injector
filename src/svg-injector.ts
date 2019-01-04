@@ -24,18 +24,19 @@ const SVGInjector = (
     renumerateIRIElements = true
   }: IOptionalArgs = {}
 ) => {
-  if (elements && !(elements instanceof Element)) {
+  if (elements && 'length' in elements) {
     let elementsLoaded = 0
-    for (const element of elements) {
+    for (let i = 0, j = elements.length; i < j; i++) {
       injectElement(
-        element,
+        elements[i],
         (error: Error | null, svg?: SVGSVGElement) => {
           each(error, svg)
           if (
             elements &&
-            !(elements instanceof Element) &&
+            'length' in elements &&
             elements.length === ++elementsLoaded
           ) {
+            /* istanbul ignore else */
             if (typeof done === 'function') {
               done(elementsLoaded)
             }
@@ -47,14 +48,12 @@ const SVGInjector = (
         }
       )
     }
-    return
-  }
-
-  if (elements) {
+  } else if (elements) {
     injectElement(
       elements,
       (error: Error | null, svg?: SVGSVGElement) => {
         each(error, svg)
+        /* istanbul ignore else */
         if (typeof done === 'function') {
           done(1)
         }
@@ -65,11 +64,11 @@ const SVGInjector = (
         renumerateIRIElements
       }
     )
-    return
-  }
-
-  if (typeof done === 'function') {
-    done(0)
+  } else {
+    /* istanbul ignore else */
+    if (typeof done === 'function') {
+      done(0)
+    }
   }
 }
 

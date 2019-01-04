@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
@@ -8,7 +7,7 @@ suite('renumerate iri elements', () => {
   let uniqueIdStub: sinon.SinonStub
 
   suiteSetup(() => {
-    uniqueIdStub = sinon.stub(uniqueId, 'default').returns(1)
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
   suiteTeardown(() => {
@@ -17,6 +16,44 @@ suite('renumerate iri elements', () => {
 
   teardown(() => {
     cleanup()
+  })
+
+  test('renumerateIRIElements: false', done => {
+    render(['clip-path'])
+    const injectorDone: DoneCallback = _ => {
+      const actual = format(getActual())
+      const expected = format(`
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="64"
+          height="64"
+          viewBox="0 0 64 64"
+          class="injected-svg inject-me"
+          data-src="/fixtures/clip-path.svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <defs>
+            <clipPath id="clipPathTest">
+              <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
+            </clipPath>
+          </defs>
+          <circle
+            cx="32"
+            cy="32"
+            r="18"
+            stroke="1"
+            style="fill:wheat;stroke:red;"
+            clip-path="url(#clipPathTest)"
+          ></circle>
+        </svg>
+      `)
+      expect(actual).to.equal(expected)
+      done()
+    }
+    SVGInjector(getElements(), {
+      done: injectorDone,
+      renumerateIRIElements: false
+    })
   })
 
   test('clip-path', done => {

@@ -19,6 +19,7 @@ module.exports = function(config) {
       fixWebpackSourcePaths: true
     },
     files: [
+      'node_modules/sinon/pkg/sinon.js',
       {
         pattern: 'test/fixtures/*',
         watched: false,
@@ -30,7 +31,7 @@ module.exports = function(config) {
     logLevel: config.LOG_WARN,
     port: PORT,
     preprocessors: {
-      'test/index.ts': ['webpack']
+      'test/index.ts': ['webpack', 'sourcemap']
     },
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
@@ -38,17 +39,8 @@ module.exports = function(config) {
     reporters: ['spec', 'coverage-istanbul'],
     singleRun: true,
     webpack: {
+      devtool: 'inline-source-map',
       mode: 'development',
-      node: {
-        fs: 'empty',
-        module: 'empty'
-      },
-      resolve: {
-        alias: {
-          sinon: 'sinon/pkg/sinon.js'
-        },
-        extensions: ['.json', '.js', '.ts']
-      },
       module: {
         rules: [
           {
@@ -74,6 +66,13 @@ module.exports = function(config) {
             }
           }
         ]
+      },
+      node: {
+        fs: 'empty',
+        module: 'empty'
+      },
+      resolve: {
+        extensions: ['.json', '.js', '.ts']
       }
     }
   })

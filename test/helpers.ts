@@ -1,4 +1,4 @@
-import prettyhtml from '@starptech/prettyhtml'
+import * as prettyhtml from '@starptech/prettyhtml'
 
 export const CONTAINER_ID = 'container'
 export const ELEMENT_CLASS = 'inject-me'
@@ -17,9 +17,10 @@ export const render = (names: string[]) => {
   )
 }
 
-export const format = (svg: string) =>
+export const format = (svg: string, options = {}) =>
   prettyhtml(svg, {
-    sortAttributes: true
+    sortAttributes: true,
+    ...options
   }).contents
 
 export const getElements = () => document.querySelectorAll(`.${ELEMENT_CLASS}`)
