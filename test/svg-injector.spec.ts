@@ -264,30 +264,33 @@ suite('svg injector', () => {
     SVGInjector(document.querySelectorAll('#thumb-up'), { done: injectorDone })
   })
 
-  test.skip('style tag', done => {
+  test('style tag', done => {
     render(['style-tag'])
     const injectorDone: DoneCallback = () => {
-      const actual = format(getActual())
-      const expected = format(`
+      const actual = format(getActual(), { usePrettier: false })
+      const expected = format(
+        `
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="150"
-          height="150"
-          viewBox="0 0 100 100"
           class="injected-svg inject-me"
           data-src="/fixtures/style-tag.svg"
+          height="150"
+          viewBox="0 0 100 100"
+          width="150"
+          xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >
           <style>
-            circle {
-              fill: orange;
-              stroke: black;
-              stroke-width: 10px;
-            }
-          </style>
+    circle {
+      fill: orange;
+      stroke: black;
+      stroke-width: 10px;
+    }
+  </style>
           <circle cx="50" cy="50" r="40"></circle>
         </svg>
-      `)
+      `,
+        { usePrettier: false }
+      )
       expect(actual).to.equal(expected)
       done()
     }
