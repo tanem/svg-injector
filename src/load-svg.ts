@@ -44,7 +44,9 @@ const loadSvg = (
             httpRequest.status === 200 ||
             (isLocal && httpRequest.status === 0)
           ) {
+            /* istanbul ignore else */
             if (httpRequest.responseXML instanceof Document) {
+              /* istanbul ignore else */
               if (httpRequest.responseXML.documentElement) {
                 svgCache[url] = httpRequest.responseXML.documentElement
               }
@@ -69,6 +71,7 @@ const loadSvg = (
 
     // Treat and parse the response as XML, even if the server sends us a
     // different mimetype.
+    /* istanbul ignore else */
     if (httpRequest.overrideMimeType) {
       httpRequest.overrideMimeType('text/xml')
     }
