@@ -15,7 +15,7 @@ interface IOptionalArgs {
 const injectElement = (
   el: Element | HTMLElement,
   callback: Errback,
-  { evalScripts, renumerateIRIElements }: IOptionalArgs = {}
+  { evalScripts, renumerateIRIElements }: IOptionalArgs
 ) => {
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
@@ -165,13 +165,9 @@ const injectElement = (
           const allLinks = svg.querySelectorAll('[*|href]')
           const links = []
           for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
+            const href = allLinks[c].getAttributeNS(xlinkNamespace, 'href')
             /* istanbul ignore else */
-            if (
-              (
-                allLinks[c].getAttributeNS(xlinkNamespace, 'href') || ''
-              ).toString() ===
-              '#' + elements[a].id
-            ) {
+            if (href && href.toString() === '#' + elements[a].id) {
               links.push(allLinks[c])
             }
           }

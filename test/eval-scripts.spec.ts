@@ -88,7 +88,7 @@ suite('eval scripts', () => {
         >
       `)
       expect(actual).to.equal(expected)
-      expect(logStub.callCount).to.equal(1)
+      expect(logStub.callCount).to.equal(4)
       done()
     }
     SVGInjector(document.querySelectorAll('.inject-me'), {
@@ -124,7 +124,7 @@ suite('eval scripts', () => {
         >
       `)
       expect(actual).to.equal(expected)
-      expect(logStub.callCount).to.equal(2)
+      expect(logStub.callCount).to.equal(8)
       done()
     }
     SVGInjector(document.querySelectorAll('.inject-me'), {
