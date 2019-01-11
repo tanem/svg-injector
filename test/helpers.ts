@@ -1,4 +1,6 @@
 import * as prettyhtml from '@starptech/prettyhtml'
+import { clear as clearRequestQueue } from '../src/request-queue'
+import { clear as clearSvgCache } from '../src/svg-cache'
 
 export const CONTAINER_ID = 'container'
 export const ELEMENT_CLASS = 'inject-me'
@@ -32,4 +34,6 @@ export const cleanup = () => {
   if (container) {
     document.body.removeChild(container)
   }
+  clearRequestQueue()
+  clearSvgCache()
 }

@@ -2,7 +2,11 @@ import cloneSvg from './clone-svg'
 import svgCache from './svg-cache'
 import { Errback } from './types'
 
-const requestQueue: { [key: string]: Errback[] } = {}
+let requestQueue: { [key: string]: Errback[] } = {}
+
+export const clear = () => {
+  requestQueue = {}
+}
 
 export const queueRequest = (url: string, callback: Errback) => {
   requestQueue[url] = requestQueue[url] || []
