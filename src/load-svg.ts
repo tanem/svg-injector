@@ -1,4 +1,5 @@
 import cloneSvg from './clone-svg'
+import isLocal from './is-local'
 import { processRequestQueue, queueRequest } from './request-queue'
 import svgCache from './svg-cache'
 
@@ -6,8 +7,6 @@ const loadSvg = (
   url: string,
   callback: (error: Error | null, svg?: SVGSVGElement) => void
 ) => {
-  const isLocal = window.location.protocol === 'file:'
-
   if (svgCache[url] !== undefined) {
     if (svgCache[url] instanceof SVGSVGElement) {
       callback(null, cloneSvg(svgCache[url] as SVGSVGElement))
@@ -34,7 +33,7 @@ const loadSvg = (
         if (httpRequest.readyState === 4) {
           if (httpRequest.status === 404 || httpRequest.responseXML === null) {
             throw new Error(
-              isLocal
+              isLocal()
                 ? 'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
                 : 'Unable to load SVG file: ' + url
             )
@@ -42,7 +41,7 @@ const loadSvg = (
 
           if (
             httpRequest.status === 200 ||
-            (isLocal && httpRequest.status === 0)
+            (isLocal() && httpRequest.status === 0)
           ) {
             /* istanbul ignore else */
             if (httpRequest.responseXML instanceof Document) {

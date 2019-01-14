@@ -115,9 +115,15 @@ suite('svg injector', () => {
   })
 
   test('svg not found', done => {
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const requests: sinon.SinonFakeXMLHttpRequest[] = []
+    fakeXHR.onCreate = xhr => {
+      requests.push(xhr)
+    }
     render(['not-found'])
     const injectorDone: DoneCallback = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
+      fakeXHR.restore()
       done()
     }
     const each: Errback = error => {
@@ -132,6 +138,7 @@ suite('svg injector', () => {
       done: injectorDone,
       each
     })
+    requests[0].respond(404, {}, '')
   })
 
   test('null element', done => {
@@ -306,8 +313,12 @@ suite('svg injector', () => {
     render(['not-found'])
     SVGInjector(getElements(), {
       done: _ => {
-        cleanup()
-        render(['not-found'])
+        document
+          .getElementById(`${CONTAINER_ID}`)!
+          .insertAdjacentHTML(
+            'beforeend',
+            `<div class="${ELEMENT_CLASS}" data-src="/fixtures/not-found.svg"></div>`
+          )
         SVGInjector(getElements(), {
           // tslint:disable-next-line:no-shadowed-variable
           done: _ => {
