@@ -5,25 +5,28 @@ import svgCache from './svg-cache'
 
 const loadSvg = (
   url: string,
-  callback: (error: Error | null, svg?: SVGSVGElement) => void
+  callback: (error: Error | null, svg?: Node) => void
 ) => {
-  if (svgCache[url] !== undefined) {
-    if (svgCache[url] instanceof SVGSVGElement) {
-      callback(null, cloneSvg(svgCache[url] as SVGSVGElement))
+  if (svgCache.has(url)) {
+    const cacheValue = svgCache.get(url)
+
+    if (
+      cacheValue instanceof SVGSVGElement ||
+      cacheValue instanceof HTMLElement
+    ) {
+      callback(null, cloneSvg(cacheValue))
       return
     }
 
-    if (svgCache[url] instanceof Error) {
-      callback(svgCache[url] as Error)
+    if (cacheValue instanceof Error) {
+      callback(cacheValue)
       return
     }
 
-    // We don't have it in cache yet, but we are loading it, so queue this
-    // request.
     queueRequest(url, callback)
   } else {
     // Seed the cache to indicate we are loading this URL already.
-    svgCache[url] = {}
+    svgCache.set(url, undefined)
     queueRequest(url, callback)
 
     const httpRequest = new XMLHttpRequest()
@@ -47,7 +50,7 @@ const loadSvg = (
             if (httpRequest.responseXML instanceof Document) {
               /* istanbul ignore else */
               if (httpRequest.responseXML.documentElement) {
-                svgCache[url] = httpRequest.responseXML.documentElement
+                svgCache.set(url, httpRequest.responseXML.documentElement)
               }
             }
             processRequestQueue(url)
@@ -61,7 +64,7 @@ const loadSvg = (
           }
         }
       } catch (error) {
-        svgCache[url] = error
+        svgCache.set(url, error)
         processRequestQueue(url)
       }
     }

@@ -1,7 +1,6 @@
-let svgCache: { [key: string]: {} | SVGSVGElement | Error } = {}
-
-export const clear = () => {
-  svgCache = {}
-}
+const svgCache = new Map<
+  string,
+  HTMLElement | SVGSVGElement | Error | undefined
+>()
 
 export default svgCache
