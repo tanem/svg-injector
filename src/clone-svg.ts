@@ -1,4 +1,4 @@
 const cloneSvg = (sourceSvg: HTMLElement | SVGSVGElement) =>
-  sourceSvg.cloneNode(true)
+  sourceSvg.cloneNode(true) as Element
 
 export default cloneSvg

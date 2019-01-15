@@ -29,7 +29,7 @@ const SVGInjector = (
     for (let i = 0, j = elements.length; i < j; i++) {
       injectElement(
         elements[i],
-        (error: Error | null, svg?: SVGSVGElement) => {
+        (error: Error | null, svg?: Element) => {
           each(error, svg)
           if (
             elements &&
@@ -51,7 +51,7 @@ const SVGInjector = (
   } else if (elements) {
     injectElement(
       elements,
-      (error: Error | null, svg?: SVGSVGElement) => {
+      (error: Error | null, svg?: Element) => {
         each(error, svg)
         /* istanbul ignore else */
         if (typeof done === 'function') {

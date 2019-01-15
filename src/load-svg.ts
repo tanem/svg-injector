@@ -5,7 +5,7 @@ import svgCache from './svg-cache'
 
 const loadSvg = (
   url: string,
-  callback: (error: Error | null, svg?: Node) => void
+  callback: (error: Error | null, svg?: Element) => void
 ) => {
   if (svgCache.has(url)) {
     const cacheValue = svgCache.get(url)
