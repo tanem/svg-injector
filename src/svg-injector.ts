@@ -1,26 +1,12 @@
 import injectElement from './inject-element'
-import { DoneCallback, Errback } from './types'
+import { EvalScripts, IOptionalArgs } from './types'
 
-interface IOptionalArgs {
-  done?: DoneCallback
-  each?: Errback
-  evalScripts?: 'always' | 'once' | 'never'
-  renumerateIRIElements?: boolean
-}
-
-/**
- * :NOTE: We are using get/setAttribute with SVG because the SVG DOM spec
- * differs from HTML DOM and can return other unexpected object types when
- * trying to directly access svg properties. ex: "className" returns a
- * SVGAnimatedString with the class value found in the "baseVal" property,
- * instead of simple string like with HTML Elements.
- */
 const SVGInjector = (
   elements: HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null,
   {
-    done,
+    done = () => undefined,
     each = () => undefined,
-    evalScripts = 'never',
+    evalScripts = EvalScripts.Never,
     renumerateIRIElements = true
   }: IOptionalArgs = {}
 ) => {
@@ -36,10 +22,7 @@ const SVGInjector = (
             'length' in elements &&
             elements.length === ++elementsLoaded
           ) {
-            /* istanbul ignore else */
-            if (typeof done === 'function') {
-              done(elementsLoaded)
-            }
+            done(elementsLoaded)
           }
         },
         {
@@ -53,10 +36,7 @@ const SVGInjector = (
       elements,
       (error: Error | null, svg?: Element) => {
         each(error, svg)
-        /* istanbul ignore else */
-        if (typeof done === 'function') {
-          done(1)
-        }
+        done(1)
         elements = null
       },
       {
@@ -65,10 +45,7 @@ const SVGInjector = (
       }
     )
   } else {
-    /* istanbul ignore else */
-    if (typeof done === 'function') {
-      done(0)
-    }
+    done(0)
   }
 }
 

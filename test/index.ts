@@ -1,5 +1,5 @@
-const testsContext = require.context('.', true, /\.spec.ts$/)
+const testsContext = require.context('.', false, /\.spec.ts$/)
 testsContext.keys().forEach(testsContext)
 
-const srcContext = require.context('../src', true, /^\.\/(?!types(\.ts)?$)/)
+const srcContext = require.context('../src')
 srcContext.keys().forEach(srcContext)
