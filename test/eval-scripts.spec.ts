@@ -1,5 +1,5 @@
 import SVGInjector from '../src/svg-injector'
-import { DoneCallback } from '../src/types'
+import { DoneCallback, EvalScripts } from '../src/types'
 import * as uniqueId from '../src/unique-id'
 import { cleanup, format, render } from './helpers'
 
@@ -57,7 +57,7 @@ suite('eval scripts', () => {
     }
     SVGInjector(document.querySelectorAll('.inject-me'), {
       done: injectorDone,
-      evalScripts: 'never'
+      evalScripts: EvalScripts.Never
     })
   })
 
@@ -93,7 +93,7 @@ suite('eval scripts', () => {
     }
     SVGInjector(document.querySelectorAll('.inject-me'), {
       done: injectorDone,
-      evalScripts: 'once'
+      evalScripts: EvalScripts.Once
     })
   })
 
@@ -129,7 +129,7 @@ suite('eval scripts', () => {
     }
     SVGInjector(document.querySelectorAll('.inject-me'), {
       done: injectorDone,
-      evalScripts: 'always'
+      evalScripts: EvalScripts.Always
     })
   })
 })

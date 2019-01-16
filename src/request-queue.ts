@@ -19,16 +19,20 @@ export const processRequestQueue = (url: string) => {
     setTimeout(() => {
       /* istanbul ignore else */
       if (Array.isArray(requestQueue[url])) {
-        const cb = requestQueue[url][i]
+        const cacheValue = svgCache.get(url)
+        const callback = requestQueue[url][i]
 
         /* istanbul ignore else */
-        if (svgCache[url] instanceof SVGSVGElement) {
-          cb(null, cloneSvg(svgCache[url] as SVGSVGElement))
+        if (
+          cacheValue instanceof SVGSVGElement ||
+          cacheValue instanceof HTMLElement
+        ) {
+          callback(null, cloneSvg(cacheValue))
         }
 
         /* istanbul ignore else */
-        if (svgCache[url] instanceof Error) {
-          cb(svgCache[url] as Error)
+        if (cacheValue instanceof Error) {
+          callback(cacheValue)
         }
 
         /* istanbul ignore else */
