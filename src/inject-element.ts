@@ -70,13 +70,13 @@ const injectElement = (
       svg.setAttribute('title', imgTitle)
     }
 
-    const mergedClasses = [
-      ...new Set([
+    const mergedClasses = Array.from(
+      new Set([
         ...(svg.getAttribute('class') || '').split(' '),
         'injected-svg',
         ...(el.getAttribute('class') || '').split(' ')
       ])
-    ]
+    )
       .join(' ')
       .trim()
     svg.setAttribute('class', mergedClasses)
