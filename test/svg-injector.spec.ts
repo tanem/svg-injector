@@ -236,8 +236,9 @@ suite('svg injector', () => {
         <div
           data-bar="bar"
           data-foo="foo"
+          data-src="/fixtures/thumb-up.svg"
           id="thumb-up"
-          src="/fixtures/thumb-up.svg"
+          src="/some/other/url.svg"
           style="height:20px;"
           title="thumb-up"
         ></div>
@@ -251,6 +252,7 @@ suite('svg injector', () => {
           class="injected-svg"
           data-bar="bar"
           data-foo="foo"
+          data-src="/fixtures/thumb-up.svg"
           height="8"
           id="thumb-up"
           style="height:20px;"
