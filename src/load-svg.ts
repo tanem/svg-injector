@@ -47,12 +47,19 @@ const loadSvg = (url: string, callback: Errback) => {
           httpRequest.status === 200 ||
           (isLocal() && httpRequest.status === 0)
         ) {
+          let responseXML = httpRequest.responseXML
           /* istanbul ignore else */
-          if (httpRequest.responseXML instanceof Document) {
-            /* istanbul ignore else */
-            if (httpRequest.responseXML.documentElement) {
-              svgCache.set(url, httpRequest.responseXML.documentElement)
-            }
+          // In IE9, `responseXML` is not a Document, so we need to parse it.
+          if (!(responseXML instanceof Document)) {
+            const parser = new DOMParser()
+            responseXML = parser.parseFromString(
+              httpRequest.responseText,
+              'text/xml'
+            )
+          }
+          /* istanbul ignore else */
+          if (responseXML.documentElement) {
+            svgCache.set(url, responseXML.documentElement)
           }
           processRequestQueue(url)
         } else {
