@@ -1,6 +1,15 @@
 # Changelog
 
-## [v5.0.5](https://github.com/tanem/svg-injector/tree/v5.0.5) (2019-01-23)
+## [v5.0.6](https://github.com/tanem/svg-injector/tree/v5.0.6) (2019-01-26)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.5...v5.0.6)
+
+**Merged pull requests:**
+
+- Add warning around project status [\#36](https://github.com/tanem/svg-injector/pull/36) ([tanem](https://github.com/tanem))
+- Accidental overwrite of similar ids [\#35](https://github.com/tanem/svg-injector/pull/35) ([derrickpelletier](https://github.com/derrickpelletier))
+- Copy imgUrl into a data-src attribute [\#33](https://github.com/tanem/svg-injector/pull/33) ([tanem](https://github.com/tanem))
+
+## [v5.0.5](https://github.com/tanem/svg-injector/tree/v5.0.5) (2019-01-22)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.4...v5.0.5)
 
 **Merged pull requests:**
