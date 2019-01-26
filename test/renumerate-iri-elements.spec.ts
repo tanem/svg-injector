@@ -36,6 +36,9 @@ suite('renumerate iri elements', () => {
             <clipPath id="clipPathTest">
               <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
             </clipPath>
+            <clipPath id="clipPathTest2">
+              <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
+            </clipPath>
           </defs>
           <circle
             cx="32"
@@ -44,6 +47,14 @@ suite('renumerate iri elements', () => {
             stroke="1"
             style="fill:wheat;stroke:red;"
             clip-path="url(#clipPathTest)"
+          ></circle>
+          <circle
+            cx="32"
+            cy="32"
+            r="18"
+            stroke="1"
+            style="fill:wheat;stroke:red;"
+            clip-path="url(#clipPathTest2)"
           ></circle>
         </svg>
       `)
@@ -74,6 +85,9 @@ suite('renumerate iri elements', () => {
             <clipPath id="clipPathTest-1">
               <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
             </clipPath>
+            <clipPath id="clipPathTest2-1">
+              <rect x="16" y="16" width="32" height="32" style="fill:white;"></rect>
+            </clipPath>
           </defs>
           <circle
             cx="32"
@@ -82,6 +96,14 @@ suite('renumerate iri elements', () => {
             stroke="1"
             style="fill:wheat;stroke:red;"
             clip-path="url(#clipPathTest-1)"
+          ></circle>
+          <circle
+            cx="32"
+            cy="32"
+            r="18"
+            stroke="1"
+            style="fill:wheat;stroke:red;"
+            clip-path="url(#clipPathTest2-1)"
           ></circle>
         </svg>
       `)
