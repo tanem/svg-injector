@@ -37,9 +37,11 @@
     "@babel/preset-typescript": "^7.1.0",
     "@starptech/prettyhtml": "^0.8.16",
     "@types/chai": "^4.1.7",
+    "@types/glob": "^7.1.1",
     "@types/karma": "^3.0.1",
     "@types/karma-chai": "^0.1.1",
     "@types/mocha": "^5.2.5",
+    "@types/shelljs": "^0.8.2",
     "@types/sinon": "^7.0.5",
     "@types/webpack-env": "^1.13.6",
     "babel-loader": "^8.0.5",
@@ -70,6 +72,7 @@
     "shelljs": "^0.8.3",
     "shelljs-plugin-authors": "^2.0.6",
     "sinon": "^7.2.3",
+    "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.4",
@@ -94,8 +97,9 @@
     "postcompile": "mv lib/src/svg-injector.d.ts . && del lib",
     "postversion": "git push && git push --tags && npm publish --access=public",
     "release": "npm version -m 'Release v%s'",
-    "test:karma": "karma start",
     "test": "run-s check:* lint build test:karma",
+    "test:karma": "karma start",
+    "updatedeps": "ts-node scripts/update-deps",
     "version": "run-s test changelog authors && git add ."
   }
 }
