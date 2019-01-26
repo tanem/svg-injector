@@ -87,10 +87,13 @@ const injectElement = (
       svg.setAttribute('style', imgStyle)
     }
 
+    svg.setAttribute('data-src', imgUrl)
+
     // Copy all the data elements to the svg.
     const imgData = [].filter.call(el.attributes, (at: Attr) => {
       return /^data-\w[\w-]*$/.test(at.name)
     })
+
     Array.prototype.forEach.call(imgData, (dataAttr: Attr) => {
       /* istanbul ignore else */
       if (dataAttr.name && dataAttr.value) {
