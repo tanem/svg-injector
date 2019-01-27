@@ -237,10 +237,12 @@ suite('svg injector', () => {
           data-bar="bar"
           data-foo="foo"
           data-src="/fixtures/thumb-up.svg"
+          height="100"
           id="thumb-up"
           src="/some/other/url.svg"
           style="height:20px;"
           title="thumb-up"
+          width="100"
         ></div>
       </div>
       `
@@ -253,12 +255,12 @@ suite('svg injector', () => {
           data-bar="bar"
           data-foo="foo"
           data-src="/fixtures/thumb-up.svg"
-          height="8"
+          height="100"
           id="thumb-up"
           style="height:20px;"
           title="thumb-up"
           viewBox="0 0 8 8"
-          width="8"
+          width="100"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
         >

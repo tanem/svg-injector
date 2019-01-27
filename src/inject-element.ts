@@ -70,6 +70,18 @@ const injectElement = (
       svg.setAttribute('title', imgTitle)
     }
 
+    const imgWidth = el.getAttribute('width')
+    /* istanbul ignore else */
+    if (imgWidth) {
+      svg.setAttribute('width', imgWidth)
+    }
+
+    const imgHeight = el.getAttribute('height')
+    /* istanbul ignore else */
+    if (imgHeight) {
+      svg.setAttribute('height', imgHeight)
+    }
+
     const mergedClasses = Array.from(
       new Set([
         ...(svg.getAttribute('class') || '').split(' '),
