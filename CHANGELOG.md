@@ -1,5 +1,12 @@
 # Changelog
 
+## [v6.0.0](https://github.com/tanem/svg-injector/tree/v6.0.0) (2019-01-27)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.7...v6.0.0)
+
+**Merged pull requests:**
+
+- Transfer width and height attributes from source element [\#38](https://github.com/tanem/svg-injector/pull/38) ([tanem](https://github.com/tanem))
+
 ## [v5.0.7](https://github.com/tanem/svg-injector/tree/v5.0.7) (2019-01-27)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.6...v5.0.7)
 
