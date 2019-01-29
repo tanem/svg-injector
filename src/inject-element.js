@@ -177,6 +177,13 @@ const injectElement = (
               j < referencingElementLen;
               j++
             ) {
+              const attrValue = referencingElements[j].getAttribute(property)
+              if (
+                attrValue &&
+                !attrValue.match(new RegExp('url\\(#' + currentId + '\\)'))
+              ) {
+                continue
+              }
               referencingElements[j].setAttribute(
                 property,
                 'url(#' + newId + ')'
