@@ -2,39 +2,36 @@ import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import {
-  cleanup,
-  ELEMENT_CLASS,
-  format,
-  getActual,
-  getElements,
-  render
-} from './helpers'
+import { cleanup, format, render } from './helpers/test-utils'
 
 suite('local', () => {
   let uniqueIdStub: sinon.SinonStub
   let isLocalStub: sinon.SinonStub
 
-  suiteSetup(() => {
+  setup(() => {
     uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
     isLocalStub = window.sinon.stub(isLocal, 'default').returns(true)
   })
 
-  suiteTeardown(() => {
+  teardown(() => {
     uniqueIdStub.restore()
     isLocalStub.restore()
-  })
-
-  teardown(() => {
     cleanup()
   })
 
   test('not found', done => {
-    render(['local-not-found'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/not-found.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
+
     const each: Errback = error => {
       expect(error)
         .to.be.a('error')
@@ -43,7 +40,8 @@ suite('local', () => {
           'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
         )
     }
-    SVGInjector(getElements(), {
+
+    SVGInjector(container.querySelector('.inject-me'), {
       done: injectorDone,
       each
     })
@@ -55,10 +53,17 @@ suite('local', () => {
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
     }
-    render(['thumb-up'])
+
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/thumb-up.svg"
+      ></div>
+    `)
+
     const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -83,7 +88,7 @@ suite('local', () => {
       fakeXHR.restore()
       done()
     }
-    SVGInjector(document.querySelector(`.${ELEMENT_CLASS}`), {
+    SVGInjector(container.querySelector('.inject-me'), {
       done: injectorDone,
       each
     })

@@ -28,7 +28,7 @@ module.exports = function(config) {
       'test/index.ts'
     ],
     frameworks: ['mocha', 'chai'],
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_ERROR,
     port: PORT,
     preprocessors: {
       'test/index.ts': ['webpack', 'sourcemap']
