@@ -1,6 +1,6 @@
 import * as prettyhtml from '@starptech/prettyhtml'
-import { clear as clearRequestQueue } from '../src/request-queue'
-import svgCache from '../src/svg-cache'
+import { clear as clearRequestQueue } from '../../src/request-queue'
+import svgCache from '../../src/svg-cache'
 
 export const render = (html: string) => {
   const container = document.createElement('div')

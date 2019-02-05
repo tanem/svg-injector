@@ -2,7 +2,7 @@ import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, render } from './helpers'
+import { cleanup, format, render } from './helpers/test-utils'
 
 suite('local', () => {
   let uniqueIdStub: sinon.SinonStub

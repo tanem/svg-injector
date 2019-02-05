@@ -1,7 +1,7 @@
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, render } from './helpers'
+import { cleanup, format, render } from './helpers/test-utils'
 
 suite('renumerate iri elements', () => {
   let uniqueIdStub: sinon.SinonStub
