@@ -43,7 +43,7 @@ SVGInjector(document.getElementById('inject-me'))
 
 - `elements` - A single DOM element or array of elements, with `src` or `data-src` attributes defined, to inject.
 - `options` - _Optional_ An object containing the optional arguments defined below. Defaults to `{}`.
-  - `done(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `undefined`.
+  - `done(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `() => undefined`.
   - `each(err, svg)` - _Optional_ A callback which is called when each element is processed. `svg` is the newly injected SVG DOM element. Defaults to `() => undefined`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
   - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
