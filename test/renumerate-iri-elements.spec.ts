@@ -1,7 +1,7 @@
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, getActual, getElements, render } from './helpers'
+import { cleanup, format, render } from './helpers'
 
 suite('renumerate iri elements', () => {
   let uniqueIdStub: sinon.SinonStub
@@ -16,9 +16,15 @@ suite('renumerate iri elements', () => {
   })
 
   test('renumerateIRIElements: false', done => {
-    render(['clip-path'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/clip-path.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -58,16 +64,23 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), {
+
+    SVGInjector(container.querySelector('.inject-me'), {
       done: injectorDone,
       renumerateIRIElements: false
     })
   })
 
   test('clip-path', done => {
-    render(['clip-path'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/clip-path.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -107,13 +120,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('fill', done => {
-    render(['fill'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/fill.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -173,13 +193,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('filter', done => {
-    render(['filter'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/filter.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -209,13 +236,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('marker', done => {
-    render(['marker'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/marker.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -266,13 +300,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('mask', done => {
-    render(['mask'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/mask.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -309,13 +350,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('thumb-up', done => {
-    render(['thumb-up'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/thumb-up.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -334,13 +382,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test.skip('style', done => {
-    render(['style'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/style.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -373,13 +428,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('dashboard', done => {
-    render(['dashboard'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/dashboard.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -413,13 +475,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('notifications', done => {
-    render(['notifications'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/notifications.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -453,13 +522,20 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 
   test('poll', done => {
-    render(['poll'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/poll.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = _ => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -497,6 +573,7 @@ suite('renumerate iri elements', () => {
       expect(actual).to.equal(expected)
       done()
     }
-    SVGInjector(getElements(), { done: injectorDone })
+
+    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
   })
 })

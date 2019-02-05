@@ -2,7 +2,7 @@ import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, getActual, getElements, render } from './helpers'
+import { cleanup, format, render } from './helpers'
 
 suite('local', () => {
   let uniqueIdStub: sinon.SinonStub
@@ -20,11 +20,18 @@ suite('local', () => {
   })
 
   test('not found', done => {
-    render(['local-not-found'])
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/not-found.svg"
+      ></div>
+    `)
+
     const injectorDone: DoneCallback = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
+
     const each: Errback = error => {
       expect(error)
         .to.be.a('error')
@@ -33,7 +40,8 @@ suite('local', () => {
           'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
         )
     }
-    SVGInjector(getElements(), {
+
+    SVGInjector(container.querySelector('.inject-me'), {
       done: injectorDone,
       each
     })
@@ -45,10 +53,17 @@ suite('local', () => {
     fakeXHR.onCreate = xhr => {
       requests.push(xhr)
     }
-    render(['thumb-up'])
+
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/thumb-up.svg"
+      ></div>
+    `)
+
     const each = window.sinon.stub()
     const injectorDone: DoneCallback = elementsLoaded => {
-      const actual = format(getActual())
+      const actual = format(container.innerHTML)
       const expected = format(`
         <svg
           class="injected-svg inject-me"
@@ -73,7 +88,7 @@ suite('local', () => {
       fakeXHR.restore()
       done()
     }
-    SVGInjector(getElements(), {
+    SVGInjector(container.querySelector('.inject-me'), {
       done: injectorDone,
       each
     })

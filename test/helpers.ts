@@ -2,21 +2,10 @@ import * as prettyhtml from '@starptech/prettyhtml'
 import { clear as clearRequestQueue } from '../src/request-queue'
 import svgCache from '../src/svg-cache'
 
-export const CONTAINER_ID = 'container'
-export const ELEMENT_CLASS = 'inject-me'
-
-export const render = (names: string[]) => {
-  document.body.insertAdjacentHTML(
-    'beforeend',
-    `
-    <div id="${CONTAINER_ID}">
-      ${names.reduce((str, name) => {
-        str += `<div class="${ELEMENT_CLASS}" data-src="/fixtures/${name}.svg"></div>`
-        return str
-      }, '')}
-    </div>
-    `
-  )
+export const render = (html: string) => {
+  const container = document.createElement('div')
+  container.innerHTML = html
+  return container
 }
 
 export const format = (svg: string, options = {}) =>
@@ -25,15 +14,7 @@ export const format = (svg: string, options = {}) =>
     ...options
   }).contents
 
-export const getElements = () => document.querySelectorAll(`.${ELEMENT_CLASS}`)
-
-export const getActual = () => document.getElementById(CONTAINER_ID)!.innerHTML
-
 export const cleanup = () => {
-  const container = document.getElementById(CONTAINER_ID)
-  if (container) {
-    document.body.removeChild(container)
-  }
   clearRequestQueue()
   svgCache.clear()
 }
