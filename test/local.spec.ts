@@ -2,30 +2,20 @@ import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import {
-  cleanup,
-  ELEMENT_CLASS,
-  format,
-  getActual,
-  getElements,
-  render
-} from './helpers'
+import { cleanup, format, getActual, getElements, render } from './helpers'
 
 suite('local', () => {
   let uniqueIdStub: sinon.SinonStub
   let isLocalStub: sinon.SinonStub
 
-  suiteSetup(() => {
+  setup(() => {
     uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
     isLocalStub = window.sinon.stub(isLocal, 'default').returns(true)
   })
 
-  suiteTeardown(() => {
+  teardown(() => {
     uniqueIdStub.restore()
     isLocalStub.restore()
-  })
-
-  teardown(() => {
     cleanup()
   })
 
@@ -83,7 +73,7 @@ suite('local', () => {
       fakeXHR.restore()
       done()
     }
-    SVGInjector(document.querySelector(`.${ELEMENT_CLASS}`), {
+    SVGInjector(getElements(), {
       done: injectorDone,
       each
     })
