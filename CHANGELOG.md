@@ -1,5 +1,19 @@
 # Changelog
 
+## [v6.0.1](https://github.com/tanem/svg-injector/tree/v6.0.1) (2019-02-06)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v2.1.4...v6.0.1)
+
+**Merged pull requests:**
+
+- Tidy tests [\#40](https://github.com/tanem/svg-injector/pull/40) ([tanem](https://github.com/tanem))
+
+## [v2.1.4](https://github.com/tanem/svg-injector/tree/v2.1.4) (2019-01-29)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v6.0.0...v2.1.4)
+
+**Merged pull requests:**
+
+- Fixes unique id overwrite bug in 2.x [\#39](https://github.com/tanem/svg-injector/pull/39) ([derrickpelletier](https://github.com/derrickpelletier))
+
 ## [v6.0.0](https://github.com/tanem/svg-injector/tree/v6.0.0) (2019-01-27)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v5.0.7...v6.0.0)
 
