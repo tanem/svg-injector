@@ -6,15 +6,12 @@ import { cleanup, format, getActual, getElements, render } from './helpers'
 suite('renumerate iri elements', () => {
   let uniqueIdStub: sinon.SinonStub
 
-  suiteSetup(() => {
+  setup(() => {
     uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
   })
 
-  suiteTeardown(() => {
-    uniqueIdStub.restore()
-  })
-
   teardown(() => {
+    uniqueIdStub.restore()
     cleanup()
   })
 
