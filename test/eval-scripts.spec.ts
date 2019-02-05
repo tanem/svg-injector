@@ -1,33 +1,27 @@
 import SVGInjector from '../src/svg-injector'
 import { DoneCallback, EvalScripts } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, render } from './helpers'
+import { cleanup, format, getActual, getElements, render } from './helpers'
 
 suite('eval scripts', () => {
   let logStub: sinon.SinonStub
   let uniqueIdStub: sinon.SinonStub
 
-  suiteSetup(() => {
-    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
-  })
-
-  suiteTeardown(() => {
-    uniqueIdStub.restore()
-  })
-
   setup(() => {
+    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
     logStub = window.sinon.stub(console, 'log')
     render(['script', 'script'])
   })
 
   teardown(() => {
+    uniqueIdStub.restore()
     logStub.restore()
     cleanup()
   })
 
   test('never', done => {
     const injectorDone: DoneCallback = _ => {
-      const actual = format(document.getElementById('container')!.innerHTML)
+      const actual = format(getActual())
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +49,7 @@ suite('eval scripts', () => {
       expect(logStub.callCount).to.equal(0)
       done()
     }
-    SVGInjector(document.querySelectorAll('.inject-me'), {
+    SVGInjector(getElements(), {
       done: injectorDone,
       evalScripts: EvalScripts.Never
     })
@@ -63,7 +57,7 @@ suite('eval scripts', () => {
 
   test('once', done => {
     const injectorDone: DoneCallback = _ => {
-      const actual = format(document.getElementById('container')!.innerHTML)
+      const actual = format(getActual())
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +85,7 @@ suite('eval scripts', () => {
       expect(logStub.callCount).to.equal(4)
       done()
     }
-    SVGInjector(document.querySelectorAll('.inject-me'), {
+    SVGInjector(getElements(), {
       done: injectorDone,
       evalScripts: EvalScripts.Once
     })
@@ -99,7 +93,7 @@ suite('eval scripts', () => {
 
   test('always', done => {
     const injectorDone: DoneCallback = _ => {
-      const actual = format(document.getElementById('container')!.innerHTML)
+      const actual = format(getActual())
       const expected = format(`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +121,7 @@ suite('eval scripts', () => {
       expect(logStub.callCount).to.equal(8)
       done()
     }
-    SVGInjector(document.querySelectorAll('.inject-me'), {
+    SVGInjector(getElements(), {
       done: injectorDone,
       evalScripts: EvalScripts.Always
     })
