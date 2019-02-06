@@ -7,4 +7,5 @@ coverage
 es
 node_modules
 svg-injector.d.ts
+types.d.ts
 umd
