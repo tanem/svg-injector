@@ -3,4 +3,5 @@ coverage
 es
 package.json
 svg-injector.d.ts
+types.d.ts
 umd
