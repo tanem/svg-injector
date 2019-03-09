@@ -25,7 +25,7 @@ Wrangling and maintaining a bunch of inline SVG on your pages isn't anyone's ide
 ```
 
 ```js
-import SVGInjector from '@tanem/svg-injector'
+import { SVGInjector } from '@tanem/svg-injector'
 
 SVGInjector(document.getElementById('inject-me'))
 ```
@@ -56,7 +56,7 @@ SVGInjector(document.getElementById('inject-me'))
 ```
 
 ```js
-import SVGInjector from '@tanem/svg-injector'
+import { SVGInjector } from '@tanem/svg-injector'
 
 SVGInjector(document.getElementsByClassName('inject-me'), {
   done(elementsLoaded) {
