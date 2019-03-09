@@ -1,7 +1,4 @@
-cjs
+complied
 coverage
-es
+dist
 package.json
-svg-injector.d.ts
-types.d.ts
-umd

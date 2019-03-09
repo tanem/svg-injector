@@ -1,11 +1,7 @@
 *.log
-*.tgz
 .DS_Store
 .vscode
-cjs
+compiled
 coverage
-es
+dist
 node_modules
-svg-injector.d.ts
-types.d.ts
-umd
