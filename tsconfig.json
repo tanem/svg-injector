@@ -1,15 +1,4 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "lib",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true,
-    "target": "esnext"
-  },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*", "test/**/*", "types/**/*"]
+  "extends": "./tsconfig.base.json",
+  "include": ["src", "types", "test"]
 }

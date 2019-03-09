@@ -5,7 +5,7 @@ import filesize from 'rollup-plugin-filesize'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
 import sourcemaps from 'rollup-plugin-sourcemaps'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
 const CJS_DEV = 'CJS_DEV'
@@ -14,7 +14,7 @@ const ES = 'ES'
 const UMD_DEV = 'UMD_DEV'
 const UMD_PROD = 'UMD_PROD'
 
-const input = './src/svg-injector.ts'
+const input = './compiled/index.js'
 
 const getExternal = bundleType => {
   switch (bundleType) {
@@ -43,9 +43,7 @@ const getBabelConfig = () => ({
 })
 
 const getPlugins = bundleType => [
-  nodeResolve({
-    extensions: ['.js', '.ts']
-  }),
+  nodeResolve(),
   commonjs({
     include: 'node_modules/**'
   }),
@@ -57,15 +55,30 @@ const getPlugins = bundleType => [
       )
     }),
   sourcemaps(),
-  ...(isProduction(bundleType) ? [filesize(), uglify()] : [])
+  ...(isProduction(bundleType)
+    ? [
+        filesize(),
+        terser({
+          sourcemap: true,
+          output: { comments: false },
+          compress: {
+            keep_infinity: true,
+            pure_getters: true
+          },
+          warnings: true,
+          ecma: 5,
+          toplevel: false
+        })
+      ]
+    : [])
 ]
 
 const getCjsConfig = bundleType => ({
   input,
   external: getExternal(bundleType),
   output: {
-    file: `cjs/svg-injector.${
-      isProduction(bundleType) ? 'production.min' : 'development'
+    file: `dist/svg-injector.cjs.${
+      isProduction(bundleType) ? 'production' : 'development'
     }.js`,
     format: 'cjs',
     sourcemap: true
@@ -88,8 +101,8 @@ const getUmdConfig = bundleType => ({
   input,
   external: getExternal(bundleType),
   output: {
-    file: `umd/svg-injector.${
-      isProduction(bundleType) ? 'production.min' : 'development'
+    file: `dist/svg-injector.umd.${
+      isProduction(bundleType) ? 'production' : 'development'
     }.js`,
     format: 'umd',
     name: 'SVGInjector',

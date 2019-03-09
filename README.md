@@ -4,7 +4,7 @@
 [![build status](https://img.shields.io/travis/tanem/svg-injector/master.svg?style=flat-square)](https://travis-ci.org/tanem/svg-injector)
 [![coverage status](https://img.shields.io/codecov/c/github/tanem/svg-injector.svg?style=flat-square)](https://codecov.io/gh/tanem/svg-injector)
 [![npm downloads](https://img.shields.io/npm/dm/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/umd/svg-injector.production.min.js?compression=gzip&label=gzip%20size&style=flat-square)](https://unpkg.com/@tanem/svg-injector/umd/)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.production.js?compression=gzip&label=gzip%20size&style=flat-square)](https://unpkg.com/@tanem/svg-injector/)
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
@@ -81,8 +81,8 @@ $ npm install @tanem/svg-injector
 
 There are also UMD builds available via [unpkg](https://unpkg.com/):
 
-- https://unpkg.com/@tanem/svg-injector/umd/svg-injector.development.js
-- https://unpkg.com/@tanem/svg-injector/umd/svg-injector.production.min.js
+- https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.development.js
+- https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.production.js
 
 ## License
 
