@@ -1,5 +1,12 @@
 # Changelog
 
+## [v7.0.2](https://github.com/tanem/svg-injector/tree/v7.0.2) (2019-03-10)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.1...v7.0.2)
+
+**Merged pull requests:**
+
+- Fix badge link [\#51](https://github.com/tanem/svg-injector/pull/51) ([tanem](https://github.com/tanem))
+
 ## [v7.0.1](https://github.com/tanem/svg-injector/tree/v7.0.1) (2019-03-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.0...v7.0.1)
 
