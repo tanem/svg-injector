@@ -1,6 +1,15 @@
 # Changelog
 
-## [v7.0.0](https://github.com/tanem/svg-injector/tree/v7.0.0) (2019-03-10)
+## [v7.0.1](https://github.com/tanem/svg-injector/tree/v7.0.1) (2019-03-10)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.0...v7.0.1)
+
+**Merged pull requests:**
+
+- Update dependency karma-webpack to v4.0.0-rc.6 [\#50](https://github.com/tanem/svg-injector/pull/50) ([renovate[bot]](https://github.com/apps/renovate))
+- Pin dependencies [\#49](https://github.com/tanem/svg-injector/pull/49) ([renovate[bot]](https://github.com/apps/renovate))
+- Configure Renovate [\#48](https://github.com/tanem/svg-injector/pull/48) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.0](https://github.com/tanem/svg-injector/tree/v7.0.0) (2019-03-09)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v6.0.5...v7.0.0)
 
 **Merged pull requests:**
