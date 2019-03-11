@@ -1,5 +1,13 @@
 # Changelog
 
+## [v7.0.3](https://github.com/tanem/svg-injector/tree/v7.0.3) (2019-03-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.2...v7.0.3)
+
+**Merged pull requests:**
+
+- Pin dependency parcel-bundler to 1.12.0 [\#53](https://github.com/tanem/svg-injector/pull/53) ([renovate[bot]](https://github.com/apps/renovate))
+- Reconfigure Renovate [\#52](https://github.com/tanem/svg-injector/pull/52) ([tanem](https://github.com/tanem))
+
 ## [v7.0.2](https://github.com/tanem/svg-injector/tree/v7.0.2) (2019-03-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.1...v7.0.2)
 
