@@ -62,8 +62,8 @@ const getPlugins = bundleType => [
           sourcemap: true,
           output: { comments: false },
           compress: {
-            keep_infinity: true,
-            pure_getters: true
+            keep_infinity: true, // eslint-disable-line @typescript-eslint/camelcase
+            pure_getters: true // eslint-disable-line @typescript-eslint/camelcase
           },
           warnings: true,
           ecma: 5,
