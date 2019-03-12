@@ -1,5 +1,3 @@
-// tslint:disable no-var-requires
-
 const glob = require('glob')
 const shell = require('shelljs')
 

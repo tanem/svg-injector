@@ -261,7 +261,6 @@ const injectElement = (
         //
         // Also, the code is evaluated in a closure and not in the global scope.
         // If you need to put something in global scope, use 'window'.
-        // tslint:disable-next-line:function-constructor
         new Function(scriptsToEval[l])(window)
       }
 
