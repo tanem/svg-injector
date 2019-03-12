@@ -1,5 +1,12 @@
 # Changelog
 
+## [v7.0.4](https://github.com/tanem/svg-injector/tree/v7.0.4) (2019-03-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.3...v7.0.4)
+
+**Merged pull requests:**
+
+- Switch to ESLint from TSLint [\#54](https://github.com/tanem/svg-injector/pull/54) ([tanem](https://github.com/tanem))
+
 ## [v7.0.3](https://github.com/tanem/svg-injector/tree/v7.0.3) (2019-03-11)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.2...v7.0.3)
 
