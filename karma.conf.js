@@ -1,8 +1,10 @@
-import path from 'path'
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const path = require('path')
 
 const PORT = 9876
 
-module.exports = function(config) {
+module.exports = config => {
   config.set({
     autoWatch: true,
     browsers: ['ChromeHeadless'],
