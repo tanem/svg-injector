@@ -9,10 +9,3 @@ export enum EvalScripts {
   Once = 'once',
   Never = 'never'
 }
-
-export interface IOptionalArgs {
-  done?: DoneCallback
-  each?: Errback
-  evalScripts?: EvalScripts
-  renumerateIRIElements?: boolean
-}
