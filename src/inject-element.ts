@@ -1,21 +1,21 @@
 import loadSvg from './load-svg'
-import { Errback } from './types'
+import { Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
-const injectedElements: Array<HTMLElement | Element> = []
+type ElementType = Element | HTMLElement | null
+
+const injectedElements: ElementType[] = []
 const ranScripts: { [key: string]: boolean } = {}
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
-interface IOptionalArgs {
-  evalScripts?: 'always' | 'once' | 'never'
-  renumerateIRIElements?: boolean
-}
-
 const injectElement = (
-  el: Element | HTMLElement,
+  el: NonNullable<ElementType>,
   callback: Errback,
-  { evalScripts, renumerateIRIElements }: IOptionalArgs
+  {
+    evalScripts,
+    renumerateIRIElements
+  }: { evalScripts: EvalScripts; renumerateIRIElements: boolean }
 ) => {
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
@@ -37,7 +37,7 @@ const injectElement = (
   if (injectedElements.indexOf(el) !== -1) {
     // TODO: Extract.
     injectedElements.splice(injectedElements.indexOf(el), 1)
-    ;(el as Element | HTMLElement | null) = null
+    ;(el as ElementType) = null
     return
   }
 
@@ -53,7 +53,7 @@ const injectElement = (
     if (!svg) {
       // TODO: Extract.
       injectedElements.splice(injectedElements.indexOf(el), 1)
-      ;(el as Element | HTMLElement | null) = null
+      ;(el as ElementType) = null
       callback(error)
       return
     }
@@ -291,7 +291,7 @@ const injectElement = (
     // it can be GC'd.
     // TODO: Extract
     injectedElements.splice(injectedElements.indexOf(el), 1)
-    ;(el as Element | HTMLElement | null) = null
+    ;(el as ElementType) = null
 
     callback(null, svg)
   })
