@@ -1,6 +1,15 @@
 # Changelog
 
-## [v7.0.6](https://github.com/tanem/svg-injector/tree/v7.0.6) (2019-03-14)
+## [v7.0.7](https://github.com/tanem/svg-injector/tree/v7.0.7) (2019-03-16)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.6...v7.0.7)
+
+**Merged pull requests:**
+
+- Update dependency eslint to v5.15.2 [\#61](https://github.com/tanem/svg-injector/pull/61) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency parcel-bundler to v1.12.2 [\#60](https://github.com/tanem/svg-injector/pull/60) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency @types/sinon to v7.0.10 [\#59](https://github.com/tanem/svg-injector/pull/59) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.6](https://github.com/tanem/svg-injector/tree/v7.0.6) (2019-03-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.5...v7.0.6)
 
 **Merged pull requests:**
