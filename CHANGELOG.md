@@ -1,5 +1,15 @@
 # Changelog
 
+## [v7.0.9](https://github.com/tanem/svg-injector/tree/v7.0.9) (2019-03-30)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.8...v7.0.9)
+
+**Merged pull requests:**
+
+- Update dependency typescript to v3.4.1 [\#73](https://github.com/tanem/svg-injector/pull/73) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency sinon to v7.3.1 [\#72](https://github.com/tanem/svg-injector/pull/72) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup-plugin-commonjs to v9.2.2 [\#71](https://github.com/tanem/svg-injector/pull/71) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.7.4 [\#70](https://github.com/tanem/svg-injector/pull/70) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v7.0.8](https://github.com/tanem/svg-injector/tree/v7.0.8) (2019-03-23)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.7...v7.0.8)
 
