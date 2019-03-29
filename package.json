@@ -75,7 +75,7 @@
     "shelljs-plugin-authors": "2.0.6",
     "sinon": "7.3.1",
     "ts-node": "8.0.3",
-    "typescript": "3.3.4000",
+    "typescript": "3.4.1",
     "webpack": "4.29.6"
   },
   "scripts": {
