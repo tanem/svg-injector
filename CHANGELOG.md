@@ -1,6 +1,18 @@
 # Changelog
 
-## [v7.0.10](https://github.com/tanem/svg-injector/tree/v7.0.10) (2019-04-07)
+## [v7.0.11](https://github.com/tanem/svg-injector/tree/v7.0.11) (2019-04-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.10...v7.0.11)
+
+**Merged pull requests:**
+
+- Update dependency rollup-plugin-replace to v2.2.0 [\#89](https://github.com/tanem/svg-injector/pull/89) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.9.3 [\#88](https://github.com/tanem/svg-injector/pull/88) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency typescript to v3.4.3 [\#87](https://github.com/tanem/svg-injector/pull/87) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency @starptech/prettyhtml to v0.8.17 [\#86](https://github.com/tanem/svg-injector/pull/86) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency mocha to v6.1.2 [\#85](https://github.com/tanem/svg-injector/pull/85) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup-plugin-node-resolve to v4.2.2 [\#84](https://github.com/tanem/svg-injector/pull/84) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.10](https://github.com/tanem/svg-injector/tree/v7.0.10) (2019-04-06)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.9...v7.0.10)
 
 **Merged pull requests:**
