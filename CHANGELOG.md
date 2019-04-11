@@ -1,6 +1,14 @@
 # Changelog
 
-## [v7.0.11](https://github.com/tanem/svg-injector/tree/v7.0.11) (2019-04-11)
+## [v7.0.12](https://github.com/tanem/svg-injector/tree/v7.0.12) (2019-04-12)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.11...v7.0.12)
+
+**Merged pull requests:**
+
+- Update dependency rollup to v1.10.0 [\#91](https://github.com/tanem/svg-injector/pull/91) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup-plugin-node-resolve to v4.2.3 [\#90](https://github.com/tanem/svg-injector/pull/90) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.11](https://github.com/tanem/svg-injector/tree/v7.0.11) (2019-04-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.10...v7.0.11)
 
 **Merged pull requests:**
