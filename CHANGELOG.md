@@ -1,6 +1,17 @@
 # Changelog
 
-## [v7.0.12](https://github.com/tanem/svg-injector/tree/v7.0.12) (2019-04-12)
+## [v7.0.13](https://github.com/tanem/svg-injector/tree/v7.0.13) (2019-04-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.12...v7.0.13)
+
+**Merged pull requests:**
+
+- Update dependency @babel/runtime to ^7.4.3 [\#96](https://github.com/tanem/svg-injector/pull/96) ([renovate[bot]](https://github.com/apps/renovate))
+- Reconfigure Renovate [\#95](https://github.com/tanem/svg-injector/pull/95) ([tanem](https://github.com/tanem))
+- Update dependency prettier to v1.17.0 [\#94](https://github.com/tanem/svg-injector/pull/94) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency webpack to v4.30.0 [\#93](https://github.com/tanem/svg-injector/pull/93) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency mocha to v6.1.3 [\#92](https://github.com/tanem/svg-injector/pull/92) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.12](https://github.com/tanem/svg-injector/tree/v7.0.12) (2019-04-11)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.11...v7.0.12)
 
 **Merged pull requests:**
