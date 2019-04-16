@@ -8,8 +8,6 @@
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
-> ⚠️This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system. It's currently undergoing some major refactoring, which means it will deviate significantly from the original library. Prior to creating any PRs, please raise an issue to discuss the proposed changes. That way we can ensure our efforts are aligned.
-
 ## Background
 
 There are a number of ways to use SVG on a page (`object`, `embed`, `iframe`, `img`, CSS `background-image`) but to unlock the full potential of SVG, including full element-level CSS styling and evaluation of embedded JavaScript, the full SVG markup must be included directly in the DOM.
