@@ -8,10 +8,6 @@
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
-> ⚠️This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system. It's currently undergoing some major refactoring, which means it will deviate significantly from the original library. Prior to creating any PRs, please raise an issue to discuss the proposed changes. That way we can ensure our efforts are aligned.
-
-> ⚠️Versions `6.0.4` and `6.0.5` were inadvertently published with breaking changes and have been deprecated. The changes contained in those versions have been republished in `7.0.0`.
-
 ## Background
 
 There are a number of ways to use SVG on a page (`object`, `embed`, `iframe`, `img`, CSS `background-image`) but to unlock the full potential of SVG, including full element-level CSS styling and evaluation of embedded JavaScript, the full SVG markup must be included directly in the DOM.
@@ -75,6 +71,8 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 
 ## Installation
 
+> ⚠️This library uses [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from), so if you're targeting [browsers that don't support that method](https://kangax.github.io/compat-table/es6/#test-Array_static_methods), you'll need to ensure an appropriate polyfill is included manually. See [this issue comment](https://github.com/tanem/svg-injector/issues/97#issuecomment-483365473) for further detail.
+
 ```
 $ npm install @tanem/svg-injector
 ```
@@ -83,6 +81,10 @@ There are also UMD builds available via [unpkg](https://unpkg.com/):
 
 - https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.development.js
 - https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.production.js
+
+## Credit
+
+This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
 
 ## License
 
