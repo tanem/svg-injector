@@ -1,5 +1,15 @@
 # Changelog
 
+## [v7.0.14](https://github.com/tanem/svg-injector/tree/v7.0.14) (2019-04-17)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.13...v7.0.14)
+
+**Merged pull requests:**
+
+- Add polyfill note to docs [\#101](https://github.com/tanem/svg-injector/pull/101) ([tanem](https://github.com/tanem))
+- Update dependency karma to v4.1.0 [\#100](https://github.com/tanem/svg-injector/pull/100) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency @types/shelljs to v0.8.5 [\#99](https://github.com/tanem/svg-injector/pull/99) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency ts-node to v8.1.0 [\#98](https://github.com/tanem/svg-injector/pull/98) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v7.0.13](https://github.com/tanem/svg-injector/tree/v7.0.13) (2019-04-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.12...v7.0.13)
 
