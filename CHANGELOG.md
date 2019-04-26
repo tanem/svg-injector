@@ -1,5 +1,14 @@
 # Changelog
 
+## [v7.0.16](https://github.com/tanem/svg-injector/tree/v7.0.16) (2019-04-27)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.15...v7.0.16)
+
+**Merged pull requests:**
+
+- Update dependency @babel/runtime to ^7.4.4 [\#111](https://github.com/tanem/svg-injector/pull/111) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dev dependencies [\#110](https://github.com/tanem/svg-injector/pull/110) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency null-loader to v1 [\#109](https://github.com/tanem/svg-injector/pull/109) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v7.0.15](https://github.com/tanem/svg-injector/tree/v7.0.15) (2019-04-21)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.14...v7.0.15)
 
