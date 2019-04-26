@@ -11,7 +11,7 @@
     "@tanem/svg-injector": "latest"
   },
   "devDependencies": {
-    "@babel/core": "7.4.3",
+    "@babel/core": "7.4.4",
     "parcel-bundler": "1.12.3"
   },
   "private": true
