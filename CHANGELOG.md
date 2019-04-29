@@ -1,6 +1,13 @@
 # Changelog
 
-## [v7.0.16](https://github.com/tanem/svg-injector/tree/v7.0.16) (2019-04-27)
+## [v7.0.17](https://github.com/tanem/svg-injector/tree/v7.0.17) (2019-04-30)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.16...v7.0.17)
+
+**Merged pull requests:**
+
+- Update dependency @starptech/prettyhtml to v0.9.0 [\#112](https://github.com/tanem/svg-injector/pull/112) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.16](https://github.com/tanem/svg-injector/tree/v7.0.16) (2019-04-26)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.15...v7.0.16)
 
 **Merged pull requests:**
