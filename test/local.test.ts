@@ -1,6 +1,6 @@
 import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
-import { DoneCallback, Errback } from '../src/types'
+import { AfterAll, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
 import { cleanup, format, render } from './helpers/test-utils'
 
@@ -27,12 +27,12 @@ suite('local', () => {
       ></div>
     `)
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
 
-    const each: Errback = error => {
+    const afterEach: Errback = error => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -42,8 +42,8 @@ suite('local', () => {
     }
 
     SVGInjector(container.querySelector('.inject-me'), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
   })
 
@@ -61,8 +61,8 @@ suite('local', () => {
       ></div>
     `)
 
-    const each = window.sinon.stub()
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterEach = window.sinon.stub()
+    const afterAll: AfterAll = elementsLoaded => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -80,17 +80,17 @@ suite('local', () => {
         </svg>
       `)
       expect(actual).to.equal(expected)
-      expect(each.callCount).to.equal(1)
-      expect(each.firstCall.args).to.have.lengthOf(2)
-      expect(each.firstCall.args[0]).to.be.a('null')
-      expect(format(each.firstCall.args[1].outerHTML)).to.equal(actual)
+      expect(afterEach.callCount).to.equal(1)
+      expect(afterEach.firstCall.args).to.have.lengthOf(2)
+      expect(afterEach.firstCall.args[0]).to.be.a('null')
+      expect(format(afterEach.firstCall.args[1].outerHTML)).to.equal(actual)
       expect(elementsLoaded).to.equal(1)
       fakeXHR.restore()
       done()
     }
     SVGInjector(container.querySelector('.inject-me'), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
 
     requests[0].respond(

@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 
-export type DoneCallback = (elementsLoaded: number) => void
+export type AfterAll = (elementsLoaded: number) => void
+
+export type BeforeEach = (svg: Element) => void
 
 export type Errback = (error: Error | null, svg?: Element) => void
 

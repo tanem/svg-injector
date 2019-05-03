@@ -1,11 +1,12 @@
 import injectElement from './inject-element'
-import { DoneCallback, Errback, EvalScripts } from './types'
+import { AfterAll, BeforeEach, Errback, EvalScripts } from './types'
 
 type Elements = HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null
 
 interface OptionalArgs {
-  done?: DoneCallback
-  each?: Errback
+  afterAll?: AfterAll
+  afterEach?: Errback
+  beforeEach?: BeforeEach
   evalScripts?: EvalScripts
   renumerateIRIElements?: boolean
 }
@@ -13,8 +14,9 @@ interface OptionalArgs {
 const SVGInjector = (
   elements: Elements,
   {
-    done = () => undefined,
-    each = () => undefined,
+    afterAll = () => undefined,
+    afterEach = () => undefined,
+    beforeEach = () => undefined,
     evalScripts = EvalScripts.Never,
     renumerateIRIElements = true
   }: OptionalArgs = {}
@@ -24,37 +26,35 @@ const SVGInjector = (
     for (let i = 0, j = elements.length; i < j; i++) {
       injectElement(
         elements[i],
+        evalScripts,
+        renumerateIRIElements,
+        beforeEach,
         (error, svg) => {
-          each(error, svg)
+          afterEach(error, svg)
           if (
             elements &&
             'length' in elements &&
             elements.length === ++elementsLoaded
           ) {
-            done(elementsLoaded)
+            afterAll(elementsLoaded)
           }
-        },
-        {
-          evalScripts,
-          renumerateIRIElements
         }
       )
     }
   } else if (elements) {
     injectElement(
       elements,
+      evalScripts,
+      renumerateIRIElements,
+      beforeEach,
       (error, svg) => {
-        each(error, svg)
-        done(1)
+        afterEach(error, svg)
+        afterAll(1)
         elements = null
-      },
-      {
-        evalScripts,
-        renumerateIRIElements
       }
     )
   } else {
-    done(0)
+    afterAll(0)
   }
 }
 
