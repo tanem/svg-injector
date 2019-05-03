@@ -294,7 +294,6 @@ const injectElement = (
     injectedElements.splice(injectedElements.indexOf(el), 1)
     ;(el as ElementType) = null
 
-    // This is essentially "afterInjection".
     callback(null, svg)
   })
 }
