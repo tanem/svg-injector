@@ -1,6 +1,14 @@
 # Changelog
 
-## [v7.0.17](https://github.com/tanem/svg-injector/tree/v7.0.17) (2019-04-30)
+## [v8.0.0](https://github.com/tanem/svg-injector/tree/v8.0.0) (2019-05-05)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.17...v8.0.0)
+
+**Merged pull requests:**
+
+- Add beforeEach option and adjust existing API [\#114](https://github.com/tanem/svg-injector/pull/114) ([tanem](https://github.com/tanem))
+- Update dependency rollup to v1.11.2 [\#113](https://github.com/tanem/svg-injector/pull/113) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v7.0.17](https://github.com/tanem/svg-injector/tree/v7.0.17) (2019-04-29)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.16...v7.0.17)
 
 **Merged pull requests:**
