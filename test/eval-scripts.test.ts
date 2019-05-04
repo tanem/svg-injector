@@ -1,5 +1,5 @@
 import SVGInjector from '../src/svg-injector'
-import { DoneCallback, EvalScripts } from '../src/types'
+import { AfterAll, EvalScripts } from '../src/types'
 import * as uniqueId from '../src/unique-id'
 import { cleanup, format, render } from './helpers/test-utils'
 
@@ -30,7 +30,7 @@ suite('eval scripts', () => {
   })
 
   test('never', done => {
-    const injectorDone: DoneCallback = _ => {
+    const afterAll: AfterAll = _ => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -60,13 +60,13 @@ suite('eval scripts', () => {
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
-      done: injectorDone,
+      afterAll,
       evalScripts: EvalScripts.Never
     })
   })
 
   test('once', done => {
-    const injectorDone: DoneCallback = _ => {
+    const afterAll: AfterAll = _ => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -96,13 +96,13 @@ suite('eval scripts', () => {
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
-      done: injectorDone,
+      afterAll,
       evalScripts: EvalScripts.Once
     })
   })
 
   test('always', done => {
-    const injectorDone: DoneCallback = _ => {
+    const afterAll: AfterAll = _ => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -132,7 +132,7 @@ suite('eval scripts', () => {
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
-      done: injectorDone,
+      afterAll,
       evalScripts: EvalScripts.Always
     })
   })

@@ -1,5 +1,5 @@
 import loadSvg from './load-svg'
-import { Errback, EvalScripts } from './types'
+import { BeforeEach, Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
 type ElementType = Element | HTMLElement | null
@@ -11,11 +11,10 @@ const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
 const injectElement = (
   el: NonNullable<ElementType>,
-  callback: Errback,
-  {
-    evalScripts,
-    renumerateIRIElements
-  }: { evalScripts: EvalScripts; renumerateIRIElements: boolean }
+  evalScripts: EvalScripts,
+  renumerateIRIElements: boolean,
+  beforeEach: BeforeEach,
+  callback: Errback
 ) => {
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
@@ -280,6 +279,8 @@ const injectElement = (
 
     svg.setAttribute('xmlns', svgNamespace)
     svg.setAttribute('xmlns:xlink', xlinkNamespace)
+
+    beforeEach(svg)
 
     // Replace the image with the svg.
     /* istanbul ignore else */

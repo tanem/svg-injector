@@ -1,5 +1,5 @@
 import SVGInjector from '../src/svg-injector'
-import { DoneCallback, Errback } from '../src/types'
+import { AfterAll, BeforeEach, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
 import { cleanup, format, render } from './helpers/test-utils'
 
@@ -23,9 +23,9 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const each = window.sinon.stub()
+    const afterEach = window.sinon.stub()
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -43,17 +43,17 @@ suite('SVGInjector', () => {
         </svg>
       `)
       expect(actual).to.equal(expected)
-      expect(each.callCount).to.equal(1)
-      expect(each.firstCall.args).to.have.lengthOf(2)
-      expect(each.firstCall.args[0]).to.be.a('null')
-      expect(format(each.firstCall.args[1].outerHTML)).to.equal(actual)
+      expect(afterEach.callCount).to.equal(1)
+      expect(afterEach.firstCall.args).to.have.lengthOf(2)
+      expect(afterEach.firstCall.args[0]).to.be.a('null')
+      expect(format(afterEach.firstCall.args[1].outerHTML)).to.equal(actual)
       expect(elementsLoaded).to.equal(1)
       done()
     }
 
     SVGInjector(container.querySelector(`.inject-me`), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
   })
 
@@ -69,9 +69,9 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const each = window.sinon.stub()
+    const afterEach = window.sinon.stub()
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -102,15 +102,15 @@ suite('SVGInjector', () => {
         </svg>
       `)
       expect(actual).to.equal(expected)
-      expect(each.callCount).to.equal(2)
-      expect(each.firstCall.args).to.have.lengthOf(2)
-      expect(each.firstCall.args[0]).to.be.a('null')
-      expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+      expect(afterEach.callCount).to.equal(2)
+      expect(afterEach.firstCall.args).to.have.lengthOf(2)
+      expect(afterEach.firstCall.args[0]).to.be.a('null')
+      expect(format(afterEach.firstCall.args[1].outerHTML)).to.equal(
         format(container.getElementsByTagName('svg')[0].outerHTML)
       )
-      expect(each.secondCall.args).to.have.lengthOf(2)
-      expect(each.secondCall.args[0]).to.be.a('null')
-      expect(format(each.secondCall.args[1].outerHTML)).to.equal(
+      expect(afterEach.secondCall.args).to.have.lengthOf(2)
+      expect(afterEach.secondCall.args[0]).to.be.a('null')
+      expect(format(afterEach.secondCall.args[1].outerHTML)).to.equal(
         format(container.getElementsByTagName('svg')[1].outerHTML)
       )
       expect(elementsLoaded).to.equal(2)
@@ -118,23 +118,23 @@ suite('SVGInjector', () => {
     }
 
     SVGInjector(container.querySelectorAll('.inject-me'), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
   })
 
   test('null element', done => {
-    const each = window.sinon.stub()
+    const afterEach = window.sinon.stub()
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       expect(elementsLoaded).to.equal(0)
-      expect(each.callCount).to.equal(0)
+      expect(afterEach.callCount).to.equal(0)
       done()
     }
 
     SVGInjector(null, {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
   })
 
@@ -174,7 +174,7 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const injectorDone: DoneCallback = () => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -200,7 +200,7 @@ suite('SVGInjector', () => {
       done()
     }
 
-    SVGInjector(container.querySelector('#thumb-up'), { done: injectorDone })
+    SVGInjector(container.querySelector('#thumb-up'), { afterAll })
   })
 
   test('no class attribute', done => {
@@ -211,7 +211,7 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const injectorDone: DoneCallback = () => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -233,7 +233,7 @@ suite('SVGInjector', () => {
       done()
     }
 
-    SVGInjector(container.querySelector('#thumb-up'), { done: injectorDone })
+    SVGInjector(container.querySelector('#thumb-up'), { afterAll })
   })
 
   test('style tag', done => {
@@ -244,7 +244,7 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const injectorDone: DoneCallback = () => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML, { usePrettier: false })
       const expected = format(
         `
@@ -273,7 +273,7 @@ suite('SVGInjector', () => {
       done()
     }
 
-    SVGInjector(container.querySelector('.inject-me'), { done: injectorDone })
+    SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
   test('cached success', done => {
@@ -284,10 +284,10 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const each = window.sinon.stub()
+    const afterEach = window.sinon.stub()
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      done: _ => {
+      afterAll: _ => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -296,7 +296,7 @@ suite('SVGInjector', () => {
         `)
 
         SVGInjector(containerTwo.querySelector('.inject-me'), {
-          done: () => {
+          afterAll: () => {
             const actual = format(
               containerOne.innerHTML + containerTwo.innerHTML
             )
@@ -330,23 +330,23 @@ suite('SVGInjector', () => {
               </svg>
             `)
             expect(actual).to.equal(expected)
-            expect(each.callCount).to.equal(2)
-            expect(each.firstCall.args).to.have.lengthOf(2)
-            expect(each.firstCall.args[0]).to.be.a('null')
-            expect(format(each.firstCall.args[1].outerHTML)).to.equal(
+            expect(afterEach.callCount).to.equal(2)
+            expect(afterEach.firstCall.args).to.have.lengthOf(2)
+            expect(afterEach.firstCall.args[0]).to.be.a('null')
+            expect(format(afterEach.firstCall.args[1].outerHTML)).to.equal(
               format(containerOne.innerHTML)
             )
-            expect(each.secondCall.args).to.have.lengthOf(2)
-            expect(each.secondCall.args[0]).to.be.a('null')
-            expect(format(each.secondCall.args[1].outerHTML)).to.equal(
+            expect(afterEach.secondCall.args).to.have.lengthOf(2)
+            expect(afterEach.secondCall.args[0]).to.be.a('null')
+            expect(format(afterEach.secondCall.args[1].outerHTML)).to.equal(
               format(containerTwo.innerHTML)
             )
             done()
           },
-          each
+          afterEach
         })
       },
-      each
+      afterEach
     })
   })
 
@@ -365,7 +365,7 @@ suite('SVGInjector', () => {
     `)
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      done: _ => {
+      afterAll: _ => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -374,12 +374,11 @@ suite('SVGInjector', () => {
         `)
 
         SVGInjector(containerTwo.querySelector('.inject-me'), {
-          // tslint:disable-next-line:no-shadowed-variable
-          done: _ => {
+          afterAll: () => {
             fakeXHR.restore()
             done()
           },
-          each: error => {
+          afterEach: error => {
             expect(error)
               .to.be.a('error')
               .with.property(
@@ -407,13 +406,13 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
       fakeXHR.restore()
       done()
     }
 
-    const each: Errback = error => {
+    const afterEach: Errback = error => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -423,8 +422,8 @@ suite('SVGInjector', () => {
     }
 
     SVGInjector(container.querySelector('.inject-me'), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
 
     requests[0].respond(404, {}, '')
@@ -437,12 +436,12 @@ suite('SVGInjector', () => {
         ></div>
       `)
 
-    const injectorDone: DoneCallback = elementsLoaded => {
+    const afterAll: AfterAll = elementsLoaded => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
 
-    const each: Errback = error => {
+    const afterEach: Errback = error => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -452,8 +451,8 @@ suite('SVGInjector', () => {
     }
 
     SVGInjector(container.querySelector('.inject-me'), {
-      done: injectorDone,
-      each
+      afterAll,
+      afterEach
     })
   })
 
@@ -472,11 +471,11 @@ suite('SVGInjector', () => {
       `)
 
     SVGInjector(container.querySelector('.inject-me'), {
-      done: _ => {
+      afterAll: _ => {
         fakeXHR.restore()
         done()
       },
-      each: error => {
+      afterEach: error => {
         expect(error)
           .to.be.a('error')
           .with.property(
@@ -489,7 +488,7 @@ suite('SVGInjector', () => {
     requests[0].respond(500, {}, '<svg></svg>')
   })
 
-  test('default `done` callback', done => {
+  test('default `afterAll` callback', done => {
     const container = render(`
       <div
         class="inject-me"
@@ -497,7 +496,7 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const each: Errback = () => {
+    const afterEach: Errback = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -519,7 +518,47 @@ suite('SVGInjector', () => {
     }
 
     SVGInjector(container.querySelector(`.inject-me`), {
-      each
+      afterEach
+    })
+  })
+
+  test('modifying SVG in `beforeEach`', done => {
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/thumb-up.svg"
+      ></div>
+    `)
+
+    const beforeEach: BeforeEach = svg => {
+      svg.setAttribute('stroke', 'red')
+    }
+
+    const afterEach: Errback = () => {
+      const actual = format(container.innerHTML)
+      const expected = format(`
+        <svg
+          class="injected-svg inject-me"
+          data-src="/fixtures/thumb-up.svg"
+          height="8"
+          stroke="red"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <path
+            d="M4.47 0c-.19.02-.37.15-.47.34-.13.26-1.09 2.19-1.28 2.38-.19.19-.44.28-.72.28v4h3.5c.21 0 .39-.13.47-.31 0 0 1.03-2.91 1.03-3.19 0-.28-.22-.5-.5-.5h-1.5c-.28 0-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47 3v4h1v-4h-1z"
+          ></path>
+        </svg>
+      `)
+      expect(actual).to.equal(expected)
+      done()
+    }
+
+    SVGInjector(container.querySelector(`.inject-me`), {
+      afterEach,
+      beforeEach
     })
   })
 })
