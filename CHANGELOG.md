@@ -1,6 +1,15 @@
 # Changelog
 
-## [v8.0.5](https://github.com/tanem/svg-injector/tree/v8.0.5) (2019-05-21)
+## [v8.0.6](https://github.com/tanem/svg-injector/tree/v8.0.6) (2019-05-24)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.5...v8.0.6)
+
+**Merged pull requests:**
+
+- Update dependency rollup-plugin-terser to v5 [\#123](https://github.com/tanem/svg-injector/pull/123) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dev dependencies [\#122](https://github.com/tanem/svg-injector/pull/122) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency @babel/runtime to ^7.4.5 [\#121](https://github.com/tanem/svg-injector/pull/121) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v8.0.5](https://github.com/tanem/svg-injector/tree/v8.0.5) (2019-05-20)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.4...v8.0.5)
 
 **Merged pull requests:**
