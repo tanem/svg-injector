@@ -1,6 +1,13 @@
 # Changelog
 
-## [v8.0.7](https://github.com/tanem/svg-injector/tree/v8.0.7) (2019-05-31)
+## [v8.0.8](https://github.com/tanem/svg-injector/tree/v8.0.8) (2019-05-31)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.7...v8.0.8)
+
+**Merged pull requests:**
+
+- Update dependency @types/mocha to v5.2.7 [\#126](https://github.com/tanem/svg-injector/pull/126) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v8.0.7](https://github.com/tanem/svg-injector/tree/v8.0.7) (2019-05-30)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.6...v8.0.7)
 
 **Merged pull requests:**
