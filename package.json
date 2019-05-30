@@ -47,7 +47,7 @@
     "chai": "4.2.0",
     "codecov": "3.5.0",
     "cp-cli": "2.0.0",
-    "del-cli": "1.1.0",
+    "del-cli": "2.0.0",
     "eslint": "5.16.0",
     "eslint-config-prettier": "4.3.0",
     "istanbul-instrumenter-loader": "3.0.1",
