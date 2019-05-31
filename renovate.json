@@ -6,11 +6,5 @@
     ":rebaseStalePrs"
   ],
   "ignorePaths": ["**/node_modules/**"],
-  "rangeStrategy": "bump",
-  "packageRules": [
-    {
-      "depTypeList": ["devDependencies"],
-      "groupName": "dev dependencies"
-    }
-  ]
+  "rangeStrategy": "bump"
 }
