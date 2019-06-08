@@ -1,6 +1,25 @@
 # Changelog
 
-## [v8.0.10](https://github.com/tanem/svg-injector/tree/v8.0.10) (2019-06-03)
+## [v8.0.11](https://github.com/tanem/svg-injector/tree/v8.0.11) (2019-06-09)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.10...v8.0.11)
+
+**Merged pull requests:**
+
+- Update dependency shelljs-plugin-authors to v2.0.9 [\#146](https://github.com/tanem/svg-injector/pull/146) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.14.4 [\#145](https://github.com/tanem/svg-injector/pull/145) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency karma-webpack to v4.0.2 [\#144](https://github.com/tanem/svg-injector/pull/144) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency prettier to v1.18.2 [\#143](https://github.com/tanem/svg-injector/pull/143) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency prettier to v1.18.0 [\#142](https://github.com/tanem/svg-injector/pull/142) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.14.3 [\#141](https://github.com/tanem/svg-injector/pull/141) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency null-loader to v3 [\#140](https://github.com/tanem/svg-injector/pull/140) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency shelljs-plugin-authors to v2.0.8 [\#139](https://github.com/tanem/svg-injector/pull/139) ([renovate[bot]](https://github.com/apps/renovate))
+- Fix audit issues [\#138](https://github.com/tanem/svg-injector/pull/138) ([tanem](https://github.com/tanem))
+- Update dependency rollup to v1.14.2 [\#137](https://github.com/tanem/svg-injector/pull/137) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.14.1 [\#136](https://github.com/tanem/svg-injector/pull/136) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency rollup to v1.14.0 [\#135](https://github.com/tanem/svg-injector/pull/135) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency webpack to v4.33.0 [\#134](https://github.com/tanem/svg-injector/pull/134) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v8.0.10](https://github.com/tanem/svg-injector/tree/v8.0.10) (2019-06-02)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.9...v8.0.10)
 
 **Merged pull requests:**
