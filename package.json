@@ -49,7 +49,7 @@
     "cp-cli": "2.0.0",
     "del-cli": "2.0.0",
     "eslint": "5.16.0",
-    "eslint-config-prettier": "4.3.0",
+    "eslint-config-prettier": "5.0.0",
     "istanbul-instrumenter-loader": "3.0.1",
     "karma": "4.1.0",
     "karma-chai": "0.1.0",
