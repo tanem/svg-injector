@@ -1,6 +1,13 @@
 # Changelog
 
-## [v8.0.17](https://github.com/tanem/svg-injector/tree/v8.0.17) (2019-06-30)
+## [v8.0.18](https://github.com/tanem/svg-injector/tree/v8.0.18) (2019-07-02)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.17...v8.0.18)
+
+**Merged pull requests:**
+
+- Update dependency webpack to v4.35.2 [\#173](https://github.com/tanem/svg-injector/pull/173) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [v8.0.17](https://github.com/tanem/svg-injector/tree/v8.0.17) (2019-06-29)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.16...v8.0.17)
 
 **Merged pull requests:**
@@ -309,7 +316,6 @@
 
 - Pin dependency parcel-bundler to 1.12.0 [\#53](https://github.com/tanem/svg-injector/pull/53) ([renovate[bot]](https://github.com/apps/renovate))
 - Reconfigure Renovate [\#52](https://github.com/tanem/svg-injector/pull/52) ([tanem](https://github.com/tanem))
-- Tidy tests [\#40](https://github.com/tanem/svg-injector/pull/40) ([tanem](https://github.com/tanem))
 
 ## [v7.0.2](https://github.com/tanem/svg-injector/tree/v7.0.2) (2019-03-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v7.0.1...v7.0.2)
@@ -365,6 +371,10 @@
 
 ## [v6.0.1](https://github.com/tanem/svg-injector/tree/v6.0.1) (2019-02-05)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v2.1.4...v6.0.1)
+
+**Merged pull requests:**
+
+- Tidy tests [\#40](https://github.com/tanem/svg-injector/pull/40) ([tanem](https://github.com/tanem))
 
 ## [v2.1.4](https://github.com/tanem/svg-injector/tree/v2.1.4) (2019-01-29)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v6.0.0...v2.1.4)
@@ -540,10 +550,13 @@
 **Merged pull requests:**
 
 - Add renumerateIRIElements option [\#4](https://github.com/tanem/svg-injector/pull/4) ([tanem](https://github.com/tanem))
-- Tidy up docs and add examples [\#3](https://github.com/tanem/svg-injector/pull/3) ([tanem](https://github.com/tanem))
 
 ## [v1.1.10](https://github.com/tanem/svg-injector/tree/v1.1.10) (2018-06-02)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v1.1.9...v1.1.10)
+
+**Merged pull requests:**
+
+- Tidy up docs and add examples [\#3](https://github.com/tanem/svg-injector/pull/3) ([tanem](https://github.com/tanem))
 
 ## [v1.1.9](https://github.com/tanem/svg-injector/tree/v1.1.9) (2018-05-26)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v1.1.8...v1.1.9)
