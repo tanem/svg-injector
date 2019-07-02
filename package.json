@@ -76,7 +76,7 @@
     "sinon": "7.3.2",
     "ts-node": "8.3.0",
     "typescript": "3.5.2",
-    "webpack": "4.35.0"
+    "webpack": "4.35.2"
   },
   "scripts": {
     "authors": "shelljs-authors > AUTHORS",
