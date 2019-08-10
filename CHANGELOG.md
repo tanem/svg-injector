@@ -1,5 +1,12 @@
 # Changelog
 
+## [v8.0.25](https://github.com/tanem/svg-injector/tree/v8.0.25) (2019-08-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.24...v8.0.25)
+
+**Merged pull requests:**
+
+- Update dev dependencies [#191](https://github.com/tanem/svg-injector/pull/191) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.24](https://github.com/tanem/svg-injector/tree/v8.0.24) (2019-08-09)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.23...v8.0.24)
 
