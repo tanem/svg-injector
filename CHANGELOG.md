@@ -1,5 +1,13 @@
 # Changelog
 
+## [v8.0.29](https://github.com/tanem/svg-injector/tree/v8.0.29) (2019-08-28)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.28...v8.0.29)
+
+**Merged pull requests:**
+
+- Bump eslint-utils from 1.4.0 to 1.4.2 [#198](https://github.com/tanem/svg-injector/pull/198) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update dev dependencies [#197](https://github.com/tanem/svg-injector/pull/197) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.28](https://github.com/tanem/svg-injector/tree/v8.0.28) (2019-08-25)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.27...v8.0.28)
 
