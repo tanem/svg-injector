@@ -1,5 +1,14 @@
 # Changelog
 
+## [v8.0.31](https://github.com/tanem/svg-injector/tree/v8.0.31) (2019-09-18)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.30...v8.0.31)
+
+**Merged pull requests:**
+
+- Update dev dependencies [#200](https://github.com/tanem/svg-injector/pull/200) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency del-cli to v3 [#202](https://github.com/tanem/svg-injector/pull/202) ([renovate[bot]](https://github.com/apps/renovate))
+- Update dependency @babel/runtime to ^7.6.0 [#201](https://github.com/tanem/svg-injector/pull/201) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.30](https://github.com/tanem/svg-injector/tree/v8.0.30) (2019-08-28)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.29...v8.0.30)
 
