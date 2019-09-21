@@ -45,7 +45,7 @@
     "@typescript-eslint/parser": "2.3.0",
     "babel-loader": "8.0.6",
     "chai": "4.2.0",
-    "codecov": "3.5.0",
+    "codecov": "3.6.1",
     "cp-cli": "2.0.0",
     "del-cli": "3.0.0",
     "eslint": "6.4.0",
@@ -72,7 +72,7 @@
     "rollup-plugin-sourcemaps": "0.4.2",
     "rollup-plugin-terser": "5.1.2",
     "sinon": "7.4.2",
-    "tanem-scripts": "2.0.9",
+    "tanem-scripts": "2.0.10",
     "ts-node": "8.4.1",
     "typescript": "3.6.3",
     "webpack": "4.40.2"
