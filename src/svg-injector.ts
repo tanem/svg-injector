@@ -17,7 +17,7 @@ const SVGInjector = (
     afterAll = () => undefined,
     afterEach = () => undefined,
     beforeEach = () => undefined,
-    evalScripts = EvalScripts.Never,
+    evalScripts = 'never',
     renumerateIRIElements = true
   }: OptionalArgs = {}
 ) => {
