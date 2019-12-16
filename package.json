@@ -35,7 +35,7 @@
     "@starptech/prettyhtml": "0.10.0",
     "@types/chai": "4.2.7",
     "@types/glob": "7.1.1",
-    "@types/karma": "3.0.3",
+    "@types/karma": "3.0.4",
     "@types/karma-chai": "0.1.2",
     "@types/mocha": "5.2.7",
     "@types/shelljs": "0.8.6",
