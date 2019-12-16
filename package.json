@@ -72,16 +72,14 @@
     "rollup-plugin-sourcemaps": "0.4.2",
     "rollup-plugin-terser": "5.1.3",
     "sinon": "7.5.0",
-    "tanem-scripts": "2.0.14",
+    "tanem-scripts": "5.0.2",
     "ts-node": "8.5.4",
     "typescript": "3.7.3",
     "webpack": "4.41.2"
   },
   "scripts": {
-    "authors": "tanem-scripts authors > AUTHORS",
     "build": "run-s clean compile bundle",
     "bundle": "rollup -c",
-    "changelog": "tanem-scripts changelog -f v$npm_package_version > CHANGELOG.md",
     "check:format": "prettier --list-different \"**/*.{js,ts}\"",
     "check:types": "tsc --noEmit",
     "clean": "run-p clean:*",
@@ -93,11 +91,8 @@
     "format": "prettier --write \"**/*.{js,ts}\"",
     "lint": "eslint .",
     "postbundle": "del compiled && cp-cli ./index.js ./dist/index.js",
-    "postversion": "git push && git push --tags && npm publish --access=public",
-    "release": "npm version -m 'Release v%s'",
+    "release": "tanem-scripts release",
     "test": "run-s check:* lint build test:karma",
-    "test:karma": "karma start",
-    "updatedeps": "ts-node scripts/update-deps",
-    "version": "run-s test changelog authors && git add ."
+    "test:karma": "karma start"
   }
 }
