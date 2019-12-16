@@ -74,7 +74,7 @@
     "sinon": "7.5.0",
     "tanem-scripts": "2.0.14",
     "ts-node": "8.5.4",
-    "typescript": "3.7.2",
+    "typescript": "3.7.3",
     "webpack": "4.41.2"
   },
   "scripts": {
