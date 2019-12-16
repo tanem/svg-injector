@@ -10,6 +10,7 @@ cache:
     - node_modules
 install:
   - npm i
+if: type = pull_request
 script:
   - npm t
-  - $(npm bin)/codecov
+  - npm run coverage
