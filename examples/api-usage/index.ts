@@ -14,5 +14,5 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
     svg.setAttribute('stroke', 'red')
   },
   evalScripts: 'once',
-  renumerateIRIElements: 'false'
+  renumerateIRIElements: false
 })
