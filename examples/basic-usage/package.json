@@ -1,7 +1,7 @@
 {
-  "name": "api-usage",
+  "name": "basic-usage",
   "version": "1.0.0",
-  "description": "SVGInjector API Usage Example",
+  "description": "SVGInjector Basic Usage Example",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
@@ -11,8 +11,7 @@
     "@tanem/svg-injector": "latest"
   },
   "devDependencies": {
-    "@babel/core": "7.7.5",
-    "parcel-bundler": "1.12.4"
+    "parcel-bundler": "1.6.1"
   },
   "private": true
 }
