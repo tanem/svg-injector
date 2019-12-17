@@ -1,6 +1,14 @@
 import { SVGInjector } from '@tanem/svg-injector'
 
-SVGInjector(document.getElementsByClassName('inject-me'), {
+document.body.insertAdjacentHTML(
+  'beforeend',
+  `
+  <div class="api-usage" data-src="api-usage/icon-one.svg"></div>
+  <div class="api-usage" data-src="api-usage/icon-two.svg"></div>
+  `
+)
+
+SVGInjector(document.getElementsByClassName('api-usage'), {
   afterAll(elementsLoaded) {
     console.log(`injected ${elementsLoaded} elements`)
   },
