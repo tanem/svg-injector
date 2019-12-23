@@ -48,7 +48,7 @@
     "codecov": "3.6.1",
     "cp-cli": "2.0.0",
     "del-cli": "3.0.0",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-config-prettier": "6.7.0",
     "istanbul-instrumenter-loader": "3.0.1",
     "karma": "4.4.1",
