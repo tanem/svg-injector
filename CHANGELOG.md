@@ -1,5 +1,27 @@
 # Changelog
 
+## [v8.0.37](https://github.com/tanem/svg-injector/tree/v8.0.37) (2019-12-27)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.36...v8.0.37)
+
+#### :house: Internal
+
+- [#248](https://github.com/tanem/svg-injector/pull/248) Update dependency sinon to v8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#251](https://github.com/tanem/svg-injector/pull/251) Update typescript-eslint monorepo to v2.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#250](https://github.com/tanem/svg-injector/pull/250) Update dependency @types/karma to v3.0.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#247](https://github.com/tanem/svg-injector/pull/247) Update dependency rollup to v1.27.14 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#246](https://github.com/tanem/svg-injector/pull/246) Update dependency typescript to v3.7.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#245](https://github.com/tanem/svg-injector/pull/245) Update dependency eslint to v6.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#249](https://github.com/tanem/svg-injector/pull/249) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#230](https://github.com/tanem/svg-injector/pull/230) Update dependency webpack to v4.41.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#244](https://github.com/tanem/svg-injector/pull/244) Update babel monorepo to v7.7.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#233](https://github.com/tanem/svg-injector/pull/233) Update typescript-eslint monorepo to v2.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#224](https://github.com/tanem/svg-injector/pull/224) Update dependency rollup to v1.27.13 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#243](https://github.com/tanem/svg-injector/pull/243) Update dependency @babel/runtime to ^7.7.6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#242](https://github.com/tanem/svg-injector/pull/242) Reconfigure renovate ([@tanem](https://github.com/tanem))
+- [#241](https://github.com/tanem/svg-injector/pull/241) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#240](https://github.com/tanem/svg-injector/pull/240) Update dependency parcel-bundler to v1.12.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#238](https://github.com/tanem/svg-injector/pull/238) Update dependency parcel-bundler to v1.10.0 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.36](https://github.com/tanem/svg-injector/tree/v8.0.36) (2019-12-17)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.35...v8.0.36)
 
