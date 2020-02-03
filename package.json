@@ -33,7 +33,7 @@
     "@babel/preset-env": "7.8.4",
     "@babel/preset-typescript": "7.8.3",
     "@starptech/prettyhtml": "0.10.0",
-    "@types/chai": "4.2.7",
+    "@types/chai": "4.2.8",
     "@types/glob": "7.1.1",
     "@types/karma": "3.0.5",
     "@types/karma-chai": "0.1.2",
