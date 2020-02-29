@@ -1,5 +1,18 @@
 # Changelog
 
+## [v8.0.42](https://github.com/tanem/svg-injector/tree/v8.0.42) (2020-02-29)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.41...v8.0.42)
+
+#### :house: Internal
+
+- [#314](https://github.com/tanem/svg-injector/pull/314) Update dependency mocha to v7.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#313](https://github.com/tanem/svg-injector/pull/313) Update dependency @types/sinon to v7.5.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#312](https://github.com/tanem/svg-injector/pull/312) Update dependency @types/karma to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#311](https://github.com/tanem/svg-injector/pull/311) Update typescript-eslint monorepo to v2.21.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#310](https://github.com/tanem/svg-injector/pull/310) Update dependency tanem-scripts to v5.0.12 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#309](https://github.com/tanem/svg-injector/pull/309) Update dependency typescript to v3.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#308](https://github.com/tanem/svg-injector/pull/308) Update dependency sinon to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.41](https://github.com/tanem/svg-injector/tree/v8.0.41) (2020-02-21)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.40...v8.0.41)
 
