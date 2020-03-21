@@ -1,5 +1,22 @@
 # Changelog
 
+## [v8.0.44](https://github.com/tanem/svg-injector/tree/v8.0.44) (2020-03-21)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.43...v8.0.44)
+
+#### :house: Internal
+
+- [#333](https://github.com/tanem/svg-injector/pull/333) Update typescript-eslint monorepo to v2.24.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#332](https://github.com/tanem/svg-injector/pull/332) Update dependency ts-node to v8.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#331](https://github.com/tanem/svg-injector/pull/331) Update dependency @types/chai to v4.2.11 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#330](https://github.com/tanem/svg-injector/pull/330) Update dependency tanem-scripts to v5.0.15 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#329](https://github.com/tanem/svg-injector/pull/329) Update dependency rollup to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#328](https://github.com/tanem/svg-injector/pull/328) Update dependency sinon to v9.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#327](https://github.com/tanem/svg-injector/pull/327) Update dependency rollup-plugin-terser to v5.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#326](https://github.com/tanem/svg-injector/pull/326) Update typescript-eslint monorepo to v2.23.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#325](https://github.com/tanem/svg-injector/pull/325) Update dependency tanem-scripts to v5.0.14 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#324](https://github.com/tanem/svg-injector/pull/324) Update dependency rollup-plugin-babel to v4.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#323](https://github.com/tanem/svg-injector/pull/323) Update babel monorepo to v7.8.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.43](https://github.com/tanem/svg-injector/tree/v8.0.43) (2020-03-07)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.42...v8.0.43)
 
