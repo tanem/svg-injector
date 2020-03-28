@@ -13,4 +13,5 @@ install:
 if: type = pull_request
 script:
   - npm t
-  - npm run coverage
+after_success:
+  - bash <(curl -s https://codecov.io/bash
