@@ -4,39 +4,39 @@ const path = require('path')
 
 const PORT = 9876
 
-module.exports = config => {
+module.exports = (config) => {
   config.set({
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     client: {
       mocha: {
-        ui: 'tdd'
-      }
+        ui: 'tdd',
+      },
     },
     colors: true,
     concurrency: Infinity,
     coverageIstanbulReporter: {
       reports: ['lcov', 'text'],
       dir: path.join(__dirname, 'coverage'),
-      fixWebpackSourcePaths: true
+      fixWebpackSourcePaths: true,
     },
     files: [
       'node_modules/sinon/pkg/sinon.js',
       {
         pattern: 'test/fixtures/*',
         watched: false,
-        included: false
+        included: false,
       },
-      'test/index.ts'
+      'test/index.ts',
     ],
     frameworks: ['mocha', 'chai'],
     logLevel: config.LOG_ERROR,
     port: PORT,
     preprocessors: {
-      'test/index.ts': ['webpack', 'sourcemap']
+      'test/index.ts': ['webpack', 'sourcemap'],
     },
     proxies: {
-      '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`
+      '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`,
     },
     reporters: ['spec', 'coverage-istanbul'],
     singleRun: true,
@@ -47,16 +47,16 @@ module.exports = config => {
         rules: [
           {
             test: require.resolve('prettier'),
-            use: 'null-loader'
+            use: 'null-loader',
           },
           {
             test: /\.(ts|js)$/,
             use: {
               loader: 'babel-loader',
               options: {
-                presets: ['@babel/preset-env', '@babel/typescript']
-              }
-            }
+                presets: ['@babel/preset-env', '@babel/typescript'],
+              },
+            },
           },
           {
             test: /\.ts$/,
@@ -64,18 +64,18 @@ module.exports = config => {
             enforce: 'post',
             use: {
               loader: 'istanbul-instrumenter-loader',
-              options: { esModules: true }
-            }
-          }
-        ]
+              options: { esModules: true },
+            },
+          },
+        ],
       },
       node: {
         fs: 'empty',
-        module: 'empty'
+        module: 'empty',
       },
       resolve: {
-        extensions: ['.json', '.js', '.ts']
-      }
-    }
+        extensions: ['.json', '.js', '.ts'],
+      },
+    },
   })
 }

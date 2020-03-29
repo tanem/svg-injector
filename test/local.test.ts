@@ -19,7 +19,7 @@ suite('local', () => {
     cleanup()
   })
 
-  test('not found', done => {
+  test('not found', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -27,12 +27,12 @@ suite('local', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
 
-    const afterEach: Errback = error => {
+    const afterEach: Errback = (error) => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -43,14 +43,14 @@ suite('local', () => {
 
     SVGInjector(container.querySelector('.inject-me'), {
       afterAll,
-      afterEach
+      afterEach,
     })
   })
 
-  test('ok', done => {
+  test('ok', (done) => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
-    fakeXHR.onCreate = xhr => {
+    fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
     }
 
@@ -62,7 +62,7 @@ suite('local', () => {
     `)
 
     const afterEach = window.sinon.stub()
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -90,7 +90,7 @@ suite('local', () => {
     }
     SVGInjector(container.querySelector('.inject-me'), {
       afterAll,
-      afterEach
+      afterEach,
     })
 
     requests[0].respond(

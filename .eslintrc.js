@@ -3,15 +3,15 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.eslint.json',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   extends: [
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    'prettier/@typescript-eslint'
+    'prettier/@typescript-eslint',
   ],
   plugins: ['@typescript-eslint'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off'
-  }
+    '@typescript-eslint/explicit-function-return-type': 'off',
+  },
 }

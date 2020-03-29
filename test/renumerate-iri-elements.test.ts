@@ -15,7 +15,7 @@ suite('renumerate iri elements', () => {
     cleanup()
   })
 
-  test('renumerateIRIElements: false', done => {
+  test('renumerateIRIElements: false', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -23,7 +23,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -67,11 +67,11 @@ suite('renumerate iri elements', () => {
 
     SVGInjector(container.querySelector('.inject-me'), {
       afterAll,
-      renumerateIRIElements: false
+      renumerateIRIElements: false,
     })
   })
 
-  test('clip-path', done => {
+  test('clip-path', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -79,7 +79,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -124,7 +124,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('fill', done => {
+  test('fill', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -132,7 +132,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -197,7 +197,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('filter', done => {
+  test('filter', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -205,7 +205,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -240,7 +240,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('marker', done => {
+  test('marker', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -248,7 +248,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -304,7 +304,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('mask', done => {
+  test('mask', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -312,7 +312,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -354,7 +354,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('thumb-up', done => {
+  test('thumb-up', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -362,7 +362,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -386,7 +386,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test.skip('style', done => {
+  test.skip('style', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -394,7 +394,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -432,7 +432,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('dashboard', done => {
+  test('dashboard', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -440,7 +440,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -479,7 +479,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('notifications', done => {
+  test('notifications', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -487,7 +487,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -526,7 +526,7 @@ suite('renumerate iri elements', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('poll', done => {
+  test('poll', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -534,7 +534,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = _ => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg

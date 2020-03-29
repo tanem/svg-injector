@@ -29,8 +29,8 @@ suite('eval scripts', () => {
     cleanup()
   })
 
-  test('never', done => {
-    const afterAll: AfterAll = _ => {
+  test('never', (done) => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -61,12 +61,12 @@ suite('eval scripts', () => {
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
       afterAll,
-      evalScripts: 'never'
+      evalScripts: 'never',
     })
   })
 
-  test('once', done => {
-    const afterAll: AfterAll = _ => {
+  test('once', (done) => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -97,12 +97,12 @@ suite('eval scripts', () => {
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
       afterAll,
-      evalScripts: 'once'
+      evalScripts: 'once',
     })
   })
 
-  test('always', done => {
-    const afterAll: AfterAll = _ => {
+  test('always', (done) => {
+    const afterAll: AfterAll = (_) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -133,7 +133,7 @@ suite('eval scripts', () => {
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
       afterAll,
-      evalScripts: 'always'
+      evalScripts: 'always',
     })
   })
 })
