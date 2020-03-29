@@ -18,7 +18,7 @@ const SVGInjector = (
     afterEach = () => undefined,
     beforeEach = () => undefined,
     evalScripts = 'never',
-    renumerateIRIElements = true
+    renumerateIRIElements = true,
   }: OptionalArgs = {}
 ) => {
   if (elements && 'length' in elements) {

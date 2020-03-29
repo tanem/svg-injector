@@ -16,7 +16,7 @@ const UMD_PROD = 'UMD_PROD'
 
 const input = './compiled/index.js'
 
-const getExternal = bundleType => {
+const getExternal = (bundleType) => {
   switch (bundleType) {
     case CJS_DEV:
     case CJS_PROD:
@@ -27,7 +27,7 @@ const getExternal = bundleType => {
   }
 }
 
-const isProduction = bundleType =>
+const isProduction = (bundleType) =>
   bundleType === CJS_PROD || bundleType === UMD_PROD
 
 const getBabelConfig = () => ({
@@ -35,24 +35,24 @@ const getBabelConfig = () => ({
   exclude: 'node_modules/**',
   presets: [
     ['@babel/env', { loose: true, modules: false }],
-    '@babel/typescript'
+    '@babel/typescript',
   ],
   plugins: ['@babel/transform-runtime'],
   runtimeHelpers: true,
-  extensions: [...DEFAULT_EXTENSIONS, '.ts']
+  extensions: [...DEFAULT_EXTENSIONS, '.ts'],
 })
 
-const getPlugins = bundleType => [
+const getPlugins = (bundleType) => [
   nodeResolve(),
   commonjs({
-    include: 'node_modules/**'
+    include: 'node_modules/**',
   }),
   babel(getBabelConfig()),
   bundleType !== ES &&
     replace({
       'process.env.NODE_ENV': JSON.stringify(
         isProduction(bundleType) ? 'production' : 'development'
-      )
+      ),
     }),
   sourcemaps(),
   ...(isProduction(bundleType)
@@ -63,17 +63,17 @@ const getPlugins = bundleType => [
           output: { comments: false },
           compress: {
             keep_infinity: true, // eslint-disable-line @typescript-eslint/camelcase
-            pure_getters: true // eslint-disable-line @typescript-eslint/camelcase
+            pure_getters: true, // eslint-disable-line @typescript-eslint/camelcase
           },
           warnings: true,
           ecma: 5,
-          toplevel: false
-        })
+          toplevel: false,
+        }),
       ]
-    : [])
+    : []),
 ]
 
-const getCjsConfig = bundleType => ({
+const getCjsConfig = (bundleType) => ({
   input,
   external: getExternal(bundleType),
   output: {
@@ -81,9 +81,9 @@ const getCjsConfig = bundleType => ({
       isProduction(bundleType) ? 'production' : 'development'
     }.js`,
     format: 'cjs',
-    sourcemap: true
+    sourcemap: true,
   },
-  plugins: getPlugins(bundleType)
+  plugins: getPlugins(bundleType),
 })
 
 const getEsConfig = () => ({
@@ -92,12 +92,12 @@ const getEsConfig = () => ({
   output: {
     file: pkg.module,
     format: 'es',
-    sourcemap: true
+    sourcemap: true,
   },
-  plugins: getPlugins(ES)
+  plugins: getPlugins(ES),
 })
 
-const getUmdConfig = bundleType => ({
+const getUmdConfig = (bundleType) => ({
   input,
   external: getExternal(bundleType),
   output: {
@@ -106,9 +106,9 @@ const getUmdConfig = bundleType => ({
     }.js`,
     format: 'umd',
     name: 'SVGInjector',
-    sourcemap: true
+    sourcemap: true,
   },
-  plugins: getPlugins(bundleType)
+  plugins: getPlugins(bundleType),
 })
 
 export default [
@@ -116,5 +116,5 @@ export default [
   getCjsConfig(CJS_PROD),
   getEsConfig(),
   getUmdConfig(UMD_DEV),
-  getUmdConfig(UMD_PROD)
+  getUmdConfig(UMD_PROD),
 ]

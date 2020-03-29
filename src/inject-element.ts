@@ -85,7 +85,7 @@ const injectElement = (
       new Set([
         ...(svg.getAttribute('class') || '').split(' '),
         'injected-svg',
-        ...(el.getAttribute('class') || '').split(' ')
+        ...(el.getAttribute('class') || '').split(' '),
       ])
     )
       .join(' ')
@@ -138,7 +138,7 @@ const injectElement = (
         mask: ['mask'],
         path: [],
         pattern: ['fill', 'stroke'],
-        radialGradient: ['fill', 'stroke']
+        radialGradient: ['fill', 'stroke'],
       }
 
       let element
@@ -147,7 +147,7 @@ const injectElement = (
       let currentId: string
       let newId: string
 
-      Object.keys(iriElementsAndProperties).forEach(key => {
+      Object.keys(iriElementsAndProperties).forEach((key) => {
         element = key
         properties = iriElementsAndProperties[key]
 

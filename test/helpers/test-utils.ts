@@ -11,7 +11,7 @@ export const render = (html: string) => {
 export const format = (svg: string, options = {}) =>
   prettyhtml(svg, {
     sortAttributes: true,
-    ...options
+    ...options,
   }).contents
 
 export const cleanup = () => {

@@ -15,7 +15,7 @@ suite('SVGInjector', () => {
     cleanup()
   })
 
-  test('single element', done => {
+  test('single element', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -25,7 +25,7 @@ suite('SVGInjector', () => {
 
     const afterEach = window.sinon.stub()
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -53,11 +53,11 @@ suite('SVGInjector', () => {
 
     SVGInjector(container.querySelector(`.inject-me`), {
       afterAll,
-      afterEach
+      afterEach,
     })
   })
 
-  test('multiple elements', done => {
+  test('multiple elements', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -71,7 +71,7 @@ suite('SVGInjector', () => {
 
     const afterEach = window.sinon.stub()
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -119,14 +119,14 @@ suite('SVGInjector', () => {
 
     SVGInjector(container.querySelectorAll('.inject-me'), {
       afterAll,
-      afterEach
+      afterEach,
     })
   })
 
-  test('null element', done => {
+  test('null element', (done) => {
     const afterEach = window.sinon.stub()
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       expect(elementsLoaded).to.equal(0)
       expect(afterEach.callCount).to.equal(0)
       done()
@@ -134,14 +134,14 @@ suite('SVGInjector', () => {
 
     SVGInjector(null, {
       afterAll,
-      afterEach
+      afterEach,
     })
   })
 
   test('injection in progress', () => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
-    fakeXHR.onCreate = xhr => {
+    fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
     }
 
@@ -158,7 +158,7 @@ suite('SVGInjector', () => {
     fakeXHR.restore()
   })
 
-  test('attributes', done => {
+  test('attributes', (done) => {
     const container = render(`
       <div
         class="svg-one svg-two"
@@ -203,7 +203,7 @@ suite('SVGInjector', () => {
     SVGInjector(container.querySelector('#thumb-up'), { afterAll })
   })
 
-  test('no class attribute', done => {
+  test('no class attribute', (done) => {
     const container = render(`
       <div
         id="thumb-up"
@@ -236,7 +236,7 @@ suite('SVGInjector', () => {
     SVGInjector(container.querySelector('#thumb-up'), { afterAll })
   })
 
-  test('style tag', done => {
+  test('style tag', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -276,7 +276,7 @@ suite('SVGInjector', () => {
     SVGInjector(container.querySelector('.inject-me'), { afterAll })
   })
 
-  test('cached success', done => {
+  test('cached success', (done) => {
     const containerOne = render(`
       <div
         class="inject-me"
@@ -287,7 +287,7 @@ suite('SVGInjector', () => {
     const afterEach = window.sinon.stub()
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      afterAll: _ => {
+      afterAll: (_) => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -343,17 +343,17 @@ suite('SVGInjector', () => {
             )
             done()
           },
-          afterEach
+          afterEach,
         })
       },
-      afterEach
+      afterEach,
     })
   })
 
-  test('cached error', done => {
+  test('cached error', (done) => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
-    fakeXHR.onCreate = xhr => {
+    fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
     }
 
@@ -365,7 +365,7 @@ suite('SVGInjector', () => {
     `)
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      afterAll: _ => {
+      afterAll: (_) => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -378,24 +378,24 @@ suite('SVGInjector', () => {
             fakeXHR.restore()
             done()
           },
-          afterEach: error => {
+          afterEach: (error) => {
             expect(error)
               .to.be.a('error')
               .with.property(
                 'message',
                 'Unable to load SVG file: /fixtures/not-found.svg'
               )
-          }
+          },
         })
-      }
+      },
     })
     requests[0].respond(404, {}, '')
   })
 
-  test('svg not found error', done => {
+  test('svg not found error', (done) => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
-    fakeXHR.onCreate = xhr => {
+    fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
     }
 
@@ -406,13 +406,13 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       expect(elementsLoaded).to.equal(1)
       fakeXHR.restore()
       done()
     }
 
-    const afterEach: Errback = error => {
+    const afterEach: Errback = (error) => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -423,25 +423,25 @@ suite('SVGInjector', () => {
 
     SVGInjector(container.querySelector('.inject-me'), {
       afterAll,
-      afterEach
+      afterEach,
     })
 
     requests[0].respond(404, {}, '')
   })
 
-  test('non-svg error', done => {
+  test('non-svg error', (done) => {
     const container = render(`
         <div
           class="inject-me"
         ></div>
       `)
 
-    const afterAll: AfterAll = elementsLoaded => {
+    const afterAll: AfterAll = (elementsLoaded) => {
       expect(elementsLoaded).to.equal(1)
       done()
     }
 
-    const afterEach: Errback = error => {
+    const afterEach: Errback = (error) => {
       expect(error)
         .to.be.a('error')
         .with.property(
@@ -452,14 +452,14 @@ suite('SVGInjector', () => {
 
     SVGInjector(container.querySelector('.inject-me'), {
       afterAll,
-      afterEach
+      afterEach,
     })
   })
 
-  test('unknown exception', done => {
+  test('unknown exception', (done) => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
-    fakeXHR.onCreate = xhr => {
+    fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
     }
 
@@ -471,24 +471,24 @@ suite('SVGInjector', () => {
       `)
 
     SVGInjector(container.querySelector('.inject-me'), {
-      afterAll: _ => {
+      afterAll: (_) => {
         fakeXHR.restore()
         done()
       },
-      afterEach: error => {
+      afterEach: (error) => {
         expect(error)
           .to.be.a('error')
           .with.property(
             'message',
             'There was a problem injecting the SVG: 500 Internal Server Error'
           )
-      }
+      },
     })
 
     requests[0].respond(500, {}, '<svg></svg>')
   })
 
-  test('default `afterAll` callback', done => {
+  test('default `afterAll` callback', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -518,11 +518,11 @@ suite('SVGInjector', () => {
     }
 
     SVGInjector(container.querySelector(`.inject-me`), {
-      afterEach
+      afterEach,
     })
   })
 
-  test('modifying SVG in `beforeEach`', done => {
+  test('modifying SVG in `beforeEach`', (done) => {
     const container = render(`
       <div
         class="inject-me"
@@ -530,7 +530,7 @@ suite('SVGInjector', () => {
       ></div>
     `)
 
-    const beforeEach: BeforeEach = svg => {
+    const beforeEach: BeforeEach = (svg) => {
       svg.setAttribute('stroke', 'red')
     }
 
@@ -558,7 +558,7 @@ suite('SVGInjector', () => {
 
     SVGInjector(container.querySelector(`.inject-me`), {
       afterEach,
-      beforeEach
+      beforeEach,
     })
   })
 })
