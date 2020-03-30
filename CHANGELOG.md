@@ -1,5 +1,23 @@
 # Changelog
 
+## [v8.0.45](https://github.com/tanem/svg-injector/tree/v8.0.45) (2020-03-30)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.44...v8.0.45)
+
+#### :house: Internal
+
+- [#341](https://github.com/tanem/svg-injector/pull/341) Update typescript-eslint monorepo to v2.25.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#343](https://github.com/tanem/svg-injector/pull/343) Update dependency webpack to v4.42.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#344](https://github.com/tanem/svg-injector/pull/344) Update dependency rollup to v2.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#340](https://github.com/tanem/svg-injector/pull/340) Update dependency @types/shelljs to v0.8.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#342](https://github.com/tanem/svg-injector/pull/342) Update dependency prettier to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#345](https://github.com/tanem/svg-injector/pull/345) Use codecov bash uploader ([@tanem](https://github.com/tanem))
+- [#339](https://github.com/tanem/svg-injector/pull/339) Update dependency eslint-config-prettier to v6.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#335](https://github.com/tanem/svg-injector/pull/335) Update dependency mocha to v7.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#336](https://github.com/tanem/svg-injector/pull/336) Update dependency tanem-scripts to v5.0.16 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#337](https://github.com/tanem/svg-injector/pull/337) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+- [#338](https://github.com/tanem/svg-injector/pull/338) Update dependency ts-node to v8.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#334](https://github.com/tanem/svg-injector/pull/334) Update dependency rollup to v2.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.44](https://github.com/tanem/svg-injector/tree/v8.0.44) (2020-03-21)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.43...v8.0.44)
 
