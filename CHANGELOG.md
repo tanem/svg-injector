@@ -1,5 +1,16 @@
 # Changelog
 
+## [v8.0.47](https://github.com/tanem/svg-injector/tree/v8.0.47) (2020-04-07)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.46...v8.0.47)
+
+#### :bug: Bug Fix
+
+- [#352](https://github.com/tanem/svg-injector/pull/352) Update exported types ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#353](https://github.com/tanem/svg-injector/pull/353) Fix prettier config typo ([@tanem](https://github.com/tanem))
+
 ## [v8.0.46](https://github.com/tanem/svg-injector/tree/v8.0.46) (2020-04-04)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.45...v8.0.46)
 
