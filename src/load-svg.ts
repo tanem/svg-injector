@@ -8,10 +8,7 @@ const loadSvg = (url: string, callback: Errback) => {
   if (svgCache.has(url)) {
     const cacheValue = svgCache.get(url)
 
-    if (
-      cacheValue instanceof SVGSVGElement ||
-      cacheValue instanceof HTMLElement
-    ) {
+    if (cacheValue instanceof SVGElement) {
       callback(null, cloneSvg(cacheValue))
       return
     }
