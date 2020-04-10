@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-runtime": "7.9.0",
-    "@babel/preset-env": "7.9.0",
+    "@babel/preset-env": "7.9.5",
     "@babel/preset-typescript": "7.9.0",
     "@starptech/prettyhtml": "0.10.0",
     "@types/chai": "4.2.11",
