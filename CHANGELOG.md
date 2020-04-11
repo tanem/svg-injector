@@ -1,5 +1,17 @@
 # Changelog
 
+## [v8.0.48](https://github.com/tanem/svg-injector/tree/v8.0.48) (2020-04-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.47...v8.0.48)
+
+#### :house: Internal
+
+- [#359](https://github.com/tanem/svg-injector/pull/359) Update dependency @babel/preset-env to v7.9.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#358](https://github.com/tanem/svg-injector/pull/358) Update typescript-eslint monorepo to v2.27.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#357](https://github.com/tanem/svg-injector/pull/357) Update dependency rollup-plugin-filesize to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#356](https://github.com/tanem/svg-injector/pull/356) Update dependency prettier to v2.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#355](https://github.com/tanem/svg-injector/pull/355) Update dependency ts-node to v8.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#354](https://github.com/tanem/svg-injector/pull/354) Update dependency tanem-scripts to v5.0.18 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.47](https://github.com/tanem/svg-injector/tree/v8.0.47) (2020-04-07)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.46...v8.0.47)
 
