@@ -1,5 +1,16 @@
 # Changelog
 
+## [v8.0.51](https://github.com/tanem/svg-injector/tree/v8.0.51) (2020-05-22)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.50...v8.0.51)
+
+#### :house: Internal
+
+- [#400](https://github.com/tanem/svg-injector/pull/400) Update dependency tanem-scripts to v5.0.23 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#399](https://github.com/tanem/svg-injector/pull/399) Update dependency del-cli to v3.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#398](https://github.com/tanem/svg-injector/pull/398) Update dependency @types/sinon to v9.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#397](https://github.com/tanem/svg-injector/pull/397) Update dependency @types/shelljs to v0.8.8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#390](https://github.com/tanem/svg-injector/pull/390) Update dependency rollup to v2.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.50](https://github.com/tanem/svg-injector/tree/v8.0.50) (2020-05-17)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.49...v8.0.50)
 
