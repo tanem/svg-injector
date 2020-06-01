@@ -1,5 +1,22 @@
 # Changelog
 
+## [v8.0.52](https://github.com/tanem/svg-injector/tree/v8.0.52) (2020-06-01)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.51...v8.0.52)
+
+#### :house: Internal
+
+- [#409](https://github.com/tanem/svg-injector/pull/409) Update dependency rollup-plugin-terser to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#403](https://github.com/tanem/svg-injector/pull/403) Update typescript-eslint monorepo to v3 (major) ([@renovate[bot]](https://github.com/apps/renovate))
+- [#411](https://github.com/tanem/svg-injector/pull/411) Update dependency karma-coverage-istanbul-reporter to v3.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#410](https://github.com/tanem/svg-injector/pull/410) Update dependency ts-node to v8.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#408](https://github.com/tanem/svg-injector/pull/408) Update dependency rollup to v2.10.9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#407](https://github.com/tanem/svg-injector/pull/407) Update dependency mocha to v7.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#406](https://github.com/tanem/svg-injector/pull/406) Update dependency eslint to v7.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#405](https://github.com/tanem/svg-injector/pull/405) Update dependency tanem-scripts to v5.0.24 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#404](https://github.com/tanem/svg-injector/pull/404) Update dependency @types/sinon to v9.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#402](https://github.com/tanem/svg-injector/pull/402) Update dependency typescript to v3.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#401](https://github.com/tanem/svg-injector/pull/401) Update dependency karma to v5.0.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.51](https://github.com/tanem/svg-injector/tree/v8.0.51) (2020-05-22)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.50...v8.0.51)
 
