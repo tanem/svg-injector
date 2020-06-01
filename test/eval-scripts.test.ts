@@ -30,7 +30,7 @@ suite('eval scripts', () => {
   })
 
   test('never', (done) => {
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -66,7 +66,7 @@ suite('eval scripts', () => {
   })
 
   test('once', (done) => {
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -102,7 +102,7 @@ suite('eval scripts', () => {
   })
 
   test('always', (done) => {
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
