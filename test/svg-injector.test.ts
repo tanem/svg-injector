@@ -287,7 +287,7 @@ suite('SVGInjector', () => {
     const afterEach = window.sinon.stub()
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      afterAll: (_) => {
+      afterAll: () => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -365,7 +365,7 @@ suite('SVGInjector', () => {
     `)
 
     SVGInjector(containerOne.querySelector('.inject-me'), {
-      afterAll: (_) => {
+      afterAll: () => {
         const containerTwo = render(`
           <div
             class="inject-me"
@@ -471,7 +471,7 @@ suite('SVGInjector', () => {
       `)
 
     SVGInjector(container.querySelector('.inject-me'), {
-      afterAll: (_) => {
+      afterAll: () => {
         fakeXHR.restore()
         done()
       },

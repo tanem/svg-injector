@@ -1,3 +1,3 @@
 interface Window {
-  sinon: any
+  sinon: unknown
 }

@@ -23,7 +23,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -79,7 +79,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -132,7 +132,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -205,7 +205,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -248,7 +248,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -312,7 +312,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -362,7 +362,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -394,7 +394,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -440,7 +440,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -487,7 +487,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
@@ -534,7 +534,7 @@ suite('renumerate iri elements', () => {
       ></div>
     `)
 
-    const afterAll: AfterAll = (_) => {
+    const afterAll: AfterAll = () => {
       const actual = format(container.innerHTML)
       const expected = format(`
         <svg
