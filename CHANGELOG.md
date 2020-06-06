@@ -1,5 +1,13 @@
 # Changelog
 
+## [v8.0.53](https://github.com/tanem/svg-injector/tree/v8.0.53) (2020-06-06)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.52...v8.0.53)
+
+#### :house: Internal
+
+- [#413](https://github.com/tanem/svg-injector/pull/413) Update typescript-eslint monorepo to v3.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#412](https://github.com/tanem/svg-injector/pull/412) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.52](https://github.com/tanem/svg-injector/tree/v8.0.52) (2020-06-01)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.51...v8.0.52)
 
