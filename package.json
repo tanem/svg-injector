@@ -25,13 +25,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.10.3"
+    "@babel/runtime": "^7.10.4"
   },
   "devDependencies": {
-    "@babel/core": "7.10.3",
-    "@babel/plugin-transform-runtime": "7.10.3",
-    "@babel/preset-env": "7.10.3",
-    "@babel/preset-typescript": "7.10.1",
+    "@babel/core": "7.10.4",
+    "@babel/plugin-transform-runtime": "7.10.4",
+    "@babel/preset-env": "7.10.4",
+    "@babel/preset-typescript": "7.10.4",
     "@starptech/prettyhtml": "0.10.0",
     "@types/chai": "4.2.11",
     "@types/glob": "7.1.2",
