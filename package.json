@@ -74,7 +74,7 @@
     "tanem-scripts": "5.0.32",
     "ts-node": "8.10.2",
     "typescript": "3.9.7",
-    "webpack": "4.43.0"
+    "webpack": "4.44.0"
   },
   "scripts": {
     "build": "run-s clean compile bundle",
