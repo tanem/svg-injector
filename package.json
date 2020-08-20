@@ -37,7 +37,7 @@
     "@types/glob": "7.1.3",
     "@types/karma": "5.0.0",
     "@types/karma-chai": "0.1.2",
-    "@types/mocha": "8.0.2",
+    "@types/mocha": "8.0.3",
     "@types/shelljs": "0.8.8",
     "@types/sinon": "9.0.4",
     "@types/webpack-env": "1.15.2",
