@@ -1,5 +1,12 @@
 # Changelog
 
+## [v8.0.66](https://github.com/tanem/svg-injector/tree/v8.0.66) (2020-08-28)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.65...v8.0.66)
+
+#### :house: Internal
+
+- [#485](https://github.com/tanem/svg-injector/pull/485) Update dependency mocha to v8.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.65](https://github.com/tanem/svg-injector/tree/v8.0.65) (2020-08-28)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.64...v8.0.65)
 
