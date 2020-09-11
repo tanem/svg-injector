@@ -1,5 +1,25 @@
 # Changelog
 
+## [v8.0.68](https://github.com/tanem/svg-injector/tree/v8.0.68) (2020-09-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.67...v8.0.68)
+
+#### :house: Internal
+
+- [#510](https://github.com/tanem/svg-injector/pull/510) Remove dependabot until properly investigated ([@tanem](https://github.com/tanem))
+- [#503](https://github.com/tanem/svg-injector/pull/503) Bump elliptic from 6.5.2 to 6.5.3 in /examples/basic-usage ([@dependabot[bot]](https://github.com/apps/dependabot))
+- [#507](https://github.com/tanem/svg-injector/pull/507) Update dependency rollup to v2.26.11 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#504](https://github.com/tanem/svg-injector/pull/504) Bump lodash from 4.17.15 to 4.17.20 in /examples/api-usage ([@dependabot[bot]](https://github.com/apps/dependabot))
+- [#505](https://github.com/tanem/svg-injector/pull/505) Bump yargs-parser from 15.0.0 to 15.0.1 in /examples/api-usage ([@dependabot[bot]](https://github.com/apps/dependabot))
+- [#506](https://github.com/tanem/svg-injector/pull/506) Add labels to dependabot prs ([@tanem](https://github.com/tanem))
+- [#498](https://github.com/tanem/svg-injector/pull/498) Use dependabot for security alerts ([@tanem](https://github.com/tanem))
+- [#497](https://github.com/tanem/svg-injector/pull/497) Update typescript-eslint monorepo to v4.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#496](https://github.com/tanem/svg-injector/pull/496) Update dependency tanem-scripts to v5.0.39 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#495](https://github.com/tanem/svg-injector/pull/495) Update dependency rollup-plugin-terser to v7.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#490](https://github.com/tanem/svg-injector/pull/490) Update dependency rollup to v2.26.10 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#494](https://github.com/tanem/svg-injector/pull/494) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+- [#493](https://github.com/tanem/svg-injector/pull/493) Update dependency karma to v5.2.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#492](https://github.com/tanem/svg-injector/pull/492) Update dependency eslint to v7.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.67](https://github.com/tanem/svg-injector/tree/v8.0.67) (2020-09-04)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.66...v8.0.67)
 
