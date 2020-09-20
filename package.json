@@ -40,7 +40,7 @@
     "@types/mocha": "8.0.3",
     "@types/shelljs": "0.8.8",
     "@types/sinon": "9.0.5",
-    "@types/webpack-env": "1.15.2",
+    "@types/webpack-env": "1.15.3",
     "@typescript-eslint/eslint-plugin": "4.1.1",
     "@typescript-eslint/parser": "4.1.1",
     "babel-loader": "8.1.0",
