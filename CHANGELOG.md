@@ -1,5 +1,19 @@
 # Changelog
 
+## [v8.0.70](https://github.com/tanem/svg-injector/tree/v8.0.70) (2020-09-25)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.69...v8.0.70)
+
+#### :house: Internal
+
+- [#521](https://github.com/tanem/svg-injector/pull/521) Update typescript-eslint monorepo to v4.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#520](https://github.com/tanem/svg-injector/pull/520) Update dependency rollup to v2.28.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#519](https://github.com/tanem/svg-injector/pull/519) Update dependency typescript to v4.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#518](https://github.com/tanem/svg-injector/pull/518) Update dependency tanem-scripts to v5.0.41 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#517](https://github.com/tanem/svg-injector/pull/517) Update dependency webpack to v4.44.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#516](https://github.com/tanem/svg-injector/pull/516) Update dependency @types/webpack-env to v1.15.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#515](https://github.com/tanem/svg-injector/pull/515) Update dependency rollup to v2.27.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#514](https://github.com/tanem/svg-injector/pull/514) Update dependency prettier to v2.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.69](https://github.com/tanem/svg-injector/tree/v8.0.69) (2020-09-18)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.68...v8.0.69)
 
