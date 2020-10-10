@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "content-type": "^1.0.4",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
@@ -34,6 +35,7 @@
     "@babel/preset-env": "7.12.7",
     "@babel/preset-typescript": "7.12.7",
     "@types/chai": "4.2.14",
+    "@types/content-type": "1.1.3",
     "@types/karma": "5.0.1",
     "@types/karma-chai": "0.1.2",
     "@types/mocha": "8.0.4",
@@ -60,9 +62,10 @@
     "karma-webpack": "4.0.2",
     "mocha": "8.2.1",
     "npm-run-all": "4.1.5",
-    "null-loader": "4.0.1",
-    "prettier": "2.2.1",
-    "rollup": "2.34.0",
+    "null-loader": "4.0.0",
+    "prettier": "2.1.2",
+    "query-string": "6.13.5",
+    "rollup": "2.28.2",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-filesize": "9.1.0",

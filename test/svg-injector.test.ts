@@ -334,7 +334,7 @@ suite('SVGInjector', () => {
     requests[0].respond(404, {}, '')
   })
 
-  test('non-svg error', (done) => {
+  test('invalid src error', (done) => {
     const container = render(`
         <div
           class="inject-me"
@@ -349,10 +349,7 @@ suite('SVGInjector', () => {
     const afterEach: Errback = (error) => {
       expect(error)
         .to.be.a('error')
-        .with.property(
-          'message',
-          'Attempted to inject a file with a non-svg extension: null'
-        )
+        .with.property('message', 'Invalid data-src or src attribute')
     }
 
     SVGInjector(container.querySelector('.inject-me'), {

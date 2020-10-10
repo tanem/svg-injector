@@ -21,12 +21,8 @@ const injectElement = (
   const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
   /* istanbul ignore else */
-  if (!imgUrl || !/\.svg/i.test(imgUrl)) {
-    callback(
-      new Error(
-        'Attempted to inject a file with a non-svg extension: ' + imgUrl
-      )
-    )
+  if (!imgUrl) {
+    callback(new Error('Invalid data-src or src attribute'))
     return
   }
 

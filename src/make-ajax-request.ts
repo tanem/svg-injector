@@ -1,3 +1,4 @@
+import { parse as parseContentType } from 'content-type'
 import isLocal from './is-local'
 
 const makeAjaxRequest = (
@@ -8,6 +9,18 @@ const makeAjaxRequest = (
 
   httpRequest.onreadystatechange = () => {
     try {
+      if (!/\.svg/i.test(url) && httpRequest.readyState === 2) {
+        const contentType = httpRequest.getResponseHeader('Content-Type')
+        if (!contentType) {
+          throw new Error('Content type not found')
+        }
+
+        const { type } = parseContentType(contentType)
+        if (!(type === 'image/svg+xml' || type === 'text/plain')) {
+          throw new Error(`Invalid content type: ${type}`)
+        }
+      }
+
       if (httpRequest.readyState === 4) {
         if (httpRequest.status === 404 || httpRequest.responseXML === null) {
           throw new Error(
@@ -34,6 +47,7 @@ const makeAjaxRequest = (
         }
       }
     } catch (error) {
+      httpRequest.abort()
       callback(error, httpRequest)
     }
   }

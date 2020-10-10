@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const path = require('path')
+const queryString = require('query-string')
+const url = require('url')
 
 const PORT = 9876
 
@@ -45,7 +47,6 @@ module.exports = (config) => {
       'bs_edge_win',
       'bs_ie_win',
     ],
-
     autoWatch: true,
     client: {
       mocha: {
@@ -117,6 +118,17 @@ module.exports = (config) => {
       resolve: {
         extensions: ['.json', '.js', '.ts'],
       },
+    },
+    proxyRes(proxyRes, req) {
+      const { search } = url.parse(req.url)
+      const parsed = queryString.parse(search)
+      const contentType = parsed['content-type']
+
+      if (contentType === 'missing') {
+        delete proxyRes.headers['content-type']
+      } else if (contentType) {
+        proxyRes.headers['content-type'] = contentType
+      }
     },
   })
 }

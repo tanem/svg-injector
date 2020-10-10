@@ -5,16 +5,16 @@
   xmlns="http://www.w3.org/2000/svg"
 >
   <script>
-    console.log('ran script');
+    alert('ran script');
   </script>
   <script type="application/ecmascript">
-    console.log('ran script');
+    alert('ran script');
   </script>
   <script type="application/javascript">
-    console.log('ran script');
+    alert('ran script');
   </script>
   <script type="text/javascript">
-    console.log('ran script');
+    alert('ran script');
   </script>
   <circle cx="50" cy="50" r="15" fill="green" />
 </svg>
