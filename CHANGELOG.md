@@ -1,5 +1,30 @@
 # Changelog
 
+## [v8.0.72](https://github.com/tanem/svg-injector/tree/v8.0.72) (2020-10-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.71...v8.0.72)
+
+#### :bug: Bug Fix
+
+- [#539](https://github.com/tanem/svg-injector/pull/539) Fix renumerateIRIElements regex for IE ([@tanem](https://github.com/tanem))
+
+#### :memo: Documentation
+
+- [#541](https://github.com/tanem/svg-injector/pull/541) Fix examples for CodeSandbox ([@tanem](https://github.com/tanem))
+- [#540](https://github.com/tanem/svg-injector/pull/540) Fix examples ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#538](https://github.com/tanem/svg-injector/pull/538) Update dependency eslint to v7.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#537](https://github.com/tanem/svg-injector/pull/537) Update dependency tanem-scripts to v5.0.44 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#536](https://github.com/tanem/svg-injector/pull/536) Update dependency null-loader to v4.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#535](https://github.com/tanem/svg-injector/pull/535) Update dependency rollup to v2.29.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#534](https://github.com/tanem/svg-injector/pull/534) Update dependency rollup-plugin-sourcemaps to v0.6.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#533](https://github.com/tanem/svg-injector/pull/533) Update dependency sinon to v9.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#532](https://github.com/tanem/svg-injector/pull/532) Update typescript-eslint monorepo to v4.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#531](https://github.com/tanem/svg-injector/pull/531) Update dependency @types/chai to v4.2.13 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#530](https://github.com/tanem/svg-injector/pull/530) Update dependency tanem-scripts to v5.0.43 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#529](https://github.com/tanem/svg-injector/pull/529) Update dependency sinon to v9.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.71](https://github.com/tanem/svg-injector/tree/v8.0.71) (2020-10-02)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.70...v8.0.71)
 
