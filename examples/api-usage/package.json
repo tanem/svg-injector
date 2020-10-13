@@ -11,14 +11,9 @@
     "@tanem/svg-injector": "latest"
   },
   "devDependencies": {
-    "parcel-bundler": "1.12.4",
-    "parcel-plugin-static-files-copy": "2.5.0"
+    "parcel-bundler": "1.12.4"
   },
-  "private": true,
-  "staticFiles": {
-    "staticPath": [
-      "static"
-    ],
-    "watcherGlob": "**"
-  }
+  "keywords": [
+    "@tanem/svg-injector"
+  ]
 }
