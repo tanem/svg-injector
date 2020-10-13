@@ -174,7 +174,7 @@ const injectElement = (
               ].getAttribute(property)
               if (
                 attrValue &&
-                !attrValue.match(new RegExp('url\\(#' + currentId + '\\)'))
+                !attrValue.match(new RegExp('url\\("?#' + currentId + '"?\\)'))
               ) {
                 continue
               }
