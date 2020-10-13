@@ -5,3 +5,4 @@ compiled
 coverage
 dist
 node_modules
+.cache
