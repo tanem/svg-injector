@@ -1,4 +1,5 @@
-import loadSvg from './load-svg'
+import loadSvgCached from './load-svg-cached'
+import loadSvgUncached from './load-svg-uncached'
 import { BeforeEach, Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
@@ -13,6 +14,7 @@ const injectElement = (
   el: NonNullable<ElementType>,
   evalScripts: EvalScripts,
   renumerateIRIElements: boolean,
+  cacheRequests: boolean,
   beforeEach: BeforeEach,
   callback: Errback
 ) => {
@@ -46,6 +48,8 @@ const injectElement = (
 
   // Try to avoid loading the orginal image src if possible.
   el.setAttribute('src', '')
+
+  const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
 
   loadSvg(imgUrl, (error, svg) => {
     /* istanbul ignore else */

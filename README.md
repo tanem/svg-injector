@@ -42,6 +42,7 @@ SVGInjector(document.getElementById('inject-me'))
   - `afterAll(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `() => undefined`.
   - `afterEach(err, svg)` - _Optional_ A callback which is called when each element is processed. `svg` is the newly injected SVG DOM element. Defaults to `() => undefined`.
   - `beforeEach(svg)` - _Optional_ A callback which is called just before each SVG element is added to the DOM. `svg` is the SVG DOM element which is about to be injected. Defaults to `() => undefined`.
+  - `cacheRequests` - _Optional_ Use request cache. Defaults to `true`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
   - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
 
@@ -69,7 +70,7 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
     svg.setAttribute('stroke', 'red')
   },
   evalScripts: 'once',
-  renumerateIRIElements: 'false'
+  renumerateIRIElements: 'false',
 })
 ```
 

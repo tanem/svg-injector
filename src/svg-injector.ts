@@ -7,6 +7,7 @@ interface OptionalArgs {
   afterAll?: AfterAll
   afterEach?: Errback
   beforeEach?: BeforeEach
+  cacheRequests?: boolean
   evalScripts?: EvalScripts
   renumerateIRIElements?: boolean
 }
@@ -17,6 +18,7 @@ const SVGInjector = (
     afterAll = () => undefined,
     afterEach = () => undefined,
     beforeEach = () => undefined,
+    cacheRequests = true,
     evalScripts = 'never',
     renumerateIRIElements = true,
   }: OptionalArgs = {}
@@ -28,6 +30,7 @@ const SVGInjector = (
         elements[i],
         evalScripts,
         renumerateIRIElements,
+        cacheRequests,
         beforeEach,
         (error, svg) => {
           afterEach(error, svg)
@@ -46,6 +49,7 @@ const SVGInjector = (
       elements,
       evalScripts,
       renumerateIRIElements,
+      cacheRequests,
       beforeEach,
       (error, svg) => {
         afterEach(error, svg)
