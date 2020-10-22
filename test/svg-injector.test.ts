@@ -561,4 +561,47 @@ suite('SVGInjector', () => {
       beforeEach,
     })
   })
+
+  test('single element without cache', (done) => {
+    const container = render(`
+      <div
+        class="inject-me"
+        data-src="/fixtures/thumb-up.svg"
+      ></div>
+    `)
+
+    const afterEach = window.sinon.stub()
+
+    const afterAll: AfterAll = (elementsLoaded) => {
+      const actual = format(container.innerHTML)
+      const expected = format(`
+        <svg
+          class="injected-svg inject-me"
+          data-src="/fixtures/thumb-up.svg"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <path
+            d="M4.47 0c-.19.02-.37.15-.47.34-.13.26-1.09 2.19-1.28 2.38-.19.19-.44.28-.72.28v4h3.5c.21 0 .39-.13.47-.31 0 0 1.03-2.91 1.03-3.19 0-.28-.22-.5-.5-.5h-1.5c-.28 0-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47 3v4h1v-4h-1z"
+          ></path>
+        </svg>
+      `)
+      expect(actual).to.equal(expected)
+      expect(afterEach.callCount).to.equal(1)
+      expect(afterEach.firstCall.args).to.have.lengthOf(2)
+      expect(afterEach.firstCall.args[0]).to.be.a('null')
+      expect(format(afterEach.firstCall.args[1].outerHTML)).to.equal(actual)
+      expect(elementsLoaded).to.equal(1)
+      done()
+    }
+
+    SVGInjector(container.querySelector(`.inject-me`), {
+      afterAll,
+      afterEach,
+      cacheRequests: false,
+    })
+  })
 })

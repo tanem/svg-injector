@@ -37,7 +37,7 @@ suite('local', () => {
         .to.be.a('error')
         .with.property(
           'message',
-          'Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.'
+          'Note: SVG injection ajax calls do not work locally without adjusting security settings in your browser. Or consider using a local webserver.'
         )
     }
 
