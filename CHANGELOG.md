@@ -1,5 +1,22 @@
 # Changelog
 
+## [v8.1.0](https://github.com/tanem/svg-injector/tree/v8.1.0) (2020-10-23)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.72...v8.1.0)
+
+#### :rocket: Enhancement
+
+- [#549](https://github.com/tanem/svg-injector/pull/549) Add cacheRequests option ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#550](https://github.com/tanem/svg-injector/pull/550) Update typescript-eslint monorepo to v4.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#548](https://github.com/tanem/svg-injector/pull/548) Update dependency mocha to v8.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#547](https://github.com/tanem/svg-injector/pull/547) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+- [#545](https://github.com/tanem/svg-injector/pull/545) Update dependency rollup to v2.32.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#544](https://github.com/tanem/svg-injector/pull/544) Update dependency @types/chai to v4.2.14 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#543](https://github.com/tanem/svg-injector/pull/543) Update dependency eslint-config-prettier to v6.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#542](https://github.com/tanem/svg-injector/pull/542) Update typescript-eslint monorepo to v4.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.0.72](https://github.com/tanem/svg-injector/tree/v8.0.72) (2020-10-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.0.71...v8.0.72)
 
