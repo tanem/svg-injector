@@ -47,7 +47,7 @@
     "chai": "4.2.0",
     "cp-cli": "2.0.0",
     "del-cli": "3.0.1",
-    "eslint": "7.12.1",
+    "eslint": "7.13.0",
     "eslint-config-prettier": "6.15.0",
     "istanbul-instrumenter-loader": "3.0.1",
     "karma": "5.2.3",
