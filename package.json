@@ -39,7 +39,7 @@
     "@types/karma-chai": "0.1.2",
     "@types/mocha": "8.0.4",
     "@types/shelljs": "0.8.8",
-    "@types/sinon": "9.0.8",
+    "@types/sinon": "9.0.9",
     "@types/webpack-env": "1.16.0",
     "@typescript-eslint/eslint-plugin": "4.8.2",
     "@typescript-eslint/parser": "4.8.2",
