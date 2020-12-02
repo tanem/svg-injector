@@ -1,3 +1,4 @@
+// const testsContext = require.context('.', false, /elements\.test\.ts$/)
 const testsContext = require.context('.', false, /\.test\.ts$/)
 testsContext.keys().forEach(testsContext)
 

@@ -1,4 +1,3 @@
-import * as prettyhtml from '@starptech/prettyhtml'
 import { clear as clearRequestQueue } from '../../src/request-queue'
 import svgCache from '../../src/svg-cache'
 
@@ -8,11 +7,20 @@ export const render = (html: string) => {
   return container
 }
 
-export const format = (svg: string, options = {}) =>
-  prettyhtml(svg, {
-    sortAttributes: true,
-    ...options,
-  }).contents
+export const format = (svg: string) => {
+  return svg
+    .split(/\n/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .join('')
+}
+
+export const getOuterHTML = (element?: Element) => {
+  if (element) {
+    return element.outerHTML || new XMLSerializer().serializeToString(element)
+  }
+  return ''
+}
 
 export const cleanup = () => {
   clearRequestQueue()

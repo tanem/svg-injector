@@ -6,19 +6,60 @@ const PORT = 9876
 
 module.exports = (config) => {
   config.set({
+    customLaunchers: {
+      bs_chrome_mac: {
+        base: 'BrowserStack',
+        browser: 'Chrome',
+        os: 'OS X',
+        os_version: 'Catalina',
+      },
+      bs_firefox_mac: {
+        base: 'BrowserStack',
+        browser: 'Firefox',
+        os: 'OS X',
+        os_version: 'Catalina',
+      },
+      bs_safari_mac: {
+        base: 'BrowserStack',
+        browser: 'Safari',
+        os: 'OS X',
+        os_version: 'Catalina',
+      },
+      bs_edge_win: {
+        base: 'BrowserStack',
+        browser: 'Edge',
+        os: 'Windows',
+        os_version: '10',
+      },
+      bs_ie_win: {
+        base: 'BrowserStack',
+        browser: 'IE',
+        os: 'Windows',
+        os_version: '10',
+      },
+    },
+    browsers: [
+      'bs_chrome_mac',
+      'bs_firefox_mac',
+      'bs_safari_mac',
+      'bs_edge_win',
+      'bs_ie_win',
+    ],
+
     autoWatch: true,
-    browsers: ['ChromeHeadless'],
     client: {
       mocha: {
+        timeout: 10000,
         ui: 'tdd',
       },
     },
     colors: true,
     concurrency: Infinity,
     coverageIstanbulReporter: {
-      reports: ['lcov', 'text'],
+      combineBrowserReports: true,
       dir: path.join(__dirname, 'coverage'),
       fixWebpackSourcePaths: true,
+      reports: ['lcov', 'text'],
     },
     files: [
       'node_modules/sinon/pkg/sinon.js',
@@ -38,7 +79,7 @@ module.exports = (config) => {
     proxies: {
       '/fixtures/': `http://localhost:${PORT}/base/test/fixtures/`,
     },
-    reporters: ['spec', 'coverage-istanbul'],
+    reporters: ['spec', 'coverage-istanbul', 'BrowserStack'],
     singleRun: true,
     webpack: {
       devtool: 'inline-source-map',

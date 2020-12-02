@@ -28,6 +28,7 @@ const loadSvgCached = (url: string, callback: Errback) => {
   queueRequest(url, callback)
 
   makeAjaxRequest(url, (error, httpRequest) => {
+    /* istanbul ignore else */
     if (error) {
       svgCache.set(url, error)
     } else if (

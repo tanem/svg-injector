@@ -69,8 +69,9 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   beforeEach(svg) {
     svg.setAttribute('stroke', 'red')
   },
+  cacheRequests: false,
   evalScripts: 'once',
-  renumerateIRIElements: 'false',
+  renumerateIRIElements: false,
 })
 ```
 
