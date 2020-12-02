@@ -25,7 +25,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.12.5"
+    "@babel/runtime": "^7.12.5",
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "7.12.9",
@@ -64,7 +65,7 @@
     "npm-run-all": "4.1.5",
     "null-loader": "4.0.1",
     "prettier": "2.2.1",
-    "rollup": "2.33.3",
+    "rollup": "2.34.0",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-filesize": "9.0.2",
@@ -91,7 +92,7 @@
     "compile": "tsc -p tsconfig.base.json",
     "format": "prettier --write \"**/*.{js,ts}\"",
     "lint": "eslint .",
-    "postbundle": "del compiled && cp-cli ./index.js ./dist/index.js",
+    "// postbundle": "del compiled && cp-cli ./index.js ./dist/index.js",
     "release": "tanem-scripts release",
     "test": "run-s check:* lint build test:karma",
     "test:karma": "karma start"

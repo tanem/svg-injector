@@ -2,6 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "dist",
+    "importHelpers": true,
     "lib": ["es2015", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
