@@ -1,10 +1,10 @@
 # svg-injector
 
 [![npm version](https://img.shields.io/npm/v/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
-[![build status](https://img.shields.io/travis/tanem/svg-injector/master.svg?style=flat-square)](https://travis-ci.org/tanem/svg-injector)
+[![build status](https://img.shields.io/github/workflow/status/tanem/svg-injector/CI?style=flat-square)](https://github.com/tanem/svg-injector/actions?query=workflow%3ACI)
 [![coverage status](https://img.shields.io/codecov/c/github/tanem/svg-injector.svg?style=flat-square)](https://codecov.io/gh/tanem/svg-injector)
 [![npm downloads](https://img.shields.io/npm/dm/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.production.js?style=flat-square&compression=gzip)](https://unpkg.com/@tanem/svg-injector/)
+[![minzipped size](https://img.shields.io/bundlephobia/minzip/@tanem/svg-injector?style=flat-square)](https://bundlephobia.com/result?p=@tanem/svg-injector)
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
