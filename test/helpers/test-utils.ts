@@ -1,5 +1,8 @@
+import { UAParser } from 'ua-parser-js'
 import { clear as clearRequestQueue } from '../../src/request-queue'
 import svgCache from '../../src/svg-cache'
+
+export const { name: browser } = new UAParser().getBrowser()
 
 export const render = (html: string) => {
   const container = document.createElement('div')

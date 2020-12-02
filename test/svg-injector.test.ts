@@ -1,17 +1,16 @@
 import * as Sinon from 'sinon'
-import { UAParser } from 'ua-parser-js'
 import SVGInjector from '../src/svg-injector'
 import { AfterAll, BeforeEach, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, getOuterHTML, render } from './helpers/test-utils'
+import {
+  browser,
+  cleanup,
+  format,
+  getOuterHTML,
+  render,
+} from './helpers/test-utils'
 
 type AfterEachStub = Sinon.SinonStub<Parameters<Errback>, ReturnType<Errback>>
-
-const parser = new UAParser()
-const { name: browser } = parser.getBrowser()
-if (!browser) {
-  throw new Error('Unable to determine browser name')
-}
 
 suite('SVGInjector', () => {
   let uniqueIdStub: sinon.SinonStub

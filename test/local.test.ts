@@ -1,15 +1,14 @@
-import { UAParser } from 'ua-parser-js'
 import * as isLocal from '../src/is-local'
 import SVGInjector from '../src/svg-injector'
 import { AfterAll, Errback } from '../src/types'
 import * as uniqueId from '../src/unique-id'
-import { cleanup, format, getOuterHTML, render } from './helpers/test-utils'
-
-const parser = new UAParser()
-const { name: browser } = parser.getBrowser()
-if (!browser) {
-  throw new Error('Unable to determine browser name')
-}
+import {
+  browser,
+  cleanup,
+  format,
+  getOuterHTML,
+  render,
+} from './helpers/test-utils'
 
 suite('local', () => {
   let uniqueIdStub: sinon.SinonStub
