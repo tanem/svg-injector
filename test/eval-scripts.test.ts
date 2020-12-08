@@ -5,12 +5,12 @@ import { browser, cleanup, format, render } from './helpers/test-utils'
 
 suite('eval scripts', () => {
   let container: HTMLDivElement
-  let logStub: sinon.SinonStub
+  let alertStub: sinon.SinonStub
   let uniqueIdStub: sinon.SinonStub
 
   setup(() => {
     uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
-    logStub = window.sinon.stub(console, 'log')
+    alertStub = window.sinon.stub(window, 'alert')
     container = render(`
       <div
         class="inject-me"
@@ -25,7 +25,7 @@ suite('eval scripts', () => {
 
   teardown(() => {
     uniqueIdStub.restore()
-    logStub.restore()
+    alertStub.restore()
     cleanup()
   })
 
@@ -39,7 +39,7 @@ suite('eval scripts', () => {
           ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
           : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
       expect(actual).to.equal(expected)
-      expect(logStub.callCount).to.equal(0)
+      expect(alertStub.callCount).to.equal(0)
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
@@ -58,7 +58,7 @@ suite('eval scripts', () => {
           ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
           : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
       expect(actual).to.equal(expected)
-      expect(logStub.callCount).to.equal(4)
+      expect(alertStub.callCount).to.equal(4)
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
@@ -77,7 +77,7 @@ suite('eval scripts', () => {
           ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
           : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
       expect(actual).to.equal(expected)
-      expect(logStub.callCount).to.equal(8)
+      expect(alertStub.callCount).to.equal(8)
       done()
     }
     SVGInjector(container.querySelectorAll('.inject-me'), {
