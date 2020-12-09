@@ -1,0 +1,19 @@
+{
+  "name": "no-extension",
+  "version": "1.0.0",
+  "description": "SVGInjector No Extension Example",
+  "scripts": {
+    "start": "webpack && cp ./{index.html,svg} dist && http-server dist"
+  },
+  "dependencies": {
+    "@tanem/svg-injector": "latest",
+    "http-server": "0.12.3",
+    "ts-loader": "8.0.11",
+    "typescript": "4.1.2",
+    "webpack": "5.10.0",
+    "webpack-cli": "4.2.0"
+  },
+  "keywords": [
+    "@tanem/svg-injector"
+  ]
+}
