@@ -38,7 +38,7 @@
     "@types/content-type": "1.1.3",
     "@types/karma": "5.0.1",
     "@types/karma-chai": "0.1.2",
-    "@types/mocha": "8.0.4",
+    "@types/mocha": "8.2.0",
     "@types/sinon": "9.0.9",
     "@types/ua-parser-js": "0.7.33",
     "@types/webpack-env": "1.16.0",
