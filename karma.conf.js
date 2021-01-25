@@ -13,19 +13,19 @@ module.exports = (config) => {
         base: 'BrowserStack',
         browser: 'Chrome',
         os: 'OS X',
-        os_version: 'Catalina',
+        os_version: 'Big Sur',
       },
       bs_firefox_mac: {
         base: 'BrowserStack',
         browser: 'Firefox',
         os: 'OS X',
-        os_version: 'Catalina',
+        os_version: 'Big Sur',
       },
       bs_safari_mac: {
         base: 'BrowserStack',
         browser: 'Safari',
         os: 'OS X',
-        os_version: 'Catalina',
+        os_version: 'Big Sur',
       },
       bs_edge_win: {
         base: 'BrowserStack',
