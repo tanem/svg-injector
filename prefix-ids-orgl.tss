@@ -1,0 +1,185 @@
+// Make sure any internally referenced ids and their references are unique.
+// This addresses the issue of having multiple instances of the same SVG on a
+// page and only the first id is referenced.
+//
+// Browsers often shortcut the SVG Spec and don't use elements contained in
+// parent elements that are hidden, so if you hide the first SVG instance on
+// the page, then it affects all other instances. Reference:
+// https://bugzilla.mozilla.org/show_bug.cgi?id=376027.
+
+import uniqueId from './unique-id'
+
+const xlinkNamespace = 'http://www.w3.org/1999/xlink'
+
+// http://www.w3.org/TR/SVG11/linking.html#processingIRI
+const elementsAndProperties: { [key: string]: string[] } = {
+  clipPath: ['clip-path'],
+  'color-profile': ['color-profile'],
+  cursor: ['cursor'],
+  filter: ['filter'],
+  linearGradient: ['fill', 'stroke'],
+  marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
+  mask: ['mask'],
+  path: [],
+  pattern: ['fill', 'stroke'],
+  radialGradient: ['fill', 'stroke'],
+}
+
+const prefixIds = (svg: SVGElement) => {
+  // let element
+  let elementsWithIds: NodeListOf<Element>
+  // let properties
+  let currentId: string
+  let newId: string
+
+  for (const [element, properties] of Object.entries(elementsAndProperties)) {
+    // Object.keys(elementsAndProperties).forEach((element) => {
+    // element = key
+    // properties = elementsAndProperties[element]
+
+    // elements = svg.querySelectorAll(`${element}[id]`)
+    elementsWithIds = svg.querySelectorAll(`${element}[id]`)
+
+    // for (let a = 0, b = elements.length; a < b; a++) {
+    for (const elementWithId of elementsWithIds) {
+      currentId = elementWithId.id
+      newId = uniqueId() + '-' + currentId
+
+      // All of the properties that can reference this element type.
+      // todo: rather than directly specify props, just loop through all.
+      // let referencingElements
+
+      for (const property of properties) {
+        // Array.prototype.forEach.call(
+        // elementsAndProperties[element],
+        // properties,
+        // (property: string) => {
+        // NOTE: Using a substring match attr selector here to deal with IE
+        // "adding extra quotes in url() attrs".
+        const referencingElements = svg.querySelectorAll(
+          `[${property}*="${currentId}"]`
+        )
+
+        const addPrefixToUrlAttr = (element, attributeName) => {
+          const attribute = element.getAttribute(attributeName)
+
+          // if (!attrNotEmpty(attr)) {
+          if (!attribute) {
+            return
+          }
+
+          // url(...) in value
+          // var urlVal = matchUrl(attr.value)
+          if (!attribute.match(new RegExp(`url\\("?#${currentId}"?\\)`))) {
+            return
+          }
+
+          // var idPrefixed = prefixId(urlVal)
+          // if (!idPrefixed) {
+          //   return
+          // }
+
+          // attr.value = 'url(' + idPrefixed + ')'
+          element.setAttribute(attributeName, `url(#${newId})`)
+        }
+
+        // addPrefixToUrlAttr
+        for (let c = 0, d = referencingElements.length; c < d; c++) {
+          // get full value of attribute
+          const attrValue = referencingElements[c].getAttribute(property)
+
+          if (
+            attrValue &&
+            !attrValue.match(new RegExp('url\\("?#' + currentId + '"?\\)'))
+          ) {
+            continue
+          }
+
+          referencingElements[c].setAttribute(property, 'url(#' + newId + ')')
+        }
+      }
+
+      // turn these lumps into functions. like svgo.
+      // addPrefixToHrefAttr
+      // selector is "any namespace, href" so will get plain href & xlink:
+      // create function, pass the links in
+      const allLinks = svg.querySelectorAll('[*|href]')
+      const links = []
+      for (let e = 0, f = allLinks.length; e < f; e++) {
+        const href = allLinks[e].getAttributeNS(xlinkNamespace, 'href')
+        /* istanbul ignore else */
+        if (href && href.toString() === '#' + currentId) {
+          links.push(allLinks[e])
+        }
+      }
+
+      for (let g = 0, h = links.length; g < h; g++) {
+        links[g].setAttributeNS(xlinkNamespace, 'href', '#' + newId)
+      }
+
+      elements[a].id = newId
+    }
+  }
+
+  // now to do style refs?
+  // needs to handle multiple refs?
+  // let styleElements = svg.querySelectorAll('style')
+  // for (
+  //   let e = 0, styleElementsLen = styleElements.length;
+  //   e < styleElementsLen;
+  //   e++
+  // ) {
+  //   let style = styleElements[e]
+
+  //   let cssStr = style.textContent
+  //   if (!cssStr) continue
+  //   cssStr = cssStr.trim()
+
+  //   // generate css ast
+  //   let cssAst = {}
+  //   try {
+  //     cssAst = csstree.parse(cssStr, {
+  //       parseValue: true,
+  //       parseCustomProperty: false,
+  //     })
+  //   } catch (parseError) {
+  //     console.warn(
+  //       'Warning: Parse error of styles of <style/> element, skipped. Error details: ' +
+  //         parseError
+  //     )
+  //     continue
+  //   }
+
+  //   // update css ast
+  //   csstree.walk(cssAst, (node) => {
+  //     // #ID, .class
+  //     if (
+  //       (node.type === 'IdSelector' || node.type === 'ClassSelector') &&
+  //       node.name
+  //     ) {
+  //       // pass in unique id thing?
+  //       // node.name = addPrefix(node.name)
+  //       node.name = addPrefix(node.name)
+  //       return
+  //     }
+
+  //     // url(...) in value
+  //     if (
+  //       node.type === 'Url' &&
+  //       node.value.value &&
+  //       node.value.value.length > 0
+  //     ) {
+  //       idPrefixed = prefixId(unquote(node.value.value))
+  //       if (!idPrefixed) {
+  //         return
+  //       }
+  //       node.value.value = idPrefixed
+  //     }
+  //   })
+
+  //   // update <style>s
+  //   // node.content[0].text = csstree.generate(cssAst)
+  //   style.textContent = csstree.generate(cssAst)
+}
+
+export default prefixIds
