@@ -1,5 +1,23 @@
 # Changelog
 
+## [v8.2.4](https://github.com/tanem/svg-injector/tree/v8.2.4) (2021-02-14)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.2.3...v8.2.4)
+
+#### :house: Internal
+
+- [#640](https://github.com/tanem/svg-injector/pull/640) Update dependency typescript to v4.1.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#637](https://github.com/tanem/svg-injector/pull/637) Update dependency query-string to v6.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#638](https://github.com/tanem/svg-injector/pull/638) Update dependency webpack to v4.46.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#639](https://github.com/tanem/svg-injector/pull/639) Update dependency @types/chai to v4.2.15 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#636](https://github.com/tanem/svg-injector/pull/636) Update typescript-eslint monorepo to v4.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#635](https://github.com/tanem/svg-injector/pull/635) Update dependency rollup to v2.38.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#634](https://github.com/tanem/svg-injector/pull/634) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+- [#618](https://github.com/tanem/svg-injector/pull/618) Update dependency karma to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#633](https://github.com/tanem/svg-injector/pull/633) Update dependency chai to v4.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#632](https://github.com/tanem/svg-injector/pull/632) Update dependency tanem-scripts to v6.0.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#630](https://github.com/tanem/svg-injector/pull/630) Update typescript-eslint monorepo to v4.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#629](https://github.com/tanem/svg-injector/pull/629) Update dependency eslint to v7.19.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.2.3](https://github.com/tanem/svg-injector/tree/v8.2.3) (2021-02-03)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.2.2...v8.2.3)
 
