@@ -282,11 +282,15 @@ const injectElement = (
 
     beforeEach(svg)
 
-    // Replace the image with the svg.
-    /* istanbul ignore else */
-    if (el.parentNode) {
-      el.parentNode.replaceChild(svg, el)
+    if (!el.parentNode) {
+      injectedElements.splice(injectedElements.indexOf(el), 1)
+      ;(el as ElementType) = null
+      callback(new Error('Parent node is null'))
+      return
     }
+
+    // Replace the image with the svg.
+    el.parentNode.replaceChild(svg, el)
 
     // Now that we no longer need it, drop references to the original element so
     // it can be GC'd.

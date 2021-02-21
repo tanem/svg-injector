@@ -505,4 +505,25 @@ suite('SVGInjector', () => {
 
     requests[0].respond(500, {}, '<svg></svg>')
   })
+
+  test('returns an error when parent node is null', (done) => {
+    // Deliberately create an element without a parent node.
+    const div = document.createElement('div')
+    div.dataset.src = '/fixtures/thumb-up.svg'
+
+    const afterEach: AfterEachStub = window.sinon.stub()
+
+    const afterAll: AfterAll = () => {
+      expect(afterEach.callCount).to.equal(1)
+      expect(afterEach.firstCall.args[0])
+        .to.be.a('error')
+        .with.property('message', 'Parent node is null')
+      done()
+    }
+
+    SVGInjector(div, {
+      afterAll,
+      afterEach,
+    })
+  })
 })
