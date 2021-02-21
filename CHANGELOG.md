@@ -1,5 +1,16 @@
 # Changelog
 
+## [v9.0.0](https://github.com/tanem/svg-injector/tree/v9.0.0) (2021-02-21)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v8.2.5...v9.0.0)
+
+#### :boom: Breaking Change
+
+- [#650](https://github.com/tanem/svg-injector/pull/650) Throw error if parent node is null ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#649](https://github.com/tanem/svg-injector/pull/649) Update dependency @types/mocha to v8.2.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v8.2.5](https://github.com/tanem/svg-injector/tree/v8.2.5) (2021-02-20)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.2.4...v8.2.5)
 
