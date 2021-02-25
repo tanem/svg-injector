@@ -18,10 +18,10 @@ const injectElement = (
   beforeEach: BeforeEach,
   callback: Errback
 ) => {
-  const imgUrl = el.getAttribute('data-src') || el.getAttribute('src')
+  const elUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
   /* istanbul ignore else */
-  if (!imgUrl) {
+  if (!elUrl) {
     callback(new Error('Invalid data-src or src attribute'))
     return
   }
@@ -47,7 +47,7 @@ const injectElement = (
 
   const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
 
-  loadSvg(imgUrl, (error, svg) => {
+  loadSvg(elUrl, (error, svg) => {
     /* istanbul ignore else */
     if (!svg) {
       // TODO: Extract.
@@ -57,28 +57,28 @@ const injectElement = (
       return
     }
 
-    const imgId = el.getAttribute('id')
+    const elId = el.getAttribute('id')
     /* istanbul ignore else */
-    if (imgId) {
-      svg.setAttribute('id', imgId)
+    if (elId) {
+      svg.setAttribute('id', elId)
     }
 
-    const imgTitle = el.getAttribute('title')
+    const elTitle = el.getAttribute('title')
     /* istanbul ignore else */
-    if (imgTitle) {
-      svg.setAttribute('title', imgTitle)
+    if (elTitle) {
+      svg.setAttribute('title', elTitle)
     }
 
-    const imgWidth = el.getAttribute('width')
+    const elWidth = el.getAttribute('width')
     /* istanbul ignore else */
-    if (imgWidth) {
-      svg.setAttribute('width', imgWidth)
+    if (elWidth) {
+      svg.setAttribute('width', elWidth)
     }
 
-    const imgHeight = el.getAttribute('height')
+    const elHeight = el.getAttribute('height')
     /* istanbul ignore else */
-    if (imgHeight) {
-      svg.setAttribute('height', imgHeight)
+    if (elHeight) {
+      svg.setAttribute('height', elHeight)
     }
 
     const mergedClasses = Array.from(
@@ -92,20 +92,20 @@ const injectElement = (
       .trim()
     svg.setAttribute('class', mergedClasses)
 
-    const imgStyle = el.getAttribute('style')
+    const elStyle = el.getAttribute('style')
     /* istanbul ignore else */
-    if (imgStyle) {
-      svg.setAttribute('style', imgStyle)
+    if (elStyle) {
+      svg.setAttribute('style', elStyle)
     }
 
-    svg.setAttribute('data-src', imgUrl)
+    svg.setAttribute('data-src', elUrl)
 
     // Copy all the data elements to the svg.
-    const imgData = [].filter.call(el.attributes, (at: Attr) => {
+    const elData = [].filter.call(el.attributes, (at: Attr) => {
       return /^data-\w[\w-]*$/.test(at.name)
     })
 
-    Array.prototype.forEach.call(imgData, (dataAttr: Attr) => {
+    Array.prototype.forEach.call(elData, (dataAttr: Attr) => {
       /* istanbul ignore else */
       if (dataAttr.name && dataAttr.value) {
         svg.setAttribute(dataAttr.name, dataAttr.value)
@@ -247,7 +247,7 @@ const injectElement = (
     if (
       scriptsToEval.length > 0 &&
       (evalScripts === 'always' ||
-        (evalScripts === 'once' && !ranScripts[imgUrl]))
+        (evalScripts === 'once' && !ranScripts[elUrl]))
     ) {
       for (
         let l = 0, scriptsToEvalLen = scriptsToEval.length;
@@ -264,7 +264,7 @@ const injectElement = (
       }
 
       // Remember we already ran scripts for this svg.
-      ranScripts[imgUrl] = true
+      ranScripts[elUrl] = true
     }
 
     // :WORKAROUND: IE doesn't evaluate <style> tags in SVGs that are
