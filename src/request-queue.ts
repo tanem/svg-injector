@@ -23,7 +23,7 @@ export const processRequestQueue = (url: string) => {
         const callback = requestQueue[url][i]
 
         /* istanbul ignore else */
-        if (cacheValue instanceof SVGElement) {
+        if (cacheValue instanceof SVGSVGElement) {
           callback(null, cloneSvg(cacheValue))
         }
 

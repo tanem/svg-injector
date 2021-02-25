@@ -8,7 +8,7 @@ const loadSvgCached = (url: string, callback: Errback) => {
   if (svgCache.has(url)) {
     const cacheValue = svgCache.get(url)
 
-    if (cacheValue instanceof SVGElement) {
+    if (cacheValue instanceof SVGSVGElement) {
       callback(null, cloneSvg(cacheValue))
       return
     }
@@ -34,7 +34,7 @@ const loadSvgCached = (url: string, callback: Errback) => {
     } else if (
       httpRequest.responseXML instanceof Document &&
       httpRequest.responseXML.documentElement &&
-      httpRequest.responseXML.documentElement instanceof SVGElement
+      httpRequest.responseXML.documentElement instanceof SVGSVGElement
     ) {
       svgCache.set(url, httpRequest.responseXML.documentElement)
     }
