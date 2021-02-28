@@ -1,5 +1,22 @@
 # Changelog
 
+## [v9.0.1](https://github.com/tanem/svg-injector/tree/v9.0.1) (2021-02-28)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.0...v9.0.1)
+
+#### :house: Internal
+
+- [#661](https://github.com/tanem/svg-injector/pull/661) Revert "Temp enable pr target in builds" ([@tanem](https://github.com/tanem))
+- [#659](https://github.com/tanem/svg-injector/pull/659) Replace SVGElement type annotation with more specific SVGSVGElement  ([@steven-wolfman](https://github.com/steven-wolfman))
+- [#660](https://github.com/tanem/svg-injector/pull/660) Temp enable pr target in builds ([@tanem](https://github.com/tanem))
+- [#658](https://github.com/tanem/svg-injector/pull/658) Decruft ([@tanem](https://github.com/tanem))
+- [#657](https://github.com/tanem/svg-injector/pull/657) Update dependency typescript to v4.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#656](https://github.com/tanem/svg-injector/pull/656) Update dependency rollup to v2.39.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#655](https://github.com/tanem/svg-injector/pull/655) Update typescript-eslint monorepo to v4.15.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#653](https://github.com/tanem/svg-injector/pull/653) Update dependency eslint-config-prettier to v8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#654](https://github.com/tanem/svg-injector/pull/654) Tidy code style ([@tanem](https://github.com/tanem))
+- [#652](https://github.com/tanem/svg-injector/pull/652) Update dependency tanem-scripts to v6.0.9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#651](https://github.com/tanem/svg-injector/pull/651) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v9.0.0](https://github.com/tanem/svg-injector/tree/v9.0.0) (2021-02-21)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v8.2.5...v9.0.0)
 
