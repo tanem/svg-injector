@@ -1,3 +1,3 @@
-const svgCache = new Map<string, SVGElement | Error | undefined>()
+const svgCache = new Map<string, SVGSVGElement | Error | undefined>()
 
 export default svgCache
