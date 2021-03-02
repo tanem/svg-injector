@@ -1,5 +1,13 @@
 # Changelog
 
+## [v9.0.2](https://github.com/tanem/svg-injector/tree/v9.0.2) (2021-03-02)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.1...v9.0.2)
+
+#### :house: Internal
+
+- [#663](https://github.com/tanem/svg-injector/pull/663) Update dependency rollup to v2.40.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#662](https://github.com/tanem/svg-injector/pull/662) Update dependency query-string to v6.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v9.0.1](https://github.com/tanem/svg-injector/tree/v9.0.1) (2021-02-28)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.0...v9.0.1)
 
