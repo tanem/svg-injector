@@ -45,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
     "babel-loader": "8.2.2",
-    "chai": "4.3.3",
+    "chai": "4.3.4",
     "cp-cli": "2.0.0",
     "del-cli": "3.0.1",
     "eslint": "7.22.0",
