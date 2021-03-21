@@ -1,5 +1,18 @@
 # Changelog
 
+## [v9.0.4](https://github.com/tanem/svg-injector/tree/v9.0.4) (2021-03-21)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.3...v9.0.4)
+
+#### :house: Internal
+
+- [#683](https://github.com/tanem/svg-injector/pull/683) Update dependency parcel-bundler to v1.12.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#682](https://github.com/tanem/svg-injector/pull/682) Update typescript-eslint monorepo to v4.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#681](https://github.com/tanem/svg-injector/pull/681) Update dependency tanem-scripts to v6.0.11 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#680](https://github.com/tanem/svg-injector/pull/680) Update dependency eslint to v7.22.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#677](https://github.com/tanem/svg-injector/pull/677) Update actions/setup-node action to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#676](https://github.com/tanem/svg-injector/pull/676) Update dependency mocha to v8.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#675](https://github.com/tanem/svg-injector/pull/675) Update dependency karma to v6.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v9.0.3](https://github.com/tanem/svg-injector/tree/v9.0.3) (2021-03-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.2...v9.0.3)
 
