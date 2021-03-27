@@ -1,5 +1,16 @@
 # Changelog
 
+## [v9.0.5](https://github.com/tanem/svg-injector/tree/v9.0.5) (2021-03-27)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.4...v9.0.5)
+
+#### :house: Internal
+
+- [#687](https://github.com/tanem/svg-injector/pull/687) Update dependency @babel/preset-env to v7.13.12 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#685](https://github.com/tanem/svg-injector/pull/685) Update dependency @types/mocha to v8.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#686](https://github.com/tanem/svg-injector/pull/686) Update dependency tanem-scripts to v6.0.12 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#684](https://github.com/tanem/svg-injector/pull/684) Update dependency query-string to v7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#679](https://github.com/tanem/svg-injector/pull/679) Update dependency chai to v4.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v9.0.4](https://github.com/tanem/svg-injector/tree/v9.0.4) (2021-03-21)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.3...v9.0.4)
 
