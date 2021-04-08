@@ -1,6 +1,6 @@
 import { UAParser } from 'ua-parser-js'
+import cache from '../../src/cache'
 import { clear as clearRequestQueue } from '../../src/request-queue'
-import svgCache from '../../src/svg-cache'
 
 export const { name: browser } = new UAParser().getBrowser()
 
@@ -27,5 +27,5 @@ export const getOuterHTML = (element?: Element) => {
 
 export const cleanup = () => {
   clearRequestQueue()
-  svgCache.clear()
+  cache.clear()
 }

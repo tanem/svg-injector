@@ -1,5 +1,5 @@
+import cache from './cache'
 import cloneSvg from './clone-svg'
-import svgCache from './svg-cache'
 import { Errback } from './types'
 
 let requestQueue: { [key: string]: Errback[] } = {}
@@ -19,7 +19,7 @@ export const processRequestQueue = (url: string) => {
     setTimeout(() => {
       /* istanbul ignore else */
       if (Array.isArray(requestQueue[url])) {
-        const cacheValue = svgCache.get(url)
+        const cacheValue = cache.get(url)
         const callback = requestQueue[url][i]
 
         /* istanbul ignore else */
