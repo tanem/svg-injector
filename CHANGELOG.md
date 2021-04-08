@@ -1,5 +1,25 @@
 # Changelog
 
+## [v10.0.0](https://github.com/tanem/svg-injector/tree/v10.0.0) (2021-04-08)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.5...v10.0.0)
+
+#### :boom: Breaking Change
+
+- [#699](https://github.com/tanem/svg-injector/pull/699) Don't cache errors ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#698](https://github.com/tanem/svg-injector/pull/698) Update dependency tanem-scripts to v6.0.14 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#697](https://github.com/tanem/svg-injector/pull/697) Update dependency @types/chai to v4.2.16 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#688](https://github.com/tanem/svg-injector/pull/688) Update typescript-eslint monorepo to v4.20.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#690](https://github.com/tanem/svg-injector/pull/690) Update dependency ua-parser-js to v0.7.27 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#695](https://github.com/tanem/svg-injector/pull/695) Update dependency @babel/core to v7.13.14 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#696](https://github.com/tanem/svg-injector/pull/696) Update dependency karma to v6.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#678](https://github.com/tanem/svg-injector/pull/678) Update dependency rollup to v2.44.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#694](https://github.com/tanem/svg-injector/pull/694) Update dependency tanem-scripts to v6.0.13 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#693](https://github.com/tanem/svg-injector/pull/693) Update dependency eslint to v7.23.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#691](https://github.com/tanem/svg-injector/pull/691) Update dependency karma to v6.3.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v9.0.5](https://github.com/tanem/svg-injector/tree/v9.0.5) (2021-03-27)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.4...v9.0.5)
 
