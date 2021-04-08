@@ -1,42 +1,41 @@
+import cache from './cache'
 import cloneSvg from './clone-svg'
 import makeAjaxRequest from './make-ajax-request'
 import { processRequestQueue, queueRequest } from './request-queue'
-import svgCache from './svg-cache'
 import { Errback } from './types'
 
 const loadSvgCached = (url: string, callback: Errback) => {
-  if (svgCache.has(url)) {
-    const cacheValue = svgCache.get(url)
+  if (cache.has(url)) {
+    const cacheValue = cache.get(url)
 
+    if (cacheValue === undefined) {
+      queueRequest(url, callback)
+      return
+    }
+
+    /* istanbul ignore else */
     if (cacheValue instanceof SVGSVGElement) {
       callback(null, cloneSvg(cacheValue))
       return
     }
 
-    if (cacheValue instanceof Error) {
-      callback(cacheValue)
-      return
-    }
-
-    queueRequest(url, callback)
-
-    return
+    // Errors are always refetched.
   }
 
   // Seed the cache to indicate we are loading this URL.
-  svgCache.set(url, undefined)
+  cache.set(url, undefined)
   queueRequest(url, callback)
 
   makeAjaxRequest(url, (error, httpRequest) => {
     /* istanbul ignore else */
     if (error) {
-      svgCache.set(url, error)
+      cache.set(url, error)
     } else if (
       httpRequest.responseXML instanceof Document &&
       httpRequest.responseXML.documentElement &&
       httpRequest.responseXML.documentElement instanceof SVGSVGElement
     ) {
-      svgCache.set(url, httpRequest.responseXML.documentElement)
+      cache.set(url, httpRequest.responseXML.documentElement)
     }
     processRequestQueue(url)
   })

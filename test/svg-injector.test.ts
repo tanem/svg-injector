@@ -255,7 +255,7 @@ suite('SVGInjector', () => {
     })
   })
 
-  test('cached error', (done) => {
+  test('errors should not be cached', (done) => {
     const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
@@ -274,7 +274,7 @@ suite('SVGInjector', () => {
         const containerTwo = render(`
           <div
             class="inject-me"
-            data-src="/fixtures/not-found.svg"
+            data-src="/fixtures/still-not-found.svg"
           ></div>
         `)
 
@@ -288,10 +288,11 @@ suite('SVGInjector', () => {
               .to.be.a('error')
               .with.property(
                 'message',
-                'Unable to load SVG file: /fixtures/not-found.svg'
+                'Unable to load SVG file: /fixtures/still-not-found.svg'
               )
           },
         })
+        requests[1].respond(404, {}, '')
       },
     })
     requests[0].respond(404, {}, '')
