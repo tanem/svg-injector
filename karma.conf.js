@@ -111,12 +111,12 @@ module.exports = (config) => {
           },
         ],
       },
-      node: {
-        fs: 'empty',
-        module: 'empty',
-      },
       resolve: {
         extensions: ['.json', '.js', '.ts'],
+        fallback: {
+          fs: 'empty',
+          module: 'empty',
+        },
       },
     },
     proxyRes(proxyRes, req) {
