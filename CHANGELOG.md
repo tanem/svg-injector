@@ -1,5 +1,28 @@
 # Changelog
 
+## [v10.0.1](https://github.com/tanem/svg-injector/tree/v10.0.1) (2021-04-17)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.0...v10.0.1)
+
+#### :memo: Documentation
+
+- [#700](https://github.com/tanem/svg-injector/pull/700) Add migration notes for v10.0.0 release ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#546](https://github.com/tanem/svg-injector/pull/546) Update dependency webpack to v5.33.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#711](https://github.com/tanem/svg-injector/pull/711) Fix @types/sinon version ([@tanem](https://github.com/tanem))
+- [#631](https://github.com/tanem/svg-injector/pull/631) Update dependency karma-webpack to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#710](https://github.com/tanem/svg-injector/pull/710) Update dependency ua-parser-js to v0.7.28 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#709](https://github.com/tanem/svg-injector/pull/709) Update dependency @types/karma to v6.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#708](https://github.com/tanem/svg-injector/pull/708) Update dependency eslint to v7.24.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#707](https://github.com/tanem/svg-injector/pull/707) Update babel monorepo to v7.13.15 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#706](https://github.com/tanem/svg-injector/pull/706) Update dependency typescript to v4.2.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#705](https://github.com/tanem/svg-injector/pull/705) Update dependency is-svg to 4.2.2 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+- [#702](https://github.com/tanem/svg-injector/pull/702) Update typescript-eslint monorepo to v4.21.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#701](https://github.com/tanem/svg-injector/pull/701) Update dependency tslib to ^2.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#704](https://github.com/tanem/svg-injector/pull/704) Fix audit issues ([@tanem](https://github.com/tanem))
+- [#703](https://github.com/tanem/svg-injector/pull/703) Restrict sinon version for IE11 support ([@tanem](https://github.com/tanem))
+
 ## [v10.0.0](https://github.com/tanem/svg-injector/tree/v10.0.0) (2021-04-08)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v9.0.5...v10.0.0)
 
