@@ -113,7 +113,8 @@ suite('SVGInjector', () => {
   })
 
   test('injection in progress', () => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
@@ -256,7 +257,8 @@ suite('SVGInjector', () => {
   })
 
   test('errors should not be cached', (done) => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
@@ -299,7 +301,8 @@ suite('SVGInjector', () => {
   })
 
   test('svg not found error', (done) => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
@@ -360,7 +363,8 @@ suite('SVGInjector', () => {
   })
 
   test('unknown exception', (done) => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
@@ -475,7 +479,8 @@ suite('SVGInjector', () => {
   })
 
   test('single element unknown exception without cache', (done) => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
