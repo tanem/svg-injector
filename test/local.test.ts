@@ -54,7 +54,8 @@ suite('local', () => {
   })
 
   test('ok', (done) => {
-    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic = window.sinon.useFakeXMLHttpRequest()
+    const fakeXHR: sinon.SinonFakeXMLHttpRequestStatic =
+      window.sinon.useFakeXMLHttpRequest()
     const requests: sinon.SinonFakeXMLHttpRequest[] = []
     fakeXHR.onCreate = (xhr) => {
       requests.push(xhr)
