@@ -41,11 +41,12 @@ module.exports = (config) => {
       },
     },
     browsers: [
-      'bs_chrome_mac',
-      'bs_firefox_mac',
-      'bs_safari_mac',
-      'bs_edge_win',
-      'bs_ie_win',
+      'ChromeHeadless',
+      // 'bs_chrome_mac',
+      // 'bs_firefox_mac',
+      // 'bs_safari_mac',
+      // 'bs_edge_win',
+      // 'bs_ie_win',
     ],
     autoWatch: true,
     client: {
@@ -105,8 +106,8 @@ module.exports = (config) => {
             exclude: [path.resolve(__dirname, 'test')],
             enforce: 'post',
             use: {
-              loader: 'istanbul-instrumenter-loader',
-              options: { esModules: true },
+              loader: 'babel-loader',
+              options: { plugins: ['istanbul'] },
             },
           },
         ],
