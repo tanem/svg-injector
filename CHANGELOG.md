@@ -1,5 +1,23 @@
 # Changelog
 
+## [v10.0.5](https://github.com/tanem/svg-injector/tree/v10.0.5) (2021-06-25)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.4...v10.0.5)
+
+#### :house: Internal
+
+- [#771](https://github.com/tanem/svg-injector/pull/771) Update dependency @babel/preset-env to v7.14.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#770](https://github.com/tanem/svg-injector/pull/770) Update typescript-eslint monorepo to v4.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#769](https://github.com/tanem/svg-injector/pull/769) Update dependency webpack to v5.40.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#768](https://github.com/tanem/svg-injector/pull/768) Update dependency query-string to v7.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#767](https://github.com/tanem/svg-injector/pull/767) Update dependency rollup to v2.52.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#766](https://github.com/tanem/svg-injector/pull/766) Update dependency @types/chai to v4.2.19 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#765](https://github.com/tanem/svg-injector/pull/765) Update dependency eslint to v7.29.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#764](https://github.com/tanem/svg-injector/pull/764) Update dependency tanem-scripts to v6.0.20 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#763](https://github.com/tanem/svg-injector/pull/763) Update dependency mocha to v9.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#762](https://github.com/tanem/svg-injector/pull/762) Update dependency typescript to v4.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#761](https://github.com/tanem/svg-injector/pull/761) Update dependency webpack to v5.39.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#760](https://github.com/tanem/svg-injector/pull/760) Update dependency rollup to v2.52.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.0.4](https://github.com/tanem/svg-injector/tree/v10.0.4) (2021-06-18)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.3...v10.0.4)
 
