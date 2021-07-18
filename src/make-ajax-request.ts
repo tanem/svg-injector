@@ -3,6 +3,7 @@ import isLocal from './is-local'
 
 const makeAjaxRequest = (
   url: string,
+  httpRequestWithCredentials: boolean,
   callback: (error: Error | null, httpRequest: XMLHttpRequest) => void
 ) => {
   const httpRequest = new XMLHttpRequest()
@@ -55,7 +56,7 @@ const makeAjaxRequest = (
   httpRequest.open('GET', url)
 
   /* Setting httpRequest.withCredentials to true for third-party cookies */
-  httpRequest.withCredentials = true
+  httpRequest.withCredentials = httpRequestWithCredentials || false
 
   /* istanbul ignore else */
   if (httpRequest.overrideMimeType) {

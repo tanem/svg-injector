@@ -4,7 +4,11 @@ import makeAjaxRequest from './make-ajax-request'
 import { processRequestQueue, queueRequest } from './request-queue'
 import { Errback } from './types'
 
-const loadSvgCached = (url: string, callback: Errback) => {
+const loadSvgCached = (
+  url: string,
+  httpRequestWithCredentials: boolean,
+  callback: Errback
+) => {
   if (cache.has(url)) {
     const cacheValue = cache.get(url)
 
@@ -26,19 +30,23 @@ const loadSvgCached = (url: string, callback: Errback) => {
   cache.set(url, undefined)
   queueRequest(url, callback)
 
-  makeAjaxRequest(url, (error, httpRequest) => {
-    /* istanbul ignore else */
-    if (error) {
-      cache.set(url, error)
-    } else if (
-      httpRequest.responseXML instanceof Document &&
-      httpRequest.responseXML.documentElement &&
-      httpRequest.responseXML.documentElement instanceof SVGSVGElement
-    ) {
-      cache.set(url, httpRequest.responseXML.documentElement)
+  makeAjaxRequest(
+    url,
+    httpRequestWithCredentials || false,
+    (error, httpRequest) => {
+      /* istanbul ignore else */
+      if (error) {
+        cache.set(url, error)
+      } else if (
+        httpRequest.responseXML instanceof Document &&
+        httpRequest.responseXML.documentElement &&
+        httpRequest.responseXML.documentElement instanceof SVGSVGElement
+      ) {
+        cache.set(url, httpRequest.responseXML.documentElement)
+      }
+      processRequestQueue(url)
     }
-    processRequestQueue(url)
-  })
+  )
 }
 
 export default loadSvgCached

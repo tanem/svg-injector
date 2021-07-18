@@ -10,6 +10,7 @@ interface OptionalArgs {
   cacheRequests?: boolean
   evalScripts?: EvalScripts
   renumerateIRIElements?: boolean
+  httpRequestWithCredentials?: boolean
 }
 
 const SVGInjector = (
@@ -21,6 +22,7 @@ const SVGInjector = (
     cacheRequests = true,
     evalScripts = 'never',
     renumerateIRIElements = true,
+    httpRequestWithCredentials = false,
   }: OptionalArgs = {}
 ) => {
   if (elements && 'length' in elements) {
@@ -41,7 +43,8 @@ const SVGInjector = (
           ) {
             afterAll(elementsLoaded)
           }
-        }
+        },
+        httpRequestWithCredentials
       )
     }
   } else if (elements) {
@@ -55,7 +58,8 @@ const SVGInjector = (
         afterEach(error, svg)
         afterAll(1)
         elements = null
-      }
+      },
+      httpRequestWithCredentials
     )
   } else {
     afterAll(0)

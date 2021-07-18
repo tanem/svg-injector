@@ -45,6 +45,7 @@ SVGInjector(document.getElementById('inject-me'))
   - `cacheRequests` - _Optional_ Use request cache. Defaults to `true`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
   - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
+  - `httpRequestWithCredentials` - _Optional_ Boolean indicating if http request should be with credentials. Defaults to `false`.
 
 **Example**
 
@@ -72,6 +73,7 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   cacheRequests: false,
   evalScripts: 'once',
   renumerateIRIElements: false,
+  httpRequestWithCredentials: false,
 })
 ```
 
