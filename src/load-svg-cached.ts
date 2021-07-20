@@ -30,23 +30,19 @@ const loadSvgCached = (
   cache.set(url, undefined)
   queueRequest(url, callback)
 
-  makeAjaxRequest(
-    url,
-    httpRequestWithCredentials || false,
-    (error, httpRequest) => {
-      /* istanbul ignore else */
-      if (error) {
-        cache.set(url, error)
-      } else if (
-        httpRequest.responseXML instanceof Document &&
-        httpRequest.responseXML.documentElement &&
-        httpRequest.responseXML.documentElement instanceof SVGSVGElement
-      ) {
-        cache.set(url, httpRequest.responseXML.documentElement)
-      }
-      processRequestQueue(url)
+  makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
+    /* istanbul ignore else */
+    if (error) {
+      cache.set(url, error)
+    } else if (
+      httpRequest.responseXML instanceof Document &&
+      httpRequest.responseXML.documentElement &&
+      httpRequest.responseXML.documentElement instanceof SVGSVGElement
+    ) {
+      cache.set(url, httpRequest.responseXML.documentElement)
     }
-  )
+    processRequestQueue(url)
+  })
 }
 
 export default loadSvgCached

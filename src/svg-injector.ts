@@ -9,8 +9,8 @@ interface OptionalArgs {
   beforeEach?: BeforeEach
   cacheRequests?: boolean
   evalScripts?: EvalScripts
-  renumerateIRIElements?: boolean
   httpRequestWithCredentials?: boolean
+  renumerateIRIElements?: boolean
 }
 
 const SVGInjector = (
@@ -21,8 +21,8 @@ const SVGInjector = (
     beforeEach = () => undefined,
     cacheRequests = true,
     evalScripts = 'never',
-    renumerateIRIElements = true,
     httpRequestWithCredentials = false,
+    renumerateIRIElements = true,
   }: OptionalArgs = {}
 ) => {
   if (elements && 'length' in elements) {
@@ -33,6 +33,7 @@ const SVGInjector = (
         evalScripts,
         renumerateIRIElements,
         cacheRequests,
+        httpRequestWithCredentials,
         beforeEach,
         (error, svg) => {
           afterEach(error, svg)
@@ -43,8 +44,7 @@ const SVGInjector = (
           ) {
             afterAll(elementsLoaded)
           }
-        },
-        httpRequestWithCredentials
+        }
       )
     }
   } else if (elements) {
@@ -53,13 +53,13 @@ const SVGInjector = (
       evalScripts,
       renumerateIRIElements,
       cacheRequests,
+      httpRequestWithCredentials,
       beforeEach,
       (error, svg) => {
         afterEach(error, svg)
         afterAll(1)
         elements = null
-      },
-      httpRequestWithCredentials
+      }
     )
   } else {
     afterAll(0)

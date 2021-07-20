@@ -55,8 +55,7 @@ const makeAjaxRequest = (
 
   httpRequest.open('GET', url)
 
-  /* Setting httpRequest.withCredentials to true for third-party cookies */
-  httpRequest.withCredentials = httpRequestWithCredentials || false
+  httpRequest.withCredentials = httpRequestWithCredentials
 
   /* istanbul ignore else */
   if (httpRequest.overrideMimeType) {

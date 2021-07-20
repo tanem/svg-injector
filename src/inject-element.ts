@@ -15,9 +15,9 @@ const injectElement = (
   evalScripts: EvalScripts,
   renumerateIRIElements: boolean,
   cacheRequests: boolean,
+  httpRequestWithCredentials: boolean,
   beforeEach: BeforeEach,
-  callback: Errback,
-  httpRequestWithCredentials: boolean
+  callback: Errback
 ) => {
   const elUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
