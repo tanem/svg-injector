@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
   pull_request_target:
     branches: [master]
     types: [labeled, opened, synchronize, reopened]
@@ -13,12 +11,13 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'pull_request' && github.actor == 'tanem') ||
-      (github.event_name == 'pull_request_target' && github.actor == 'renovate-bot') ||
-      (github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'safe to test'))
+      github.event_name != 'pull_request_target' ||
+      github.event.pull_request.user.login == 'tanem' ||
+      github.event.pull_request.user.login == 'renovate[bot]' ||
+      contains(github.event.pull_request.labels.*.name, 'safe to test')
     steps:
       - run: |
-          echo "actor: ${{ github.actor }}"
+          echo "login: ${{ github.event.pull_request.user.login }}"
           echo "event_name: ${{ github.event_name }}"
       - uses: 'browserstack/github-actions/setup-env@master'
         with:
