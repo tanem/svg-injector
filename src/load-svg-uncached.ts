@@ -1,8 +1,12 @@
 import makeAjaxRequest from './make-ajax-request'
 import { Errback } from './types'
 
-const loadSvgUncached = (url: string, callback: Errback) => {
-  makeAjaxRequest(url, (error, httpRequest) => {
+const loadSvgUncached = (
+  url: string,
+  httpRequestWithCredentials: boolean,
+  callback: Errback
+) => {
+  makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
     /* istanbul ignore else */
     if (error) {
       callback(error)

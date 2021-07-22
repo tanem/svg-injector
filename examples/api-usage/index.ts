@@ -15,5 +15,6 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   },
   cacheRequests: false,
   evalScripts: 'once',
+  httpRequestWithCredentials: false,
   renumerateIRIElements: false,
 })

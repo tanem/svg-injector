@@ -44,6 +44,7 @@ SVGInjector(document.getElementById('inject-me'))
   - `beforeEach(svg)` - _Optional_ A callback which is called just before each SVG element is added to the DOM. `svg` is the SVG DOM element which is about to be injected. Defaults to `() => undefined`.
   - `cacheRequests` - _Optional_ Use request cache. Defaults to `true`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
+  - `httpRequestWithCredentials` - _Optional_ Boolean that indicates whether or not cross-site Access-Control requests should be made using credentials. Defaults to `false`.
   - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
 
 **Example**
@@ -71,6 +72,7 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   },
   cacheRequests: false,
   evalScripts: 'once',
+  httpRequestWithCredentials: false,
   renumerateIRIElements: false,
 })
 ```

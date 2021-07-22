@@ -15,6 +15,7 @@ const injectElement = (
   evalScripts: EvalScripts,
   renumerateIRIElements: boolean,
   cacheRequests: boolean,
+  httpRequestWithCredentials: boolean,
   beforeEach: BeforeEach,
   callback: Errback
 ) => {
@@ -47,7 +48,7 @@ const injectElement = (
 
   const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
 
-  loadSvg(elUrl, (error, svg) => {
+  loadSvg(elUrl, httpRequestWithCredentials, (error, svg) => {
     /* istanbul ignore else */
     if (!svg) {
       // TODO: Extract.
