@@ -5,16 +5,31 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  pull_request_target:
+    branches: [master]
+    types: [labeled, opened, synchronize, reopened]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'pull_request' && github.actor == 'tanem') ||
+      (github.event_name == 'pull_request_target' && github.actor == 'renovate-bot') ||
+      (github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'safe to test'))
     steps:
+      - run: |
+          echo "actor: ${{ github.actor }}"
+          echo "event_name: ${{ github.event_name }}"
       - uses: 'browserstack/github-actions/setup-env@master'
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       - uses: actions/checkout@v2
+        if: github.event_name == 'pull_request_target'
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v2
+        if: github.event_name != 'pull_request_target'
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
