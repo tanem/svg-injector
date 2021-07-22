@@ -41,12 +41,11 @@ module.exports = (config) => {
       },
     },
     browsers: [
-      'ChromeHeadless',
-      // 'bs_chrome_mac',
-      // 'bs_firefox_mac',
-      // 'bs_safari_mac',
-      // 'bs_edge_win',
-      // 'bs_ie_win',
+      'bs_chrome_mac',
+      'bs_firefox_mac',
+      'bs_safari_mac',
+      'bs_edge_win',
+      'bs_ie_win',
     ],
     autoWatch: true,
     client: {
