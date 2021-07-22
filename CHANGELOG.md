@@ -1,5 +1,22 @@
 # Changelog
 
+## [v10.1.0](https://github.com/tanem/svg-injector/tree/v10.1.0) (2021-07-22)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.8...v10.1.0)
+
+#### :rocket: Enhancement
+
+- [#793](https://github.com/tanem/svg-injector/pull/793) Add httpRequestWithCredentials option ([@Sgajjar08](https://github.com/Sgajjar08))
+
+#### :house: Internal
+
+- [#800](https://github.com/tanem/svg-injector/pull/800) Update tanem-scripts ([@tanem](https://github.com/tanem))
+- [#799](https://github.com/tanem/svg-injector/pull/799) Update CI workflow ([@tanem](https://github.com/tanem))
+- [#798](https://github.com/tanem/svg-injector/pull/798) Update CI workflow & fix karma config ([@tanem](https://github.com/tanem))
+- [#797](https://github.com/tanem/svg-injector/pull/797) Update dependency eslint to v7.31.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#796](https://github.com/tanem/svg-injector/pull/796) Update dependency webpack to v5.45.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#795](https://github.com/tanem/svg-injector/pull/795) Update dependency tanem-scripts to v6.0.24 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#794](https://github.com/tanem/svg-injector/pull/794) Update dependency rollup to v2.53.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.0.8](https://github.com/tanem/svg-injector/tree/v10.0.8) (2021-07-16)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.7...v10.0.8)
 
