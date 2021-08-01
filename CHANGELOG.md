@@ -1,5 +1,20 @@
 # Changelog
 
+## [v10.1.1](https://github.com/tanem/svg-injector/tree/v10.1.1) (2021-08-01)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.0...v10.1.1)
+
+#### :house: Internal
+
+- [#809](https://github.com/tanem/svg-injector/pull/809) Update typescript-eslint monorepo to v4.28.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#808](https://github.com/tanem/svg-injector/pull/808) Update dependency mocha to v9.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#807](https://github.com/tanem/svg-injector/pull/807) Update dependency tanem-scripts to v6.0.26 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#806](https://github.com/tanem/svg-injector/pull/806) Update dependency @types/mocha to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#805](https://github.com/tanem/svg-injector/pull/805) Update dependency webpack to v5.46.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#804](https://github.com/tanem/svg-injector/pull/804) Update dependency rollup to v2.53.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#803](https://github.com/tanem/svg-injector/pull/803) Update babel monorepo to v7.14.8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#802](https://github.com/tanem/svg-injector/pull/802) Update typescript-eslint monorepo to v4.28.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#801](https://github.com/tanem/svg-injector/pull/801) CI workflow tweaks ([@tanem](https://github.com/tanem))
+
 ## [v10.1.0](https://github.com/tanem/svg-injector/tree/v10.1.0) (2021-07-22)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.0.8...v10.1.0)
 
