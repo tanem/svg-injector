@@ -30,10 +30,10 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "7.14.8",
-    "@babel/plugin-transform-runtime": "7.14.5",
-    "@babel/preset-env": "7.14.9",
-    "@babel/preset-typescript": "7.14.5",
+    "@babel/core": "7.15.0",
+    "@babel/plugin-transform-runtime": "7.15.0",
+    "@babel/preset-env": "7.15.0",
+    "@babel/preset-typescript": "7.15.0",
     "@types/chai": "4.2.21",
     "@types/content-type": "1.1.5",
     "@types/karma": "6.3.1",
