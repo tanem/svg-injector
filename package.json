@@ -63,7 +63,7 @@
     "null-loader": "4.0.1",
     "prettier": "2.3.2",
     "query-string": "7.0.1",
-    "rollup": "2.53.3",
+    "rollup": "2.56.2",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-filesize": "9.1.1",
