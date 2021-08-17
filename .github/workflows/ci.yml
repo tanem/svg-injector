@@ -17,8 +17,9 @@ jobs:
       contains(github.event.pull_request.labels.*.name, 'safe to test')
     steps:
       - run: |
-          echo "login: ${{ github.event.pull_request.user.login }}"
+          echo "user: ${{ toJSON(github.event.pull_request.user) }}"
           echo "event_name: ${{ github.event_name }}"
+          echo "actor: ${{ github.actor }}"
       - uses: 'browserstack/github-actions/setup-env@master'
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
