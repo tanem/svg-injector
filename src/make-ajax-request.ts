@@ -49,7 +49,11 @@ const makeAjaxRequest = (
       }
     } catch (error) {
       httpRequest.abort()
-      callback(error, httpRequest)
+      if (error instanceof Error) {
+        callback(error, httpRequest)
+      } else {
+        throw error
+      }
     }
   }
 
