@@ -1,5 +1,15 @@
 # Changelog
 
+## [v10.1.6](https://github.com/tanem/svg-injector/tree/v10.1.6) (2021-10-03)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.5...v10.1.6)
+
+#### :house: Internal
+
+- [#850](https://github.com/tanem/svg-injector/pull/850) Update dependency @types/chai to v4.2.22 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#849](https://github.com/tanem/svg-injector/pull/849) Update dependency webpack to v5.54.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#848](https://github.com/tanem/svg-injector/pull/848) Update dependency prettier to v2.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#847](https://github.com/tanem/svg-injector/pull/847) Update dependency tanem-scripts to v6.0.33 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.5](https://github.com/tanem/svg-injector/tree/v10.1.5) (2021-09-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.4...v10.1.5)
 
