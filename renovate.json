@@ -23,7 +23,6 @@
       "allowedVersions": "< 10.0.0"
     }
   ],
-  "prConcurrentLimit": 1,
   "prCreation": "not-pending",
   "stabilityDays": 3
 }
