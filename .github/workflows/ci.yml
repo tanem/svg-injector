@@ -8,8 +8,7 @@ on:
     types: [assigned, labeled, opened, reopened, synchronize]
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci
 
 jobs:
   ci:
