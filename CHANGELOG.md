@@ -1,5 +1,27 @@
 # Changelog
 
+## [v10.1.9](https://github.com/tanem/svg-injector/tree/v10.1.9) (2021-11-05)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.8...v10.1.9)
+
+#### :house: Internal
+
+- [#881](https://github.com/tanem/svg-injector/pull/881) Update dependency karma to v6.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#880](https://github.com/tanem/svg-injector/pull/880) Update typescript-eslint monorepo to v5.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#878](https://github.com/tanem/svg-injector/pull/878) Update dependency rollup to v2.59.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#879](https://github.com/tanem/svg-injector/pull/879) Reconfigure renovate ([@tanem](https://github.com/tanem))
+- [#877](https://github.com/tanem/svg-injector/pull/877) Update dependency eslint to v8.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#876](https://github.com/tanem/svg-injector/pull/876) Limit concurrent builds ([@tanem](https://github.com/tanem))
+- [#874](https://github.com/tanem/svg-injector/pull/874) Update dependency babel-plugin-istanbul to v6.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#875](https://github.com/tanem/svg-injector/pull/875) Limit concurrent builds ([@tanem](https://github.com/tanem))
+- [#873](https://github.com/tanem/svg-injector/pull/873) Update dependency mocha to v9.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#872](https://github.com/tanem/svg-injector/pull/872) Update dependency @types/webpack-env to v1.16.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#871](https://github.com/tanem/svg-injector/pull/871) Update babel monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+- [#858](https://github.com/tanem/svg-injector/pull/858) Update dependency typescript to v4.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#870](https://github.com/tanem/svg-injector/pull/870) Reconfigure renovate ([@tanem](https://github.com/tanem))
+- [#867](https://github.com/tanem/svg-injector/pull/867) Update dependency ua-parser-js to v1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#864](https://github.com/tanem/svg-injector/pull/864) Update dependency webpack to v5.61.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#863](https://github.com/tanem/svg-injector/pull/863) Update dependency karma to v6.3.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.8](https://github.com/tanem/svg-injector/tree/v10.1.8) (2021-10-22)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.7...v10.1.8)
 
