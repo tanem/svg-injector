@@ -31,7 +31,7 @@ jobs:
         if: github.event_name != 'pull_request_target'
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
       - run: npm ci
       - run: npm test
       - run: bash <(curl -s https://codecov.io/bash)
