@@ -26,6 +26,24 @@ import { SVGInjector } from '@tanem/svg-injector'
 SVGInjector(document.getElementById('inject-me'))
 ```
 
+## Avoiding XSS
+
+Be careful when injecting arbitrary third-party SVGs into the DOM, as this opens the door to XSS attacks. If you must inject third-party SVGs, it is highly recommended to sanitize the SVG before injecting. The following example uses [DOMPurify](https://github.com/cure53/DOMPurify) to strip out attributes and tags that can execute arbitrary JavaScript. Note that this can alter the behavior of the SVG.
+
+```js
+import { SVGInjector } from '@tanem/svg-injector'
+import DOMPurify from 'dompurify'
+
+SVGInjector(document.getElementById('inject-me'), {
+  beforeEach(svg) {
+    DOMPurify.sanitize(svg, {
+      IN_PLACE: true,
+      USE_PROFILES: { svg: true, svgFilters: true }
+    })
+  }
+})
+```
+
 ## Live Examples
 
 - Basic Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/basic-usage)
