@@ -1,5 +1,12 @@
 # Changelog
 
+## [v10.1.14](https://github.com/tanem/svg-injector/tree/v10.1.14) (2021-12-24)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.13...v10.1.14)
+
+#### :house: Internal
+
+- [#915](https://github.com/tanem/svg-injector/pull/915) Update dependency eslint to v8.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.13](https://github.com/tanem/svg-injector/tree/v10.1.13) (2021-12-17)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.12...v10.1.13)
 
