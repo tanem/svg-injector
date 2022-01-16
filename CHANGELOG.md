@@ -1,5 +1,31 @@
 # Changelog
 
+## [v10.1.15](https://github.com/tanem/svg-injector/tree/v10.1.15) (2022-01-16)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.14...v10.1.15)
+
+#### :memo: Documentation
+
+- [#904](https://github.com/tanem/svg-injector/pull/904) Add XSS warning ([@timhwang21](https://github.com/timhwang21))
+
+#### :house: Internal
+
+- [#924](https://github.com/tanem/svg-injector/pull/924) Update dependency karma to v6.3.11 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#931](https://github.com/tanem/svg-injector/pull/931) Update dependency webpack to v5.66.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#929](https://github.com/tanem/svg-injector/pull/929) Update babel monorepo to v7.16.8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#930](https://github.com/tanem/svg-injector/pull/930) Update typescript-eslint monorepo to v5.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#928](https://github.com/tanem/svg-injector/pull/928) Update dependency karma-spec-reporter to v0.0.33 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#927](https://github.com/tanem/svg-injector/pull/927) Update dependency rollup-plugin-filesize to v9.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#925](https://github.com/tanem/svg-injector/pull/925) Update dependency tanem-scripts to v6.0.36 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#926](https://github.com/tanem/svg-injector/pull/926) Update dependency shx to v0.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#923](https://github.com/tanem/svg-injector/pull/923) Update dependency query-string to v7.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#921](https://github.com/tanem/svg-injector/pull/921) Update typescript-eslint monorepo to v5.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#922](https://github.com/tanem/svg-injector/pull/922) Update dependency rollup to v2.63.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#920](https://github.com/tanem/svg-injector/pull/920) Update dependency eslint to v8.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#919](https://github.com/tanem/svg-injector/pull/919) Update babel monorepo to v7.16.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#918](https://github.com/tanem/svg-injector/pull/918) Update typescript-eslint monorepo to v5.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#917](https://github.com/tanem/svg-injector/pull/917) Update dependency rollup to v2.62.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#916](https://github.com/tanem/svg-injector/pull/916) Update typescript-eslint monorepo to v5.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.14](https://github.com/tanem/svg-injector/tree/v10.1.14) (2021-12-24)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.13...v10.1.14)
 
