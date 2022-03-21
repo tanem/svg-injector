@@ -1,5 +1,20 @@
 # Changelog
 
+## [v10.1.21](https://github.com/tanem/svg-injector/tree/v10.1.21) (2022-03-21)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.20...v10.1.21)
+
+#### :house: Internal
+
+- [#993](https://github.com/tanem/svg-injector/pull/993) Update dependency prettier to v2.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#992](https://github.com/tanem/svg-injector/pull/992) Update typescript-eslint monorepo to v5.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#991](https://github.com/tanem/svg-injector/pull/991) Update babel monorepo to v7.17.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#990](https://github.com/tanem/svg-injector/pull/990) Update dependency rollup to v2.70.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#988](https://github.com/tanem/svg-injector/pull/988) Update dependency mocha to v9.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#989](https://github.com/tanem/svg-injector/pull/989) Update dependency eslint to v8.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#986](https://github.com/tanem/svg-injector/pull/986) Update dependency @types/karma-chai to v0.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#987](https://github.com/tanem/svg-injector/pull/987) Update dependency karma-chrome-launcher to v3.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#985](https://github.com/tanem/svg-injector/pull/985) Update dependency tanem-scripts to v6.0.43 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.20](https://github.com/tanem/svg-injector/tree/v10.1.20) (2022-03-11)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.19...v10.1.20)
 
