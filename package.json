@@ -25,15 +25,15 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.17.9",
+    "@babel/runtime": "^7.18.0",
     "content-type": "^1.0.4",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.17.9",
-    "@babel/plugin-transform-runtime": "7.17.0",
-    "@babel/preset-env": "7.16.11",
-    "@babel/preset-typescript": "7.16.7",
+    "@babel/core": "7.18.0",
+    "@babel/plugin-transform-runtime": "7.18.0",
+    "@babel/preset-env": "7.18.0",
+    "@babel/preset-typescript": "7.17.12",
     "@types/chai": "4.3.1",
     "@types/content-type": "1.1.5",
     "@types/karma": "6.3.3",
