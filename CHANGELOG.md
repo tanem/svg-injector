@@ -1,5 +1,15 @@
 # Changelog
 
+## [v10.1.25](https://github.com/tanem/svg-injector/tree/v10.1.25) (2022-06-18)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.24...v10.1.25)
+
+#### :house: Internal
+
+- [#1055](https://github.com/tanem/svg-injector/pull/1055) Update typescript-eslint monorepo to v5.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1054](https://github.com/tanem/svg-injector/pull/1054) Update babel monorepo to v7.18.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1053](https://github.com/tanem/svg-injector/pull/1053) Update dependency tanem-scripts to v6.0.49 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1052](https://github.com/tanem/svg-injector/pull/1052) Update dependency rollup to v2.75.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.24](https://github.com/tanem/svg-injector/tree/v10.1.24) (2022-06-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.23...v10.1.24)
 
