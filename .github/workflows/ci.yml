@@ -19,7 +19,7 @@ jobs:
       github.event.pull_request.user.login == 'renovate[bot]' ||
       contains(github.event.pull_request.labels.*.name, 'safe to test')
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.1
+      - uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ github.token }}
       - uses: 'browserstack/github-actions/setup-env@master'
