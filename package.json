@@ -47,7 +47,7 @@
     "babel-loader": "8.2.5",
     "babel-plugin-istanbul": "6.1.1",
     "chai": "4.3.6",
-    "eslint": "8.20.0",
+    "eslint": "8.21.0",
     "eslint-config-prettier": "8.5.0",
     "karma": "6.4.0",
     "karma-browserstack-launcher": "1.6.0",
