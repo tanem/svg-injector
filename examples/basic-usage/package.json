@@ -2,16 +2,18 @@
   "name": "basic-usage",
   "version": "1.0.0",
   "description": "SVGInjector Basic Usage Example",
-  "main": "index.html",
   "scripts": {
+    "build": "parcel build index.html",
+    "prebuild": "npm run copysvg",
+    "prestart": "npm run copysvg",
     "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "copysvg": "mkdir -p dist && cp *.svg dist"
   },
   "dependencies": {
     "@tanem/svg-injector": "latest"
   },
   "devDependencies": {
-    "parcel-bundler": "1.12.5"
+    "parcel": "2.7.0"
   },
   "keywords": [
     "@tanem/svg-injector"
