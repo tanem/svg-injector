@@ -1,8 +1,9 @@
 *.log
 .DS_Store
+.cache
+.parcel-cache
 .vscode
 compiled
 coverage
 dist
 node_modules
-.cache
