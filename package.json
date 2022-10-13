@@ -73,7 +73,7 @@
     "rollup-plugin-terser": "7.0.2",
     "shx": "0.3.4",
     "sinon": "9.2.4",
-    "tanem-scripts": "6.0.60",
+    "tanem-scripts": "6.0.61",
     "typescript": "4.8.4",
     "ua-parser-js": "1.0.2",
     "webpack": "5.74.0"
