@@ -1,5 +1,21 @@
 # Changelog
 
+## [v10.1.35](https://github.com/tanem/svg-injector/tree/v10.1.35) (2022-10-29)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.34...v10.1.35)
+
+#### :house: Internal
+
+- [#1134](https://github.com/tanem/svg-injector/pull/1134) Update typescript-eslint monorepo to v5.41.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1133](https://github.com/tanem/svg-injector/pull/1133) Update dependency eslint to v8.26.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1132](https://github.com/tanem/svg-injector/pull/1132) Update babel monorepo to v7.19.6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1130](https://github.com/tanem/svg-injector/pull/1130) Update typescript-eslint monorepo to v5.40.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1129](https://github.com/tanem/svg-injector/pull/1129) Update dependency ua-parser-js to v1.0.32 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1127](https://github.com/tanem/svg-injector/pull/1127) Update typescript-eslint monorepo to v5.40.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1128](https://github.com/tanem/svg-injector/pull/1128) Update styfle/cancel-workflow-action action to v0.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1125](https://github.com/tanem/svg-injector/pull/1125) Update dependency tanem-scripts to v6.0.61 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1126](https://github.com/tanem/svg-injector/pull/1126) Update babel monorepo to v7.19.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1124](https://github.com/tanem/svg-injector/pull/1124) Update dependency eslint to v8.25.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.34](https://github.com/tanem/svg-injector/tree/v10.1.34) (2022-10-09)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.33...v10.1.34)
 
