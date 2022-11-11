@@ -1,5 +1,21 @@
 # Changelog
 
+## [v10.1.36](https://github.com/tanem/svg-injector/tree/v10.1.36) (2022-11-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.35...v10.1.36)
+
+#### :house: Internal
+
+- [#1145](https://github.com/tanem/svg-injector/pull/1145) Update dependency chai to v4.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1140](https://github.com/tanem/svg-injector/pull/1140) Update typescript-eslint monorepo to v5.42.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1143](https://github.com/tanem/svg-injector/pull/1143) Update babel monorepo to v7.20.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1142](https://github.com/tanem/svg-injector/pull/1142) Update dependency babel-loader to v9.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1141](https://github.com/tanem/svg-injector/pull/1141) Update dependency @babel/runtime to ^7.20.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1139](https://github.com/tanem/svg-injector/pull/1139) Update dependency tslib to ^2.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1135](https://github.com/tanem/svg-injector/pull/1135) Update dependency babel-loader to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1138](https://github.com/tanem/svg-injector/pull/1138) Update dependency tanem-scripts to v6.0.62 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1137](https://github.com/tanem/svg-injector/pull/1137) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1136](https://github.com/tanem/svg-injector/pull/1136) Update dependency @babel/runtime to ^7.20.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.35](https://github.com/tanem/svg-injector/tree/v10.1.35) (2022-10-29)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.34...v10.1.35)
 
