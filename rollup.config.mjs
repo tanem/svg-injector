@@ -1,12 +1,11 @@
 import { DEFAULT_EXTENSIONS } from '@babel/core'
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
-import nodeResolve from 'rollup-plugin-node-resolve'
-import replace from 'rollup-plugin-replace'
-import sourcemaps from 'rollup-plugin-sourcemaps'
-import { terser } from 'rollup-plugin-terser'
-import pkg from './package.json'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
+import terser from '@rollup/plugin-terser'
+import pkg from './package.json' assert { type: 'json' }
 
 const CJS_DEV = 'CJS_DEV'
 const CJS_PROD = 'CJS_PROD'
@@ -31,14 +30,15 @@ const isProduction = (bundleType) =>
   bundleType === CJS_PROD || bundleType === UMD_PROD
 
 const getBabelConfig = () => ({
+  babelHelpers: 'runtime',
   babelrc: false,
   exclude: 'node_modules/**',
+  inputSourceMap: true,
   presets: [
     ['@babel/env', { loose: true, modules: false }],
     '@babel/typescript',
   ],
   plugins: ['@babel/transform-runtime'],
-  runtimeHelpers: true,
   extensions: [...DEFAULT_EXTENSIONS, '.ts'],
 })
 
@@ -53,8 +53,8 @@ const getPlugins = (bundleType) => [
       'process.env.NODE_ENV': JSON.stringify(
         isProduction(bundleType) ? 'production' : 'development'
       ),
+      preventAssignment: true,
     }),
-  sourcemaps(),
   ...(isProduction(bundleType)
     ? [
         filesize(),
