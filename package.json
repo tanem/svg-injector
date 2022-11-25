@@ -68,7 +68,7 @@
     "null-loader": "4.0.1",
     "prettier": "2.7.1",
     "query-string": "7.1.1",
-    "rollup": "3.3.0",
+    "rollup": "3.4.0",
     "rollup-plugin-filesize": "9.1.2",
     "shx": "0.3.4",
     "sinon": "9.2.4",
