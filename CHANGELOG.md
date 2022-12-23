@@ -1,5 +1,18 @@
 # Changelog
 
+## [v10.1.41](https://github.com/tanem/svg-injector/tree/v10.1.41) (2022-12-23)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.40...v10.1.41)
+
+#### :house: Internal
+
+- [#1193](https://github.com/tanem/svg-injector/pull/1193) Update typescript-eslint monorepo to v5.47.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1190](https://github.com/tanem/svg-injector/pull/1190) Update dependency @rollup/plugin-commonjs to v24 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1188](https://github.com/tanem/svg-injector/pull/1188) Update dependency @rollup/plugin-replace to v5.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1186](https://github.com/tanem/svg-injector/pull/1186) Update dependency rollup to v3.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1169](https://github.com/tanem/svg-injector/pull/1169) Update dependency prettier to v2.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1185](https://github.com/tanem/svg-injector/pull/1185) Update dependency eslint to v8.30.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1184](https://github.com/tanem/svg-injector/pull/1184) Update dependency karma-spec-reporter to v0.0.36 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.40](https://github.com/tanem/svg-injector/tree/v10.1.40) (2022-12-18)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.39...v10.1.40)
 
