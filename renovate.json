@@ -29,6 +29,12 @@
         "mocha"
       ],
       "allowedVersions": "< 10.0.0"
+    },
+    {
+      "matchPackageNames": [
+        "@rollup/plugin-terser"
+      ],
+      "allowedVersions": "0.1.0"
     }
   ],
   "prCreation": "not-pending",
