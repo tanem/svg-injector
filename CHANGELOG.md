@@ -1,5 +1,23 @@
 # Changelog
 
+## [v10.1.42](https://github.com/tanem/svg-injector/tree/v10.1.42) (2023-01-06)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.41...v10.1.42)
+
+#### :house: Internal
+
+- [#1204](https://github.com/tanem/svg-injector/pull/1204) Update typescript-eslint monorepo to v5.48.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1202](https://github.com/tanem/svg-injector/pull/1202) Update dependency rollup to v3.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1201](https://github.com/tanem/svg-injector/pull/1201) Update dependency eslint to v8.31.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1200](https://github.com/tanem/svg-injector/pull/1200) Update dependency rollup to v3.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1199](https://github.com/tanem/svg-injector/pull/1199) Pin query-string version ([@tanem](https://github.com/tanem))
+- [#1198](https://github.com/tanem/svg-injector/pull/1198) Fix badge link & pin dep version ([@tanem](https://github.com/tanem))
+- [#1197](https://github.com/tanem/svg-injector/pull/1197) Update typescript-eslint monorepo to v5.47.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1191](https://github.com/tanem/svg-injector/pull/1191) Update dependency tanem-scripts to v6.0.68 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1196](https://github.com/tanem/svg-injector/pull/1196) Update dependency rollup to v3.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1194](https://github.com/tanem/svg-injector/pull/1194) Update dependency rollup to v3.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1195](https://github.com/tanem/svg-injector/pull/1195) Update babel monorepo to v7.20.7 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1167](https://github.com/tanem/svg-injector/pull/1167) Update dependency @rollup/plugin-terser to v0.2.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.41](https://github.com/tanem/svg-injector/tree/v10.1.41) (2022-12-23)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.40...v10.1.41)
 
