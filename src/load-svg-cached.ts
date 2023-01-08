@@ -35,9 +35,7 @@ const loadSvgCached = (
     if (error) {
       cache.set(url, error)
     } else if (
-      httpRequest.responseXML instanceof Document &&
-      httpRequest.responseXML.documentElement &&
-      httpRequest.responseXML.documentElement instanceof SVGSVGElement
+      httpRequest.responseXML?.documentElement instanceof SVGSVGElement
     ) {
       cache.set(url, httpRequest.responseXML.documentElement)
     }
