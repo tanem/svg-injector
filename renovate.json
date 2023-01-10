@@ -32,12 +32,6 @@
     },
     {
       "matchPackageNames": [
-        "@rollup/plugin-terser"
-      ],
-      "allowedVersions": "0.1.0"
-    },
-    {
-      "matchPackageNames": [
         "query-string"
       ],
       "allowedVersions": "< 8.0.0"
