@@ -1,5 +1,17 @@
 # Changelog
 
+## [v10.1.43](https://github.com/tanem/svg-injector/tree/v10.1.43) (2023-01-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.42...v10.1.43)
+
+#### :house: Internal
+
+- [#1210](https://github.com/tanem/svg-injector/pull/1210) Update typescript-eslint monorepo to v5.48.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1209](https://github.com/tanem/svg-injector/pull/1209) Bump @rollup/plugin-terser ([@tanem](https://github.com/tanem))
+- [#1208](https://github.com/tanem/svg-injector/pull/1208) Update dependency prettier to v2.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1206](https://github.com/tanem/svg-injector/pull/1206) Update dependency babel-loader to v9.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1205](https://github.com/tanem/svg-injector/pull/1205) Update dependency @babel/core to v7.20.12 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1203](https://github.com/tanem/svg-injector/pull/1203) Update dependency eslint-config-prettier to v8.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.42](https://github.com/tanem/svg-injector/tree/v10.1.42) (2023-01-06)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.41...v10.1.42)
 
