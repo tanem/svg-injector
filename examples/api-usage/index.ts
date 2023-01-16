@@ -8,7 +8,7 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
     if (err) {
       throw err
     }
-    console.log(`injected ${svg.outerHTML}`)
+    console.log(`injected ${svg?.outerHTML}`)
   },
   beforeEach(svg) {
     svg.setAttribute('stroke', 'red')
