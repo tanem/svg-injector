@@ -1,5 +1,16 @@
 # Changelog
 
+## [v10.1.44](https://github.com/tanem/svg-injector/tree/v10.1.44) (2023-01-16)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.43...v10.1.44)
+
+#### :bug: Bug Fix
+
+- [#1207](https://github.com/tanem/svg-injector/pull/1207) Handle document wrangling via old libs ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#1211](https://github.com/tanem/svg-injector/pull/1211) Update dependency rollup to v3.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.43](https://github.com/tanem/svg-injector/tree/v10.1.43) (2023-01-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.42...v10.1.43)
 
