@@ -11,9 +11,7 @@ const loadSvgUncached = (
     if (error) {
       callback(error)
     } else if (
-      httpRequest.responseXML instanceof Document &&
-      httpRequest.responseXML.documentElement &&
-      httpRequest.responseXML.documentElement instanceof SVGSVGElement
+      httpRequest.responseXML?.documentElement instanceof SVGSVGElement
     ) {
       callback(null, httpRequest.responseXML.documentElement)
     }

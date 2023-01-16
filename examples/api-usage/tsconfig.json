@@ -10,7 +10,8 @@
       "es6",
       "dom"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "moduleResolution": "node"
-  }
+  },
+  "files": ["index.ts"],
 }
