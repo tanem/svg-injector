@@ -1,5 +1,13 @@
 # Changelog
 
+## [v10.1.45](https://github.com/tanem/svg-injector/tree/v10.1.45) (2023-01-20)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.44...v10.1.45)
+
+#### :house: Internal
+
+- [#1213](https://github.com/tanem/svg-injector/pull/1213) Update dependency prettier to v2.8.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1212](https://github.com/tanem/svg-injector/pull/1212) Update dependency tanem-scripts to v6.0.69 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.44](https://github.com/tanem/svg-injector/tree/v10.1.44) (2023-01-16)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.43...v10.1.44)
 
