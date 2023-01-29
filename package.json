@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/runtime": "^7.20.13",
     "content-type": "^1.0.4",
-    "tslib": "^2.4.1"
+    "tslib": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",
