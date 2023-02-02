@@ -73,7 +73,7 @@
     "shx": "0.3.4",
     "sinon": "9.2.4",
     "tanem-scripts": "6.0.69",
-    "typescript": "4.9.4",
+    "typescript": "4.9.5",
     "ua-parser-js": "1.0.33",
     "webpack": "5.75.0"
   },
