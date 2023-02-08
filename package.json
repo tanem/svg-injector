@@ -60,7 +60,7 @@
     "karma-chrome-launcher": "3.1.1",
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-mocha": "2.0.1",
-    "karma-sourcemap-loader": "0.3.8",
+    "karma-sourcemap-loader": "0.4.0",
     "karma-spec-reporter": "0.0.36",
     "karma-webpack": "5.0.0",
     "mocha": "9.2.2",
