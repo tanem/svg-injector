@@ -1,5 +1,16 @@
 # Changelog
 
+## [v10.1.47](https://github.com/tanem/svg-injector/tree/v10.1.47) (2023-02-12)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.46...v10.1.47)
+
+#### :house: Internal
+
+- [#1236](https://github.com/tanem/svg-injector/pull/1236) Update dependency prettier to v2.8.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1235](https://github.com/tanem/svg-injector/pull/1235) Update typescript-eslint monorepo to v5.51.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1234](https://github.com/tanem/svg-injector/pull/1234) Update dependency karma-sourcemap-loader to v0.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1232](https://github.com/tanem/svg-injector/pull/1232) Update dependency rollup to v3.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1233](https://github.com/tanem/svg-injector/pull/1233) Update dependency tanem-scripts to v6.0.70 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.46](https://github.com/tanem/svg-injector/tree/v10.1.46) (2023-02-04)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.45...v10.1.46)
 
