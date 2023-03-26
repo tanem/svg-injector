@@ -93,5 +93,8 @@
     "release": "tanem-scripts release",
     "test": "run-s check:* lint build test:karma",
     "test:karma": "karma start"
+  },
+  "overrides": {
+    "universal-user-agent": "6.0.0"
   }
 }
