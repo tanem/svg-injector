@@ -1,5 +1,24 @@
 # Changelog
 
+## [v10.1.51](https://github.com/tanem/svg-injector/tree/v10.1.51) (2023-03-27)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.50...v10.1.51)
+
+#### :house: Internal
+
+- [#1267](https://github.com/tanem/svg-injector/pull/1267) Update tanem-scripts ([@tanem](https://github.com/tanem))
+- [#1266](https://github.com/tanem/svg-injector/pull/1266) Add universal-user-agent override ([@tanem](https://github.com/tanem))
+- [#1264](https://github.com/tanem/svg-injector/pull/1264) Update dependency webpack to v5.76.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1265](https://github.com/tanem/svg-injector/pull/1265) Update dependency eslint to v8.36.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1262](https://github.com/tanem/svg-injector/pull/1262) Update dependency rollup to v3.19.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1263](https://github.com/tanem/svg-injector/pull/1263) Update dependency tanem-scripts to v6.0.76 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1261](https://github.com/tanem/svg-injector/pull/1261) Update dependency rollup to v3.19.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1260](https://github.com/tanem/svg-injector/pull/1260) Update dependency webpack to v5.76.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1259](https://github.com/tanem/svg-injector/pull/1259) Update typescript-eslint monorepo to v5.54.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1258](https://github.com/tanem/svg-injector/pull/1258) Update dependency eslint-config-prettier to v8.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1256](https://github.com/tanem/svg-injector/pull/1256) Update dependency tanem-scripts to v6.0.75 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1257](https://github.com/tanem/svg-injector/pull/1257) Update dependency ua-parser-js to v1.0.34 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1255](https://github.com/tanem/svg-injector/pull/1255) Update dependency rollup to v3.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.50](https://github.com/tanem/svg-injector/tree/v10.1.50) (2023-03-03)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.49...v10.1.50)
 
