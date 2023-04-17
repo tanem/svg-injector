@@ -7,13 +7,17 @@
     ":masterIssue",
     ":enableVulnerabilityAlerts"
   ],
-  "ignorePaths": ["**/node_modules/**"],
+  "ignorePaths": [
+    "**/node_modules/**"
+  ],
   "lockFileMaintenance": {
     "enabled": true
   },
   "packageRules": [
     {
-      "depTypeList": ["dependencies"],
+      "depTypeList": [
+        "dependencies"
+      ],
       "rangeStrategy": "bump"
     },
     {
@@ -37,6 +41,5 @@
       "allowedVersions": "< 8.0.0"
     }
   ],
-  "prCreation": "not-pending",
   "stabilityDays": 3
 }
