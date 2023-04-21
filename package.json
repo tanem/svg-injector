@@ -74,7 +74,7 @@
     "sinon": "9.2.4",
     "tanem-scripts": "7.0.0",
     "typescript": "5.0.4",
-    "ua-parser-js": "1.0.34",
+    "ua-parser-js": "1.0.35",
     "webpack": "5.79.0"
   },
   "scripts": {
