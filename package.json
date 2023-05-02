@@ -72,7 +72,7 @@
     "rollup-plugin-filesize": "10.0.0",
     "shx": "0.3.4",
     "sinon": "9.2.4",
-    "tanem-scripts": "7.0.2",
+    "tanem-scripts": "7.0.3",
     "typescript": "5.0.4",
     "ua-parser-js": "1.0.35",
     "webpack": "5.81.0"
