@@ -1,5 +1,19 @@
 # Changelog
 
+## [v10.1.54](https://github.com/tanem/svg-injector/tree/v10.1.54) (2023-05-12)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.53...v10.1.54)
+
+#### :house: Internal
+
+- [#1312](https://github.com/tanem/svg-injector/pull/1312) Update typescript-eslint monorepo to v5.59.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1311](https://github.com/tanem/svg-injector/pull/1311) Update dependency eslint to v8.40.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1310](https://github.com/tanem/svg-injector/pull/1310) Update dependency tanem-scripts to v7.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1309](https://github.com/tanem/svg-injector/pull/1309) Update dependency rollup to v3.21.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1308](https://github.com/tanem/svg-injector/pull/1308) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1306](https://github.com/tanem/svg-injector/pull/1306) Update dependency rollup to v3.21.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1307](https://github.com/tanem/svg-injector/pull/1307) Update dependency webpack to v5.82.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1305](https://github.com/tanem/svg-injector/pull/1305) Update dependency @babel/core to v7.21.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.53](https://github.com/tanem/svg-injector/tree/v10.1.53) (2023-05-05)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.52...v10.1.53)
 
