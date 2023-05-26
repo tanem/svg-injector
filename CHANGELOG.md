@@ -1,5 +1,18 @@
 # Changelog
 
+## [v10.1.56](https://github.com/tanem/svg-injector/tree/v10.1.56) (2023-05-26)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.55...v10.1.56)
+
+#### :house: Internal
+
+- [#1325](https://github.com/tanem/svg-injector/pull/1325) Update dependency tanem-scripts to v7.0.6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1313](https://github.com/tanem/svg-injector/pull/1313) Update dependency rollup to v3.23.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1324](https://github.com/tanem/svg-injector/pull/1324) Update dependency eslint to v8.41.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1323](https://github.com/tanem/svg-injector/pull/1323) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1322](https://github.com/tanem/svg-injector/pull/1322) Update dependency tslib to ^2.5.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1320](https://github.com/tanem/svg-injector/pull/1320) Update dependency webpack to v5.83.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1321](https://github.com/tanem/svg-injector/pull/1321) Update dependency @rollup/plugin-terser to v0.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.55](https://github.com/tanem/svg-injector/tree/v10.1.55) (2023-05-20)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.54...v10.1.55)
 
