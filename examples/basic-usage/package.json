@@ -13,7 +13,7 @@
     "@tanem/svg-injector": "latest"
   },
   "devDependencies": {
-    "parcel": "2.8.3"
+    "parcel": "2.9.0"
   },
   "keywords": [
     "@tanem/svg-injector"
