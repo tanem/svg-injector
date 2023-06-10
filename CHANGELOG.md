@@ -1,5 +1,22 @@
 # Changelog
 
+## [v10.1.58](https://github.com/tanem/svg-injector/tree/v10.1.58) (2023-06-10)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.57...v10.1.58)
+
+#### :house: Internal
+
+- [#1348](https://github.com/tanem/svg-injector/pull/1348) Update typescript-eslint monorepo to v5.59.9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1347](https://github.com/tanem/svg-injector/pull/1347) Update dependency webpack to v5.85.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1346](https://github.com/tanem/svg-injector/pull/1346) Update dependency rollup to v3.23.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1344](https://github.com/tanem/svg-injector/pull/1344) Update dependency tslib to ^2.5.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1345](https://github.com/tanem/svg-injector/pull/1345) Update dependency eslint to v8.42.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1343](https://github.com/tanem/svg-injector/pull/1343) Update dependency tanem-scripts to v7.0.8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1342](https://github.com/tanem/svg-injector/pull/1342) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1341](https://github.com/tanem/svg-injector/pull/1341) Update dependency typescript to v5.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1340](https://github.com/tanem/svg-injector/pull/1340) Update dependency webpack to v5.85.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1338](https://github.com/tanem/svg-injector/pull/1338) Update typescript-eslint monorepo to v5.59.8 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1339](https://github.com/tanem/svg-injector/pull/1339) Update dependency @rollup/plugin-node-resolve to v15.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.57](https://github.com/tanem/svg-injector/tree/v10.1.57) (2023-06-02)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.56...v10.1.57)
 
