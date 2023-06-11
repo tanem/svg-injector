@@ -16,6 +16,6 @@
     "@tanem/svg-injector"
   ],
   "devDependencies": {
-    "parcel": "2.9.1"
+    "parcel": "2.9.2"
   }
 }
