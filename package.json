@@ -75,7 +75,7 @@
     "tanem-scripts": "7.0.11",
     "typescript": "5.1.6",
     "ua-parser-js": "1.0.35",
-    "webpack": "5.88.1"
+    "webpack": "5.88.2"
   },
   "scripts": {
     "build": "run-s clean compile bundle",
