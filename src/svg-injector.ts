@@ -23,7 +23,7 @@ const SVGInjector = (
     evalScripts = 'never',
     httpRequestWithCredentials = false,
     renumerateIRIElements = true,
-  }: OptionalArgs = {}
+  }: OptionalArgs = {},
 ) => {
   if (elements && 'length' in elements) {
     let elementsLoaded = 0
@@ -44,7 +44,7 @@ const SVGInjector = (
           ) {
             afterAll(elementsLoaded)
           }
-        }
+        },
       )
     }
   } else if (elements) {
@@ -59,7 +59,7 @@ const SVGInjector = (
         afterEach(error, svg)
         afterAll(1)
         elements = null
-      }
+      },
     )
   } else {
     afterAll(0)
