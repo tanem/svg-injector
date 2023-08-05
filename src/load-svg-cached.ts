@@ -7,7 +7,7 @@ import { Errback } from './types'
 const loadSvgCached = (
   url: string,
   httpRequestWithCredentials: boolean,
-  callback: Errback
+  callback: Errback,
 ) => {
   if (cache.has(url)) {
     const cacheValue = cache.get(url)

@@ -17,7 +17,7 @@ const injectElement = (
   cacheRequests: boolean,
   httpRequestWithCredentials: boolean,
   beforeEach: BeforeEach,
-  callback: Errback
+  callback: Errback,
 ) => {
   const elUrl = el.getAttribute('data-src') || el.getAttribute('src')
 
@@ -87,7 +87,7 @@ const injectElement = (
         ...(svg.getAttribute('class') || '').split(' '),
         'injected-svg',
         ...(el.getAttribute('class') || '').split(' '),
-      ])
+      ]),
     )
       .join(' ')
       .trim()
@@ -163,7 +163,7 @@ const injectElement = (
             // :NOTE: using a substring match attr selector here to deal with IE
             // "adding extra quotes in url() attrs".
             referencingElements = svg.querySelectorAll(
-              '[' + property + '*="' + currentId + '"]'
+              '[' + property + '*="' + currentId + '"]',
             )
             for (
               let b = 0, referencingElementLen = referencingElements.length;
@@ -180,7 +180,7 @@ const injectElement = (
               }
               referencingElements[b].setAttribute(
                 property,
-                'url(#' + newId + ')'
+                'url(#' + newId + ')',
               )
             }
           })

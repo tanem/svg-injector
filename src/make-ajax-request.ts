@@ -4,7 +4,7 @@ import isLocal from './is-local'
 const makeAjaxRequest = (
   url: string,
   httpRequestWithCredentials: boolean,
-  callback: (error: Error | null, httpRequest: XMLHttpRequest) => void
+  callback: (error: Error | null, httpRequest: XMLHttpRequest) => void,
 ) => {
   const httpRequest = new XMLHttpRequest()
 
@@ -29,7 +29,7 @@ const makeAjaxRequest = (
               ? 'Note: SVG injection ajax calls do not work locally without ' +
                 'adjusting security settings in your browser. Or consider ' +
                 'using a local webserver.'
-              : 'Unable to load SVG file: ' + url
+              : 'Unable to load SVG file: ' + url,
           )
         }
 
@@ -43,7 +43,7 @@ const makeAjaxRequest = (
             'There was a problem injecting the SVG: ' +
               httpRequest.status +
               ' ' +
-              httpRequest.statusText
+              httpRequest.statusText,
           )
         }
       }

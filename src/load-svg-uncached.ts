@@ -4,7 +4,7 @@ import { Errback } from './types'
 const loadSvgUncached = (
   url: string,
   httpRequestWithCredentials: boolean,
-  callback: Errback
+  callback: Errback,
 ) => {
   makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
     /* istanbul ignore else */

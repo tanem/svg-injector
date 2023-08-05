@@ -80,12 +80,12 @@ suite('SVGInjector', () => {
       expect(afterEach.firstCall.args).to.have.lengthOf(2)
       expect(afterEach.firstCall.args[0]).to.be.a('null')
       expect(format(getOuterHTML(afterEach.firstCall.args[1]))).to.equal(
-        format(getOuterHTML(container.getElementsByTagName('svg')[0]))
+        format(getOuterHTML(container.getElementsByTagName('svg')[0])),
       )
       expect(afterEach.secondCall.args).to.have.lengthOf(2)
       expect(afterEach.secondCall.args[0]).to.be.a('null')
       expect(format(getOuterHTML(afterEach.secondCall.args[1]))).to.equal(
-        format(getOuterHTML(container.getElementsByTagName('svg')[1]))
+        format(getOuterHTML(container.getElementsByTagName('svg')[1])),
       )
       expect(elementsLoaded).to.equal(2)
       done()
@@ -228,7 +228,7 @@ suite('SVGInjector', () => {
         SVGInjector(containerTwo.querySelector('.inject-me'), {
           afterAll: () => {
             const actual = format(
-              containerOne.innerHTML + containerTwo.innerHTML
+              containerOne.innerHTML + containerTwo.innerHTML,
             )
             const expected =
               browser === 'IE'
@@ -240,12 +240,12 @@ suite('SVGInjector', () => {
             expect(afterEach.firstCall.args).to.have.lengthOf(2)
             expect(afterEach.firstCall.args[0]).to.be.a('null')
             expect(format(getOuterHTML(afterEach.firstCall.args[1]))).to.equal(
-              format(containerOne.innerHTML)
+              format(containerOne.innerHTML),
             )
             expect(afterEach.secondCall.args).to.have.lengthOf(2)
             expect(afterEach.secondCall.args[0]).to.be.a('null')
             expect(format(getOuterHTML(afterEach.secondCall.args[1]))).to.equal(
-              format(containerTwo.innerHTML)
+              format(containerTwo.innerHTML),
             )
             done()
           },
@@ -290,7 +290,7 @@ suite('SVGInjector', () => {
               .to.be.a('error')
               .with.property(
                 'message',
-                'Unable to load SVG file: /fixtures/still-not-found.svg'
+                'Unable to load SVG file: /fixtures/still-not-found.svg',
               )
           },
         })
@@ -326,7 +326,7 @@ suite('SVGInjector', () => {
         .to.be.a('error')
         .with.property(
           'message',
-          'Unable to load SVG file: /fixtures/not-found.svg'
+          'Unable to load SVG file: /fixtures/not-found.svg',
         )
     }
 
@@ -387,7 +387,7 @@ suite('SVGInjector', () => {
           .to.be.a('error')
           .with.property(
             'message',
-            'There was a problem injecting the SVG: 500 Internal Server Error'
+            'There was a problem injecting the SVG: 500 Internal Server Error',
           )
       },
     })
@@ -503,7 +503,7 @@ suite('SVGInjector', () => {
           .to.be.a('error')
           .with.property(
             'message',
-            'There was a problem injecting the SVG: 500 Internal Server Error'
+            'There was a problem injecting the SVG: 500 Internal Server Error',
           )
       },
       cacheRequests: false,
