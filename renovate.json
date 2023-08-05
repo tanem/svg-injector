@@ -41,5 +41,6 @@
       "allowedVersions": "< 8.0.0"
     }
   ],
+  "prConcurrentLimit": 1,
   "stabilityDays": 3
 }
