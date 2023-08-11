@@ -1,5 +1,18 @@
 # Changelog
 
+## [v10.1.62](https://github.com/tanem/svg-injector/tree/v10.1.62) (2023-08-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.61...v10.1.62)
+
+#### :house: Internal
+
+- [#1409](https://github.com/tanem/svg-injector/pull/1409) Update dependency eslint-config-prettier to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1408](https://github.com/tanem/svg-injector/pull/1408) Update dependency tanem-scripts to v7.0.13 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1407](https://github.com/tanem/svg-injector/pull/1407) Update dependency rollup to v3.27.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1406](https://github.com/tanem/svg-injector/pull/1406) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1405](https://github.com/tanem/svg-injector/pull/1405) Update dependency eslint-config-prettier to v8.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1404](https://github.com/tanem/svg-injector/pull/1404) Update dependency rollup to v3.27.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1403](https://github.com/tanem/svg-injector/pull/1403) Update dependency prettier to v3.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.61](https://github.com/tanem/svg-injector/tree/v10.1.61) (2023-08-05)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.60...v10.1.61)
 
