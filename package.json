@@ -45,7 +45,7 @@
     "@types/karma-chai": "0.1.3",
     "@types/mocha": "9.1.1",
     "@types/sinon": "9.0.11",
-    "@types/ua-parser-js": "0.7.36",
+    "@types/ua-parser-js": "0.7.37",
     "@types/webpack-env": "1.18.1",
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
