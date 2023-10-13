@@ -1,5 +1,21 @@
 # Changelog
 
+## [v10.1.67](https://github.com/tanem/svg-injector/tree/v10.1.67) (2023-10-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.66...v10.1.67)
+
+#### :house: Internal
+
+- [#1459](https://github.com/tanem/svg-injector/pull/1459) Update dependency @rollup/plugin-node-resolve to v15.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1458](https://github.com/tanem/svg-injector/pull/1458) Update dependency tanem-scripts to v7.0.21 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1457](https://github.com/tanem/svg-injector/pull/1457) Update dependency eslint to v8.51.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1456](https://github.com/tanem/svg-injector/pull/1456) Update dependency rollup to v4.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1455](https://github.com/tanem/svg-injector/pull/1455) Update dependency rollup to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1454](https://github.com/tanem/svg-injector/pull/1454) Update dependency @rollup/plugin-terser to v0.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1453](https://github.com/tanem/svg-injector/pull/1453) Update dependency @rollup/plugin-replace to v5.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1452](https://github.com/tanem/svg-injector/pull/1452) Update dependency @rollup/plugin-node-resolve to v15.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1451](https://github.com/tanem/svg-injector/pull/1451) Update dependency @rollup/plugin-commonjs to v25.0.5 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1450](https://github.com/tanem/svg-injector/pull/1450) Update dependency @rollup/plugin-babel to v6.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v10.1.66](https://github.com/tanem/svg-injector/tree/v10.1.66) (2023-10-07)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.65...v10.1.66)
 
