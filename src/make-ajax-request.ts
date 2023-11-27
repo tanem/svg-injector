@@ -4,12 +4,17 @@ import isLocal from './is-local'
 const makeAjaxRequest = (
   url: string,
   httpRequestWithCredentials: boolean,
-  callback: (error: Error | null, httpRequest: Pick<XMLHttpRequest, 'responseXML'>) => void,
+  callback: (
+    error: Error | null,
+    httpRequest: Pick<XMLHttpRequest, 'responseXML'>,
+  ) => void,
 ) => {
   if (url.startsWith('data:image/svg+xml,')) {
     const src = decodeURIComponent(url.slice('data:image/svg+xml,'.length))
     const parser = new DOMParser()
-    callback(null, { responseXML: { documentElement: parser.parseFromString(src, 'image/svg+xml') } })
+    callback(null, {
+      responseXML: parser.parseFromString(src, 'image/svg+xml'),
+    })
     return
   }
   const httpRequest = new XMLHttpRequest()
