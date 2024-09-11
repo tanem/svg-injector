@@ -12,7 +12,10 @@
   ],
   "homepage": "https://github.com/tanem/svg-injector",
   "bugs": "https://github.com/tanem/svg-injector/issues",
-  "repository": "github:tanem/svg-injector",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanem/svg-injector.git"
+  },
   "keywords": [
     "dom",
     "html",
@@ -34,6 +37,9 @@
     "@babel/plugin-transform-runtime": "7.23.2",
     "@babel/preset-env": "7.23.2",
     "@babel/preset-typescript": "7.23.2",
+    "@eslint/compat": "1.1.1",
+    "@eslint/eslintrc": "3.1.0",
+    "@eslint/js": "9.10.0",
     "@rollup/plugin-babel": "6.0.4",
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.2.3",

@@ -5,5 +5,5 @@
     "checkJs": true
   },
   "include": ["examples", "scripts", "src", "test", "types"],
-  "files": [".eslintrc.js", "index.js", "karma.conf.js", "rollup.config.mjs"]
+  "files": ["eslint.config.mjs", "index.js", "karma.conf.js", "rollup.config.mjs"]
 }
