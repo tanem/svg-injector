@@ -45,7 +45,7 @@
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-replace": "5.0.5",
     "@rollup/plugin-terser": "0.4.4",
-    "@types/chai": "4.3.8",
+    "@types/chai": "5.2.3",
     "@types/content-type": "1.1.8",
     "@types/karma": "6.3.8",
     "@types/karma-chai": "0.1.6",
