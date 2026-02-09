@@ -1,9 +1,12 @@
 *.log
 .DS_Store
 .cache
+.nyc_output
 .parcel-cache
 .vscode
 compiled
 coverage
 dist
 node_modules
+playwright-report
+test-results

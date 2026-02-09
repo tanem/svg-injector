@@ -4,6 +4,11 @@
     "allowJs": true,
     "checkJs": true
   },
-  "include": ["examples", "scripts", "src", "test", "types"],
-  "files": ["eslint.config.mjs", "index.js", "karma.conf.js", "rollup.config.mjs"]
+  "include": ["examples", "scripts", "src", "test"],
+  "files": [
+    "eslint.config.mjs",
+    "index.js",
+    "playwright.config.ts",
+    "rollup.config.mjs"
+  ]
 }

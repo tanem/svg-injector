@@ -15,6 +15,7 @@ The injection pipeline flows through these modules in `src/`:
 5. **`unique-id.ts`** — Simple incrementing counter used to make IRI element IDs unique across multiple injected instances of the same SVG.
 
 Key design decisions:
+
 - SVG cloning (`clone-svg.ts`) uses `cloneNode(true)` to avoid mutating cached originals.
 - Request queue callbacks are fired via `setTimeout(fn, 0)` to avoid blocking the renderer.
 - The `injectedElements` array in `inject-element.ts` is module-level state that prevents duplicate injection of the same element.
@@ -32,27 +33,30 @@ npm run build  →  clean → compile (tsc) → bundle (rollup)
 
 ## Testing
 
-Tests run in real browsers via **Karma** + **Mocha** (TDD interface: `suite`/`test`/`setup`/`teardown`) + **Chai** (`expect` style) + **Sinon** for stubs.
+Tests run in real browsers via **Playwright** (`@playwright/test`). Each test file uses Playwright's `test` / `test.describe` / `expect` APIs directly.
 
 ```bash
-npm test           # Full pipeline: check:types → lint → build → test:karma
-npm run test:karma # Run only browser tests (requires prior build)
+npm test                    # Full pipeline: check:types → lint → build → test:playwright
+npm run test:playwright     # Run only browser tests (requires prior build)
+npm run test:coverage       # Full pipeline with coverage: build:coverage → test → report
 ```
 
 Key testing patterns:
-- **`test/index.ts`** uses Webpack `require.context` to auto-discover all `*.test.ts` files and include all `src/` files for coverage.
-- **`test/helpers/test-utils.ts`** provides `render()` (creates a detached container with innerHTML), `cleanup()` (clears cache + request queue), `format()` (normalises whitespace), and `browser` detection.
-- Tests stub `uniqueId.default` via `window.sinon.stub(uniqueId, 'default').returns(1)` to make IRI renumeration deterministic.
-- Tests compare serialised HTML strings and branch on `browser` name (IE vs Firefox vs others) because browsers serialise SVG attributes in different orders.
-- SVG fixtures live in `test/fixtures/`. Karma proxies `/fixtures/` to serve them over HTTP.
-- Every `teardown` must call `cleanup()` to clear the module-level cache and request queue; omitting this causes test pollution.
-- **Coverage**: Instrumented via `babel-plugin-istanbul` (applied to `src/` only, see `karma.conf.js` webpack rules). Reports output to `coverage/` in lcov format. No explicit threshold is enforced; coverage is uploaded to Codecov in CI.
+
+- **`test/playwright/test-utils.ts`** provides `setupPage()` (creates a route-intercepted page serving a base HTML document and SVG fixtures), `injectSvg()` (injects SVG via the UMD bundle inside the page and returns serialised HTML + callback data), `addSvgInjector()` (adds the UMD bundle as an init script), and `formatHtml()` (normalises whitespace).
+- Tests use `page.route()` to intercept fixture requests and serve files from `test/fixtures/` with configurable status codes, content types, and bodies — no dev server is needed.
+- Tests compare serialised HTML strings and branch on `browserName` (firefox vs others) because browsers serialise SVG attributes in different orders. IE-specific branches have been removed.
+- SVG fixtures live in `test/fixtures/`.
+- Each test gets a fresh browser context automatically (Playwright's default isolation), so there is no manual cache/queue cleanup needed between tests.
+- **`test/playwright/coverage.ts`** is imported as a side-effect in every test file (`import './playwright/coverage'`). It collects `window.__coverage__` after each test (when `COVERAGE=1`) and writes per-test JSON files to `.nyc_output/`.
+- **Coverage**: Instrumented via `babel-plugin-istanbul` in the Rollup build (enabled when `COVERAGE=1`). After tests, `scripts/coverage-report.js` merges the per-test coverage JSON files, remaps through source maps, filters to `src/` only (excluding `src/index.ts` and `src/types.ts`), and outputs lcov to `coverage/`. No explicit threshold is enforced; coverage is uploaded to Codecov in CI.
+- **`playwright.config.ts`** defines three projects: chromium, firefox, webkit. CI uses `retries: 1` and `workers: 2`.
 
 ## Code Conventions
 
 - **One default export per module** — each `src/*.ts` file exports a single function or value as `export default`.
 - **Types in `src/types.ts`** — shared callback types (`AfterAll`, `BeforeEach`, `Errback`, `EvalScripts`) live here, marked `/* istanbul ignore file */`.
-- **`/* istanbul ignore else */`** comments are used extensively to skip branches that only run in specific browsers (IE edge cases).
+- **`/* istanbul ignore else */`** comments are used in source to skip branches that only run in specific browsers.
 - **No arrow function class methods** — this is a functional codebase with no classes.
 - **Strict TypeScript** — `strict: true`, `noUnusedLocals`, `noUnusedParameters` in `tsconfig.base.json`.
 - **ESLint** uses flat config (`eslint.config.mjs`) with `@typescript-eslint/recommended` + `prettier`. `explicit-module-boundary-types` is turned off.
@@ -63,8 +67,7 @@ Key testing patterns:
 - The public API surface is just `SVGInjector` and the types re-exported from `src/index.ts`.
 - When modifying IRI renumeration logic in `inject-element.ts`, verify against `test/renumerate-iri-elements.test.ts` which has extensive expected-output strings.
 - The `content-type` npm package is a runtime dependency used in `make-ajax-request.ts` for response validation.
-- Global type augmentation for `window.sinon` is in `types/globals.d.ts`.
-- CI runs tests on BrowserStack (Chrome, Firefox, Safari, Edge, IE) — see `karma.conf.js` `customLaunchers`. Locally, tests typically run against Chrome only.
+- CI runs tests on Chromium, Firefox, and WebKit via Playwright. BrowserStack / IE testing has been removed.
 
 ## Documentation
 

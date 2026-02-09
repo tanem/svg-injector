@@ -1,88 +1,95 @@
-import SVGInjector from '../src/svg-injector'
-import { AfterAll } from '../src/types'
-import * as uniqueId from '../src/unique-id'
-import { browser, cleanup, format, render } from './helpers/test-utils'
+import { expect, test } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { formatHtml, injectSvg, setupPage } from './playwright/test-utils'
+import './playwright/coverage'
 
-suite('eval scripts', () => {
-  let container: HTMLDivElement
-  let alertStub: sinon.SinonStub
-  let uniqueIdStub: sinon.SinonStub
+const injectHtml = `
+  <div
+    class="inject-me"
+    data-src="/fixtures/script.svg"
+  ></div>
+  <div
+    class="inject-me"
+    data-src="/fixtures/script.svg"
+  ></div>
+`
 
-  setup(() => {
-    uniqueIdStub = window.sinon.stub(uniqueId, 'default').returns(1)
-    alertStub = window.sinon.stub(window, 'alert')
-    container = render(`
-      <div
-        class="inject-me"
-        data-src="/fixtures/script.svg"
-      ></div>
-      <div
-        class="inject-me"
-        data-src="/fixtures/script.svg"
-      ></div>
-    `)
-  })
+test.describe('eval scripts', () => {
+  interface AlertWindow extends Window {
+    __alertCount: number
+  }
+  const expectedFirefox =
+    '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
+  const expectedDefault =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
 
-  teardown(() => {
-    uniqueIdStub.restore()
-    alertStub.restore()
-    cleanup()
-  })
-
-  test('never', (done) => {
-    const afterAll: AfterAll = () => {
-      const actual = format(container.innerHTML)
-      const expected =
-        browser === 'IE'
-          ? '<svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS1="" NS1:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg><svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS2="" NS2:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg>'
-          : browser === 'Firefox'
-          ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-          : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-      expect(actual).to.equal(expected)
-      expect(alertStub.callCount).to.equal(0)
-      done()
-    }
-    SVGInjector(container.querySelectorAll('.inject-me'), {
-      afterAll,
-      evalScripts: 'never',
+  const setupAlerts = async (page: Page) => {
+    await page.evaluate(() => {
+      ;(window as unknown as AlertWindow).__alertCount = 0
+      window.alert = () => {
+        ;(window as unknown as AlertWindow).__alertCount += 1
+      }
     })
+  }
+
+  const getAlertCount = async (page: Page) => {
+    return page.evaluate(() => (window as unknown as AlertWindow).__alertCount)
+  }
+
+  test('never', async ({ page, browserName }) => {
+    await setupPage(page)
+    await setupAlerts(page)
+
+    const result = await injectSvg(page, {
+      html: injectHtml,
+      selector: '.inject-me',
+      selectorAll: true,
+      options: { evalScripts: 'never' },
+    })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      browserName === 'firefox' ? expectedFirefox : expectedDefault
+
+    expect(actual).toBe(expected)
+    expect(await getAlertCount(page)).toBe(0)
   })
 
-  test('once', (done) => {
-    const afterAll: AfterAll = () => {
-      const actual = format(container.innerHTML)
-      const expected =
-        browser === 'IE'
-          ? '<svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS1="" NS1:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg><svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS2="" NS2:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg>'
-          : browser === 'Firefox'
-          ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-          : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-      expect(actual).to.equal(expected)
-      expect(alertStub.callCount).to.equal(4)
-      done()
-    }
-    SVGInjector(container.querySelectorAll('.inject-me'), {
-      afterAll,
-      evalScripts: 'once',
+  test('once', async ({ page, browserName }) => {
+    await setupPage(page)
+    await setupAlerts(page)
+
+    const result = await injectSvg(page, {
+      html: injectHtml,
+      selector: '.inject-me',
+      selectorAll: true,
+      options: { evalScripts: 'once' },
     })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      browserName === 'firefox' ? expectedFirefox : expectedDefault
+
+    expect(actual).toBe(expected)
+    expect(await getAlertCount(page)).toBe(4)
   })
 
-  test('always', (done) => {
-    const afterAll: AfterAll = () => {
-      const actual = format(container.innerHTML)
-      const expected =
-        browser === 'IE'
-          ? '<svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS1="" NS1:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg><svg xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" viewBox="0 0 100 100" width="100%" height="100%" data-src="/fixtures/script.svg" xmlns:NS2="" NS2:xmlns:xlink="http://www.w3.org/1999/xlink"><circle fill="green" cx="50" cy="50" r="15" /></svg>'
-          : browser === 'Firefox'
-          ? '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-          : '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
-      expect(actual).to.equal(expected)
-      expect(alertStub.callCount).to.equal(8)
-      done()
-    }
-    SVGInjector(container.querySelectorAll('.inject-me'), {
-      afterAll,
-      evalScripts: 'always',
+  test('always', async ({ page, browserName }) => {
+    await setupPage(page)
+    await setupAlerts(page)
+
+    const result = await injectSvg(page, {
+      html: injectHtml,
+      selector: '.inject-me',
+      selectorAll: true,
+      options: { evalScripts: 'always' },
     })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      browserName === 'firefox' ? expectedFirefox : expectedDefault
+
+    expect(actual).toBe(expected)
+    expect(await getAlertCount(page)).toBe(8)
   })
 })

@@ -5,7 +5,10 @@ import filesize from 'rollup-plugin-filesize'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import terser from '@rollup/plugin-terser'
-import pkg from './package.json' assert { type: 'json' }
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const pkg = require('./package.json')
 
 const CJS_DEV = 'CJS_DEV'
 const CJS_PROD = 'CJS_PROD'
@@ -28,6 +31,7 @@ const getExternal = (bundleType) => {
 
 const isProduction = (bundleType) =>
   bundleType === CJS_PROD || bundleType === UMD_PROD
+const isCoverage = process.env.COVERAGE === '1'
 
 const getBabelConfig = () => ({
   babelHelpers: 'runtime',
@@ -38,7 +42,7 @@ const getBabelConfig = () => ({
     ['@babel/env', { loose: true, modules: false }],
     '@babel/typescript',
   ],
-  plugins: ['@babel/transform-runtime'],
+  plugins: ['@babel/transform-runtime', ...(isCoverage ? ['istanbul'] : [])],
   extensions: [...DEFAULT_EXTENSIONS, '.ts'],
 })
 
@@ -51,7 +55,7 @@ const getPlugins = (bundleType) => [
   bundleType !== ES &&
     replace({
       'process.env.NODE_ENV': JSON.stringify(
-        isProduction(bundleType) ? 'production' : 'development'
+        isProduction(bundleType) ? 'production' : 'development',
       ),
       preventAssignment: true,
     }),
