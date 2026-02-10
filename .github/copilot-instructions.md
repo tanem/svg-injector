@@ -68,6 +68,7 @@ Key testing patterns:
 - When modifying IRI renumeration logic in `inject-element.ts`, verify against `test/renumerate-iri-elements.test.ts` which has extensive expected-output strings.
 - The `content-type` npm package is a runtime dependency used in `make-ajax-request.ts` for response validation.
 - CI runs tests on Chromium, Firefox, and WebKit via Playwright. BrowserStack / IE testing has been removed.
+- **When adding or removing dependencies**, always review `renovate.json` for obsolete package rules (version constraints, allowedVersions) and other config files (`codecov.yml`, CI workflows) that may reference removed tools or frameworks.
 
 ## Documentation
 
