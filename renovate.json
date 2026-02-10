@@ -4,23 +4,19 @@
     ":rebaseStalePrs",
     ":automergeAll",
     ":label(internal)",
-    ":masterIssue",
+    ":dependencyDashboard",
     ":enableVulnerabilityAlerts"
   ],
-  "ignorePaths": [
-    "**/node_modules/**"
-  ],
+  "ignorePaths": ["**/node_modules/**"],
   "lockFileMaintenance": {
     "enabled": true
   },
   "packageRules": [
     {
-      "depTypeList": [
-        "dependencies"
-      ],
+      "matchDepTypes": ["dependencies"],
       "rangeStrategy": "bump"
     }
   ],
   "prConcurrentLimit": 1,
-  "stabilityDays": 3
+  "minimumReleaseAge": "3 days"
 }
