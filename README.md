@@ -100,6 +100,8 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 
 > ⚠️This library uses [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from), so if you're targeting [browsers that don't support that method](https://kangax.github.io/compat-table/es6/#test-Array_static_methods), you'll need to ensure an appropriate polyfill is included manually. See [this issue comment](https://github.com/tanem/svg-injector/issues/97#issuecomment-483365473) for further detail.
 
+> ⚠️As of v11, this library is only tested against modern browsers (Chromium, Firefox, WebKit) via Playwright. IE and other legacy browsers are no longer supported. If you need IE support, pin `@tanem/svg-injector@^10`.
+
 ```
 $ npm install @tanem/svg-injector
 ```

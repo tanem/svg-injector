@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": ["src", "types", "test"]
+  "compilerOptions": {
+    "types": ["@playwright/test", "node"]
+  },
+  "include": ["src", "test"]
 }

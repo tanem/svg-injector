@@ -1,9 +1,9 @@
+import { expect, test } from '@playwright/test'
 import uniqueId from '../src/unique-id'
+import './playwright/coverage'
 
-suite('unique id', () => {
-  test('generates unique ids', () => {
-    expect(uniqueId()).to.equal(1)
-    expect(uniqueId()).to.equal(2)
-    expect(uniqueId()).to.equal(3)
-  })
+test('unique id generates unique ids', () => {
+  expect(uniqueId()).toBe(1)
+  expect(uniqueId()).toBe(2)
+  expect(uniqueId()).toBe(3)
 })
