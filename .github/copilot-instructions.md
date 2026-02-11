@@ -52,6 +52,26 @@ Key testing patterns:
 - **Coverage**: Instrumented via `babel-plugin-istanbul` in the Rollup build (enabled when `COVERAGE=1`). After tests, `scripts/coverage-report.js` merges the per-test coverage JSON files, remaps through source maps, filters to `src/` only (excluding `src/index.ts` and `src/types.ts`), and outputs lcov to `coverage/`. No explicit threshold is enforced; coverage is uploaded to Codecov in CI.
 - **`playwright.config.ts`** defines three projects: chromium, firefox, webkit. CI uses `retries: 1` and `workers: 2`.
 
+## Dependency Management
+
+This project follows strict versioning conventions for dependencies:
+
+- **Runtime `dependencies`**: Use caret ranges (`^1.2.3`) to allow compatible updates. Install with `npm install --save package@version`.
+- **`devDependencies`**: Use exact pinned versions (`1.2.3`, no caret) for reproducible builds. Install with `npm install --save-dev --save-exact package@version`.
+
+**Current major versions:**
+- **ESLint**: v9.x (not v10) — `@typescript-eslint` doesn't yet support ESLint v10. Update ESLint and @typescript-eslint together as a monorepo group.
+- **TypeScript**: v5.x
+- **Rollup**: v4.x
+- **Playwright**: v1.x
+
+**Updating dependencies:**
+- Always verify changes with `npm test` (alias: `npmt`) after each update.
+- Update related packages together (e.g., ESLint ecosystem, Rollup plugins, @typescript-eslint + ESLint).
+- Check for formatting changes after updating prettier and run `npm run format` if needed.
+- After updating @playwright/test, run `npx playwright install` to update browser binaries.
+- Commit each logical group of updates separately with conventional commit messages matching Renovate's format: `Update dependency <name> to v<version>` or `Update <monorepo> monorepo to v<version>`.
+
 ## Code Conventions
 
 - **One default export per module** — each `src/*.ts` file exports a single function or value as `export default`.
