@@ -1,5 +1,26 @@
 # Changelog
 
+## [v11.0.1](https://github.com/tanem/svg-injector/tree/v11.0.1) (2026-02-11)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.0.0...v11.0.1)
+
+#### :house: Internal
+
+- [#1546](https://github.com/tanem/svg-injector/pull/1546) Fix bundlephobia URL format, fix codecov config ([@tanem](https://github.com/tanem))
+- [#1545](https://github.com/tanem/svg-injector/pull/1545) Enhance ESLint config with stricter type safety rules and apply fixes ([@tanem](https://github.com/tanem))
+- [#1544](https://github.com/tanem/svg-injector/pull/1544)  Enhance TypeScript configuration and type safety ([@tanem](https://github.com/tanem))
+- [#1528](https://github.com/tanem/svg-injector/pull/1528) Update styfle/cancel-workflow-action action to v0.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1543](https://github.com/tanem/svg-injector/pull/1543) Housekeeping ([@tanem](https://github.com/tanem))
+- [#1525](https://github.com/tanem/svg-injector/pull/1525) Update dependency tslib to ^2.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1514](https://github.com/tanem/svg-injector/pull/1514) Update dependency @babel/runtime to ^7.28.6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1536](https://github.com/tanem/svg-injector/pull/1536) Update dependency @rollup/plugin-replace to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1542](https://github.com/tanem/svg-injector/pull/1542) Update typescript-eslint monorepo to v8 (major) ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1521](https://github.com/tanem/svg-injector/pull/1521) Update dependency parcel to v2.16.4 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1518](https://github.com/tanem/svg-injector/pull/1518) Update dependency @rollup/plugin-babel to v6.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1520](https://github.com/tanem/svg-injector/pull/1520) Update dependency @types/node to v20.19.33 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1519](https://github.com/tanem/svg-injector/pull/1519) Update dependency @rollup/plugin-node-resolve to v15.3.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1512](https://github.com/tanem/svg-injector/pull/1512) Update dependency tanem-scripts to v8.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1504](https://github.com/tanem/svg-injector/pull/1504) Migrate Renovate config - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v11.0.0](https://github.com/tanem/svg-injector/tree/v11.0.0) (2026-02-10)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v10.1.68...v11.0.0)
 
