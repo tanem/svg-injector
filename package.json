@@ -41,7 +41,7 @@
     "@eslint/eslintrc": "3.1.0",
     "@eslint/js": "9.10.0",
     "@playwright/test": "1.49.0",
-    "@rollup/plugin-babel": "6.0.4",
+    "@rollup/plugin-babel": "6.1.0",
     "@rollup/plugin-commonjs": "25.0.7",
     "@rollup/plugin-node-resolve": "15.3.1",
     "@rollup/plugin-replace": "5.0.5",
