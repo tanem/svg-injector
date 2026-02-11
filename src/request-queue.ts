@@ -1,6 +1,6 @@
 import cache from './cache'
 import cloneSvg from './clone-svg'
-import { Errback } from './types'
+import type { Errback } from './types'
 
 let requestQueue: Record<string, Errback[]> = {}
 
@@ -9,9 +9,7 @@ export const clear = () => {
 }
 
 export const queueRequest = (url: string, callback: Errback) => {
-  if (!requestQueue[url]) {
-    requestQueue[url] = []
-  }
+  requestQueue[url] ??= []
   requestQueue[url]!.push(callback)
 }
 

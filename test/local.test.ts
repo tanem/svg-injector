@@ -100,7 +100,7 @@ test.describe('local', () => {
     expect(actual).toBe(expected)
     expect(result.afterEachCalls).toHaveLength(1)
     expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[0]!.svg || '')).toBe(actual)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
     expect(result.elementsLoaded).toBe(1)
 
     await page.evaluate(() => {

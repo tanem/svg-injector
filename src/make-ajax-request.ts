@@ -61,7 +61,9 @@ const makeAjaxRequest = (
 
   httpRequest.withCredentials = httpRequestWithCredentials
 
+  // Defensive check for old browsers that might not have overrideMimeType
   /* istanbul ignore else */
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (httpRequest.overrideMimeType) {
     httpRequest.overrideMimeType('text/xml')
   }

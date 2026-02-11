@@ -39,8 +39,8 @@ export const setupPage = async (
 ) => {
   await addSvgInjector(page)
 
-  await page.route(baseUrl, (route) => {
-    route.fulfill({
+  await page.route(baseUrl, async (route) => {
+    await route.fulfill({
       status: 200,
       contentType: 'text/html',
       body: baseHtml,

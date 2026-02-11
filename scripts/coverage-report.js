@@ -64,7 +64,7 @@ const run = async () => {
 
   const sourceMapStore = libSourceMaps.createSourceMapStore()
   const remapResult = await sourceMapStore.transformCoverage(coverageMap)
-  const remappedCoverageMap = remapResult.map || remapResult
+  const remappedCoverageMap = remapResult.map ?? remapResult
 
   filterCoverageMap(remappedCoverageMap)
 

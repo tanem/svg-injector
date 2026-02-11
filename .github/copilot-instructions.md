@@ -87,7 +87,18 @@ This project follows strict versioning conventions for dependencies:
   - Explicitly type all variables when their type isn't obvious from the initializer.
   - Use non-null assertions (`!`) only when you have runtime guarantees (e.g., array access within bounds-checked loops).
   - Handle potential `undefined` from index access operations (required by `noUncheckedIndexedAccess`).
-- **ESLint** uses flat config (`eslint.config.mjs`) with `@typescript-eslint/recommended` + `prettier`. `explicit-module-boundary-types` is turned off.
+  - Prefer nullish coalescing (`??`) over logical or (`||`) for providing default values.
+  - Use optional chaining (`?.`) instead of `&&` chains for property access.
+  - Always use `import type` for type-only imports to improve tree-shaking and build performance.
+- **ESLint** uses flat config (`eslint.config.mjs`) with `@typescript-eslint/recommended` and `prettier`. Enforces strict type safety rules including:
+  - `no-explicit-any`: Prevents `any` types
+  - `no-unnecessary-condition`: Catches redundant conditions with strict null checks
+  - `no-floating-promises`: Ensures promises are properly handled
+  - `prefer-nullish-coalescing`: Enforces `??` over `||`
+  - `prefer-optional-chain`: Enforces `?.` over `&&` chains
+  - `consistent-type-imports`: Requires `import type` for type-only imports
+  - `no-console`: Disallowed in src/ (allowed in tests, examples, and scripts)
+  - `eqeqeq`: Always use strict equality
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
 
 ## Working with This Codebase
