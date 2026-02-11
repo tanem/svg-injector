@@ -27,8 +27,8 @@ const makeAjaxRequest = (
           throw new Error(
             isLocal()
               ? 'Note: SVG injection ajax calls do not work locally without ' +
-                'adjusting security settings in your browser. Or consider ' +
-                'using a local webserver.'
+                  'adjusting security settings in your browser. Or consider ' +
+                  'using a local webserver.'
               : 'Unable to load SVG file: ' + url,
           )
         }
