@@ -4,7 +4,7 @@
 [![build status](https://img.shields.io/github/actions/workflow/status/tanem/svg-injector/ci.yml?branch=master&style=flat-square)](https://github.com/tanem/svg-injector/actions?query=workflow%3ACI)
 [![coverage status](https://img.shields.io/codecov/c/github/tanem/svg-injector.svg?style=flat-square)](https://codecov.io/gh/tanem/svg-injector)
 [![npm downloads](https://img.shields.io/npm/dm/@tanem/svg-injector.svg?style=flat-square)](https://www.npmjs.com/package/@tanem/svg-injector)
-[![minzipped size](https://img.shields.io/bundlephobia/minzip/@tanem/svg-injector?style=flat-square)](https://bundlephobia.com/result?p=@tanem/svg-injector)
+[![minzipped size](https://img.shields.io/bundlephobia/minzip/@tanem/svg-injector?style=flat-square)](https://bundlephobia.com/package/@tanem/svg-injector)
 
 > A fast, caching, dynamic inline SVG DOM injection library.
 
