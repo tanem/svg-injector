@@ -47,7 +47,7 @@
     "@rollup/plugin-replace": "6.0.3",
     "@rollup/plugin-terser": "0.4.4",
     "@types/content-type": "1.1.8",
-    "@types/node": "20.19.33",
+    "@types/node": "24.10.12",
     "@typescript-eslint/eslint-plugin": "8.54.0",
     "@typescript-eslint/parser": "8.54.0",
     "babel-plugin-istanbul": "6.1.1",
