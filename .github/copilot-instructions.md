@@ -80,25 +80,7 @@ This project follows strict versioning conventions for dependencies:
 - **Types in `src/types.ts`** — shared callback types (`AfterAll`, `BeforeEach`, `Errback`, `EvalScripts`) live here, marked `/* istanbul ignore file */`.
 - **`/* istanbul ignore else */`** comments are used in source to skip branches that only run in specific browsers.
 - **No arrow function class methods** — this is a functional codebase with no classes.
-- **Strict TypeScript** — `strict: true`, `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, and `skipLibCheck` in `tsconfig.base.json`. These strict options ensure maximum type safety.
-- **Type safety practices**:
-  - Never use `any` types. Use proper type annotations or `unknown` when the type is truly dynamic.
-  - Use `Record<string, T>` instead of `{ [key: string]: T }` for index signatures.
-  - Explicitly type all variables when their type isn't obvious from the initializer.
-  - Use non-null assertions (`!`) only when you have runtime guarantees (e.g., array access within bounds-checked loops).
-  - Handle potential `undefined` from index access operations (required by `noUncheckedIndexedAccess`).
-  - Prefer nullish coalescing (`??`) over logical or (`||`) for providing default values.
-  - Use optional chaining (`?.`) instead of `&&` chains for property access.
-  - Always use `import type` for type-only imports to improve tree-shaking and build performance.
-- **ESLint** uses flat config (`eslint.config.mjs`) with `@typescript-eslint/recommended` and `prettier`. Enforces strict type safety rules including:
-  - `no-explicit-any`: Prevents `any` types
-  - `no-unnecessary-condition`: Catches redundant conditions with strict null checks
-  - `no-floating-promises`: Ensures promises are properly handled
-  - `prefer-nullish-coalescing`: Enforces `??` over `||`
-  - `prefer-optional-chain`: Enforces `?.` over `&&` chains
-  - `consistent-type-imports`: Requires `import type` for type-only imports
-  - `no-console`: Disallowed in src/ (allowed in tests, examples, and scripts)
-  - `eqeqeq`: Always use strict equality
+- **Strict TypeScript and ESLint** — `tsconfig.base.json` and `eslint.config.mjs` enforce strict type safety. Never use `any` types; use `unknown` when type is truly dynamic. Use non-null assertions (`!`) only with runtime guarantees (e.g., array access within bounds-checked loops).
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
 
 ## Working with This Codebase
