@@ -63,7 +63,7 @@
     "rollup-plugin-filesize": "10.0.0",
     "shx": "0.4.0",
     "tanem-scripts": "8.0.2",
-    "typescript": "5.4.4"
+    "typescript": "5.9.3"
   },
   "scripts": {
     "build": "run-s clean compile bundle",
