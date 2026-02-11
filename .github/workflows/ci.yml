@@ -41,4 +41,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v5
