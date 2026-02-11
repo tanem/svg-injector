@@ -34,7 +34,7 @@ test.describe('SVGInjector', () => {
     expect(actual).toBe(thumbUpSvg)
     expect(result.afterEachCalls).toHaveLength(1)
     expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[0]!.svg || '')).toBe(actual)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -62,9 +62,9 @@ test.describe('SVGInjector', () => {
     expect(actual).toBe(expected)
     expect(result.afterEachCalls).toHaveLength(2)
     expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[0]!.svg || '')).toBe(thumbUpSvg)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(thumbUpSvg)
     expect(result.afterEachCalls[1]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[1]!.svg || '')).toBe(thumbUpSvg)
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(thumbUpSvg)
     expect(result.elementsLoaded).toBe(2)
   })
 
@@ -244,11 +244,11 @@ test.describe('SVGInjector', () => {
     expect(actual).toBe(expected)
     expect(result.afterEachCalls).toHaveLength(2)
     expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[0]!.svg || '')).toBe(
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(
       formatHtml(result.containerOneHtml),
     )
     expect(result.afterEachCalls[1]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[1]!.svg || '')).toBe(
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(
       formatHtml(result.containerTwoHtml),
     )
   })
@@ -509,7 +509,7 @@ test.describe('SVGInjector', () => {
     expect(actual).toBe(thumbUpSvg)
     expect(result.afterEachCalls).toHaveLength(1)
     expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(formatHtml(result.afterEachCalls[0]!.svg || '')).toBe(actual)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
     expect(result.elementsLoaded).toBe(1)
   })
 

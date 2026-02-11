@@ -1,5 +1,5 @@
 import makeAjaxRequest from './make-ajax-request'
-import { Errback } from './types'
+import type { Errback } from './types'
 
 const loadSvgUncached = (
   url: string,

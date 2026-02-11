@@ -1,6 +1,6 @@
 import loadSvgCached from './load-svg-cached'
 import loadSvgUncached from './load-svg-uncached'
-import { BeforeEach, Errback, EvalScripts } from './types'
+import type { BeforeEach, Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
 type ElementType = Element | HTMLElement | null
@@ -19,7 +19,7 @@ const injectElement = (
   beforeEach: BeforeEach,
   callback: Errback,
 ) => {
-  const elUrl = el.getAttribute('data-src') || el.getAttribute('src')
+  const elUrl = el.getAttribute('data-src') ?? el.getAttribute('src')
 
   /* istanbul ignore else */
   if (!elUrl) {
@@ -84,9 +84,9 @@ const injectElement = (
 
     const mergedClasses = Array.from(
       new Set([
-        ...(svg.getAttribute('class') || '').split(' '),
+        ...(svg.getAttribute('class') ?? '').split(' '),
         'injected-svg',
-        ...(el.getAttribute('class') || '').split(' '),
+        ...(el.getAttribute('class') ?? '').split(' '),
       ]),
     )
       .join(' ')
@@ -190,7 +190,7 @@ const injectElement = (
             const link = allLinks[c]!
             const href = link.getAttributeNS(xlinkNamespace, 'href')
             /* istanbul ignore else */
-            if (href && href.toString() === '#' + currentElement.id) {
+            if (href?.toString() === '#' + currentElement.id) {
               links.push(link)
             }
           }

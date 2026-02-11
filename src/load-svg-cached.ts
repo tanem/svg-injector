@@ -2,7 +2,7 @@ import cache from './cache'
 import cloneSvg from './clone-svg'
 import makeAjaxRequest from './make-ajax-request'
 import { processRequestQueue, queueRequest } from './request-queue'
-import { Errback } from './types'
+import type { Errback } from './types'
 
 const loadSvgCached = (
   url: string,

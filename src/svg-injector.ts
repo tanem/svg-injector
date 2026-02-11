@@ -1,5 +1,5 @@
 import injectElement from './inject-element'
-import { AfterAll, BeforeEach, Errback, EvalScripts } from './types'
+import type { AfterAll, BeforeEach, Errback, EvalScripts } from './types'
 
 type Elements = HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null
 
