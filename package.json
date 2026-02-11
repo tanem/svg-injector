@@ -61,7 +61,7 @@
     "prettier": "3.8.1",
     "rollup": "4.57.1",
     "rollup-plugin-filesize": "10.0.0",
-    "shx": "0.3.4",
+    "shx": "0.4.0",
     "tanem-scripts": "8.0.2",
     "typescript": "5.4.4"
   },
