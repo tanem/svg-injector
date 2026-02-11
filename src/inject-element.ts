@@ -6,7 +6,7 @@ import uniqueId from './unique-id'
 type ElementType = Element | HTMLElement | null
 
 const injectedElements: ElementType[] = []
-const ranScripts: { [key: string]: boolean } = {}
+const ranScripts: Record<string, boolean> = {}
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
@@ -102,7 +102,7 @@ const injectElement = (
     svg.setAttribute('data-src', elUrl)
 
     // Copy all the data elements to the svg.
-    const elData = [].filter.call(el.attributes, (at: Attr) => {
+    const elData: Attr[] = [].filter.call(el.attributes, (at: Attr) => {
       return /^data-\w[\w-]*$/.test(at.name)
     })
 
@@ -129,7 +129,7 @@ const injectElement = (
       // Handle all defs elements that have iri capable attributes as defined by
       // w3c: http://www.w3.org/TR/SVG/linking.html#processingIRI. Mapping IRI
       // addressable elements to the properties that can reference them.
-      const iriElementsAndProperties: { [key: string]: string[] } = {
+      const iriElementsAndProperties: Record<string, string[]> = {
         clipPath: ['clip-path'],
         'color-profile': ['color-profile'],
         cursor: ['cursor'],
@@ -142,23 +142,24 @@ const injectElement = (
         radialGradient: ['fill', 'stroke'],
       }
 
-      let element
-      let elements
-      let properties
+      let element: string
+      let elements: NodeListOf<Element>
+      let properties: string[]
       let currentId: string
       let newId: string
 
       Object.keys(iriElementsAndProperties).forEach((key) => {
         element = key
-        properties = iriElementsAndProperties[key]
+        properties = iriElementsAndProperties[key]!
 
         elements = svg.querySelectorAll(element + '[id]')
         for (let a = 0, elementsLen = elements.length; a < elementsLen; a++) {
-          currentId = elements[a].id
+          const currentElement = elements[a]!
+          currentId = currentElement.id
           newId = currentId + '-' + uniqueId()
 
           // All of the properties that can reference this element type.
-          let referencingElements
+          let referencingElements: NodeListOf<Element>
           Array.prototype.forEach.call(properties, (property: string) => {
             // :NOTE: using a substring match attr selector here to deal with IE
             // "adding extra quotes in url() attrs".
@@ -170,35 +171,34 @@ const injectElement = (
               b < referencingElementLen;
               b++
             ) {
+              const referencingElement = referencingElements[b]!
               const attrValue: string | null =
-                referencingElements[b].getAttribute(property)
+                referencingElement.getAttribute(property)
               if (
                 attrValue &&
                 !attrValue.match(new RegExp('url\\("?#' + currentId + '"?\\)'))
               ) {
                 continue
               }
-              referencingElements[b].setAttribute(
-                property,
-                'url(#' + newId + ')',
-              )
+              referencingElement.setAttribute(property, 'url(#' + newId + ')')
             }
           })
 
           const allLinks = svg.querySelectorAll('[*|href]')
-          const links = []
+          const links: Element[] = []
           for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
-            const href = allLinks[c].getAttributeNS(xlinkNamespace, 'href')
+            const link = allLinks[c]!
+            const href = link.getAttributeNS(xlinkNamespace, 'href')
             /* istanbul ignore else */
-            if (href && href.toString() === '#' + elements[a].id) {
-              links.push(allLinks[c])
+            if (href && href.toString() === '#' + currentElement.id) {
+              links.push(link)
             }
           }
           for (let d = 0, linksLen = links.length; d < linksLen; d++) {
-            links[d].setAttributeNS(xlinkNamespace, 'href', '#' + newId)
+            links[d]!.setAttributeNS(xlinkNamespace, 'href', '#' + newId)
           }
 
-          elements[a].id = newId
+          currentElement.id = newId
         }
       })
     }
@@ -213,11 +213,12 @@ const injectElement = (
     // Find then prune the scripts.
     const scripts = svg.querySelectorAll('script')
     const scriptsToEval: string[] = []
-    let script
-    let scriptType
+    let script: string | null
+    let scriptType: string | null
 
     for (let i = 0, scriptsLen = scripts.length; i < scriptsLen; i++) {
-      scriptType = scripts[i].getAttribute('type')
+      const scriptElement = scripts[i]!
+      scriptType = scriptElement.getAttribute('type')
 
       // Only process javascript types. SVG defaults to 'application/ecmascript'
       // for unset types.
@@ -229,7 +230,7 @@ const injectElement = (
         scriptType === 'text/javascript'
       ) {
         // innerText for IE, textContent for other browsers.
-        script = scripts[i].innerText || scripts[i].textContent
+        script = scriptElement.innerText || scriptElement.textContent
 
         // Stash.
         /* istanbul ignore else */
@@ -238,7 +239,7 @@ const injectElement = (
         }
 
         // Tidy up and remove the script element since we don't need it anymore.
-        svg.removeChild(scripts[i])
+        svg.removeChild(scriptElement)
       }
     }
 
@@ -260,7 +261,7 @@ const injectElement = (
         //
         // Also, the code is evaluated in a closure and not in the global scope.
         // If you need to put something in global scope, use 'window'.
-        new Function(scriptsToEval[l])(window)
+        new Function(scriptsToEval[l]!)(window)
       }
 
       // Remember we already ran scripts for this svg.
