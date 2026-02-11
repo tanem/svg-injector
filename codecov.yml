@@ -2,3 +2,13 @@ comment: off
 coverage:
   status:
     patch: off
+
+ignore:
+  - 'dist'
+  - 'examples'
+  - 'scripts'
+  - 'test'
+  - '*.config.ts'
+  - 'index.js'
+  - 'src/index.ts'
+  - 'src/types.ts'
