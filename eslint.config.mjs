@@ -15,7 +15,13 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/compiled/', '**/coverage/', '**/dist/'],
+    ignores: [
+      '**/compiled/',
+      '**/coverage/',
+      '**/dist/',
+      '**/playwright-report/',
+      '**/test-results/',
+    ],
   },
   ...compat.extends('plugin:@typescript-eslint/recommended', 'prettier'),
   {
@@ -35,6 +41,12 @@ export default [
 
     rules: {
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
+  },
+  {
+    files: ['index.js', 'scripts/**/*.js'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
 ]
