@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.23.2",
+    "@babel/runtime": "^7.28.6",
     "content-type": "^1.0.5",
     "tslib": "^2.6.2"
   },
