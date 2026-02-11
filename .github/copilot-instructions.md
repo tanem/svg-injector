@@ -60,12 +60,14 @@ This project follows strict versioning conventions for dependencies:
 - **`devDependencies`**: Use exact pinned versions (`1.2.3`, no caret) for reproducible builds. Install with `npm install --save-dev --save-exact package@version`.
 
 **Current major versions:**
+
 - **ESLint**: v9.x (not v10) — `@typescript-eslint` doesn't yet support ESLint v10. Update ESLint and @typescript-eslint together as a monorepo group.
 - **TypeScript**: v5.x
 - **Rollup**: v4.x
 - **Playwright**: v1.x
 
 **Updating dependencies:**
+
 - Always verify changes with `npm test` (alias: `npmt`) after each update.
 - Update related packages together (e.g., ESLint ecosystem, Rollup plugins, @typescript-eslint + ESLint).
 - Check for formatting changes after updating prettier and run `npm run format` if needed.
@@ -78,7 +80,13 @@ This project follows strict versioning conventions for dependencies:
 - **Types in `src/types.ts`** — shared callback types (`AfterAll`, `BeforeEach`, `Errback`, `EvalScripts`) live here, marked `/* istanbul ignore file */`.
 - **`/* istanbul ignore else */`** comments are used in source to skip branches that only run in specific browsers.
 - **No arrow function class methods** — this is a functional codebase with no classes.
-- **Strict TypeScript** — `strict: true`, `noUnusedLocals`, `noUnusedParameters` in `tsconfig.base.json`.
+- **Strict TypeScript** — `strict: true`, `noUnusedLocals`, `noUnusedParameters`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, and `skipLibCheck` in `tsconfig.base.json`. These strict options ensure maximum type safety.
+- **Type safety practices**:
+  - Never use `any` types. Use proper type annotations or `unknown` when the type is truly dynamic.
+  - Use `Record<string, T>` instead of `{ [key: string]: T }` for index signatures.
+  - Explicitly type all variables when their type isn't obvious from the initializer.
+  - Use non-null assertions (`!`) only when you have runtime guarantees (e.g., array access within bounds-checked loops).
+  - Handle potential `undefined` from index access operations (required by `noUncheckedIndexedAccess`).
 - **ESLint** uses flat config (`eslint.config.mjs`) with `@typescript-eslint/recommended` + `prettier`. `explicit-module-boundary-types` is turned off.
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
 

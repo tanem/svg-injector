@@ -28,8 +28,12 @@ const SVGInjector = (
   if (elements && 'length' in elements) {
     let elementsLoaded = 0
     for (let i = 0, j = elements.length; i < j; i++) {
+      const element = elements[i]
+      if (!element) {
+        continue
+      }
       injectElement(
-        elements[i],
+        element,
         evalScripts,
         renumerateIRIElements,
         cacheRequests,

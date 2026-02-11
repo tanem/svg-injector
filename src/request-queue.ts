@@ -2,25 +2,37 @@ import cache from './cache'
 import cloneSvg from './clone-svg'
 import { Errback } from './types'
 
-let requestQueue: { [key: string]: Errback[] } = {}
+let requestQueue: Record<string, Errback[]> = {}
 
 export const clear = () => {
   requestQueue = {}
 }
 
 export const queueRequest = (url: string, callback: Errback) => {
-  requestQueue[url] = requestQueue[url] || []
-  requestQueue[url].push(callback)
+  if (!requestQueue[url]) {
+    requestQueue[url] = []
+  }
+  requestQueue[url]!.push(callback)
 }
 
 export const processRequestQueue = (url: string) => {
-  for (let i = 0, len = requestQueue[url].length; i < len; i++) {
+  const callbacks = requestQueue[url]
+  if (!callbacks) {
+    return
+  }
+
+  for (let i = 0, len = callbacks.length; i < len; i++) {
     // Make these calls async so we avoid blocking the page/renderer.
     setTimeout(() => {
       /* istanbul ignore else */
       if (Array.isArray(requestQueue[url])) {
         const cacheValue = cache.get(url)
-        const callback = requestQueue[url][i]
+        const callback = callbacks[i]
+
+        /* istanbul ignore if */
+        if (!callback) {
+          return
+        }
 
         /* istanbul ignore else */
         if (cacheValue instanceof SVGSVGElement) {
@@ -33,7 +45,7 @@ export const processRequestQueue = (url: string) => {
         }
 
         /* istanbul ignore else */
-        if (i === requestQueue[url].length - 1) {
+        if (i === callbacks.length - 1) {
           delete requestQueue[url]
         }
       }
