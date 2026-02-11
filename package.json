@@ -52,7 +52,7 @@
     "@typescript-eslint/parser": "8.54.0",
     "babel-plugin-istanbul": "6.1.1",
     "eslint": "8.57.0",
-    "eslint-config-prettier": "9.1.0",
+    "eslint-config-prettier": "9.1.2",
     "istanbul-lib-coverage": "3.2.2",
     "istanbul-lib-report": "3.0.1",
     "istanbul-lib-source-maps": "5.0.5",
