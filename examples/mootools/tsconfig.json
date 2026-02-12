@@ -2,13 +2,13 @@
   "compilerOptions": {
     "strict": true,
     "module": "esnext",
-    "target": "esnext",
+    "target": "es2020",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
     "lib": [
-      "esnext",
+      "es2020",
       "dom"
     ],
     "rootDir": ".",
