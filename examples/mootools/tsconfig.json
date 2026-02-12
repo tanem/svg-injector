@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "commonjs",
+    "module": "esnext",
+    "target": "esnext",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
     "lib": [
-      "es6",
+      "esnext",
       "dom"
     ],
     "rootDir": ".",
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "files": ["index.ts"]
 }
