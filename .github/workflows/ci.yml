@@ -3,31 +3,18 @@ name: CI
 on:
   push:
     branches: [master]
-  pull_request_target:
+  pull_request:
     branches: [master]
-    types: [assigned, labeled, opened, reopened, synchronize]
 
 concurrency:
-  group: ci
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name != 'pull_request_target' ||
-      github.event.pull_request.user.login == 'tanem' ||
-      github.event.pull_request.user.login == 'renovate[bot]' ||
-      contains(github.event.pull_request.labels.*.name, 'safe to test')
     steps:
-      - uses: styfle/cancel-workflow-action@0.13.0
-        with:
-          access_token: ${{ github.token }}
-      - uses: actions/checkout@v4
-        if: github.event_name == 'pull_request_target'
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/checkout@v6
-        if: github.event_name != 'pull_request_target'
       - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
