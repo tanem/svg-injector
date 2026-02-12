@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <!-- Gradient used via presentation attribute (fill) -->
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+
+    <!-- clipPath referenced via style attribute (#1244) -->
+    <clipPath id="clip">
+      <circle cx="60" cy="60" r="50" />
+    </clipPath>
+
+    <!-- Path referenced via <use href> (#2671) and <use xlink:href> (#14) -->
+    <path id="arrow" d="M50 80 L60 40 L70 80 Z" />
+
+    <!-- Mask referencing the arrow path via xlink:href (#14) -->
+    <mask id="arrow-mask" fill="#fff">
+      <use xlink:href="#arrow" xmlns:xlink="http://www.w3.org/1999/xlink" />
+    </mask>
+  </defs>
+
+  <!-- Clipped background using style attribute url() — issue #1244 -->
+  <rect width="120" height="120" fill="url(#grad)" style="clip-path: url(#clip)" />
+
+  <!-- Arrow shape via <use href> — issue #2671 -->
+  <use href="#arrow" fill="#fff" opacity="0.9" />
+
+  <!-- Masked overlay via presentation attribute url() — issue #14 -->
+  <rect x="20" y="20" width="80" height="80" fill="#f59e0b" mask="url(#arrow-mask)" />
+</svg>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVGInjector IRI Renumeration Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        color: #1e293b;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      p {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #475569;
+      }
+      .icons {
+        display: flex;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+      .icon-wrapper {
+        text-align: center;
+      }
+      .icon-wrapper span {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>IRI Renumeration</h1>
+    <p>
+      The same SVG is injected three times. Each instance exercises IRI
+      references that must be renumerated to avoid cross-instance conflicts:
+      <code>clip-path</code> via style attribute
+      (<a href="https://github.com/tanem/svg-injector/issues/1244">#1244</a>),
+      <code>&lt;use href&gt;</code>
+      (<a href="https://github.com/tanem/react-svg/issues/2671">react-svg#2671</a>),
+      and <code>&lt;mask&gt;</code> via <code>xlink:href</code>
+      (<a href="https://github.com/tanem/svg-injector/issues/14">#14</a>).
+    </p>
+    <div class="icons">
+      <div class="icon-wrapper">
+        <div class="inject-me" data-src="icon.svg"></div>
+        <span>Instance 1</span>
+      </div>
+      <div class="icon-wrapper">
+        <div class="inject-me" data-src="icon.svg"></div>
+        <span>Instance 2</span>
+      </div>
+      <div class="icon-wrapper">
+        <div class="inject-me" data-src="icon.svg"></div>
+        <span>Instance 3</span>
+      </div>
+    </div>
+    <script type="module" src="index.ts"></script>
+  </body>
+</html>
