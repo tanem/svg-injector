@@ -1,5 +1,25 @@
 # Changelog
 
+## [v11.1.0](https://github.com/tanem/svg-injector/tree/v11.1.0) (2026-02-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.0.1...v11.1.0)
+
+#### undefined
+
+- [#1551](https://github.com/tanem/svg-injector/pull/1551) Remove mootools example ([@tanem](https://github.com/tanem))
+- [#1550](https://github.com/tanem/svg-injector/pull/1550) Fix examples tsconfig.json files ([@tanem](https://github.com/tanem))
+- [#1549](https://github.com/tanem/svg-injector/pull/1549) Fix examples tsconfig.json files ([@tanem](https://github.com/tanem))
+- [#1548](https://github.com/tanem/svg-injector/pull/1548) Fix examples ([@tanem](https://github.com/tanem))
+
+#### :rocket: Enhancement
+
+- [#1552](https://github.com/tanem/svg-injector/pull/1552) Fix IRI renumeration reference updates ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#1531](https://github.com/tanem/svg-injector/pull/1531) Update actions/upload-artifact action to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1547](https://github.com/tanem/svg-injector/pull/1547) Simplify CI workflow by removing BrowserStack-era security patterns and per-PR concurrency ([@tanem](https://github.com/tanem))
+- [#1532](https://github.com/tanem/svg-injector/pull/1532) Update codecov/codecov-action action to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v11.0.1](https://github.com/tanem/svg-injector/tree/v11.0.1) (2026-02-11)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.0.0...v11.0.1)
 
