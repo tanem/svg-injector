@@ -12,6 +12,9 @@
   "dependencies": {
     "@tanem/svg-injector": "latest"
   },
+  "overrides": {
+    "braces": "3.0.3"
+  },
   "keywords": [
     "@tanem/svg-injector"
   ],
