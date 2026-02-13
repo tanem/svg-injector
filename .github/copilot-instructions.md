@@ -83,6 +83,16 @@ This project follows strict versioning conventions for dependencies:
 - **Strict TypeScript and ESLint** — `tsconfig.base.json` and `eslint.config.mjs` enforce strict type safety. Never use `any` types; use `unknown` when type is truly dynamic. Use non-null assertions (`!`) only with runtime guarantees (e.g., array access within bounds-checked loops).
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
 
+## IRI Renumeration
+
+When `renumerateIRIElements` is `true` (the default), the injector rewrites `id` attributes on IRI-addressable SVG elements to prevent cross-instance conflicts when the same SVG is injected multiple times. The implementation details (which elements, which attributes, processing order) can be read directly from `inject-element.ts`.
+
+**Known limitations:**
+
+- **All matching element types are renumerated, not just those inside `<defs>`.** If an SVG has `<path id="TX">` outside `<defs>` (e.g. a US map), that ID will be rewritten. Users who need to query injected elements by their original IDs should set `renumerateIRIElements: false`. See [#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023).
+- **String references in `<script>` blocks are not updated.** If SVG scripts use `document.getElementById('oldId')`, those strings will not be rewritten. This is an inherent limitation — arbitrary JavaScript cannot be reliably parsed for ID references.
+- **CSS ID selectors in `<style>` elements are not updated.** Only `url(#id)` references within `<style>` text are rewritten. A rule like `#myId { fill: red }` will still reference the old ID. This could be addressed in future if demand arises.
+
 ## Working with This Codebase
 
 - The public API surface is just `SVGInjector` and the types re-exported from `src/index.ts`.
@@ -95,3 +105,4 @@ This project follows strict versioning conventions for dependencies:
 
 - Keep `.github/copilot-instructions.md`, `README.md`, and `MIGRATION.md` up to date when making changes that affect the public API, build pipeline, testing patterns, or code conventions.
 - Use NZ English in documentation (e.g. "serialise", "normalise", "colour", "behaviour").
+- **Copilot instructions should only contain information that cannot be readily inferred from the source code.** Do not duplicate implementation details (e.g. function names, processing order, data structures) that an agent can discover by reading the relevant files. Focus on conventions, design decisions, known limitations, and non-obvious constraints.

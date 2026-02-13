@@ -48,6 +48,7 @@ SVGInjector(document.getElementById('inject-me'), {
 
 - Basic Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/basic-usage)
 - API Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/api-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/api-usage)
+- IRI Renumeration: [Source](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/iri-renumeration)
 - UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
 - UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)
 
@@ -63,7 +64,7 @@ SVGInjector(document.getElementById('inject-me'), {
   - `cacheRequests` - _Optional_ Use request cache. Defaults to `true`.
   - `evalScripts` - _Optional_ Run any script blocks found in the SVG. One of `'always'`, `'once'`, or `'never'`. Defaults to `'never'`.
   - `httpRequestWithCredentials` - _Optional_ Boolean that indicates whether or not cross-site Access-Control requests should be made using credentials. Defaults to `false`.
-  - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`.
+  - `renumerateIRIElements` - _Optional_ Boolean indicating if SVG IRI addressable elements should be renumerated. Defaults to `true`. When enabled, IDs on IRI-addressable elements (`clipPath`, `linearGradient`, `mask`, `path`, etc.) are made unique, and all references to them - presentation attributes, `href`/`xlink:href`, inline `style` attributes, and `<style>` element text - are updated. Note: **all** matching element types are renumerated, not only those inside `<defs>`. Set to `false` if you need to query injected elements by their original IDs.
 
 **Example**
 

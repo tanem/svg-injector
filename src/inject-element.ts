@@ -142,65 +142,151 @@ const injectElement = (
         radialGradient: ['fill', 'stroke'],
       }
 
+      const replaceIriReferences = (
+        value: string,
+        iriIdMap: Record<string, string>,
+      ) => {
+        return value.replace(
+          /url\((['"]?)\s*#([^\s'"\)]+)\s*\1\)/g,
+          (match: string, _quote: string, iriId: string) => {
+            const newId = iriIdMap[iriId]
+            return newId ? `url(#${newId})` : match
+          },
+        )
+      }
+
+      const replaceHrefReference = (
+        value: string,
+        iriIdMap: Record<string, string>,
+      ) => {
+        if (!value.startsWith('#')) {
+          return value
+        }
+
+        const iriId = value.slice(1)
+        const newId = iriIdMap[iriId]
+        return newId ? '#' + newId : value
+      }
+
       let element: string
       let elements: NodeListOf<Element>
       let properties: string[]
       let currentId: string
       let newId: string
 
+      const renumeratedElements: Array<{
+        element: Element
+        currentId: string
+        newId: string
+      }> = []
+      const iriIdMap: Record<string, string> = {}
+
       Object.keys(iriElementsAndProperties).forEach((key) => {
         element = key
-        properties = iriElementsAndProperties[key]!
-
         elements = svg.querySelectorAll(element + '[id]')
         for (let a = 0, elementsLen = elements.length; a < elementsLen; a++) {
           const currentElement = elements[a]!
           currentId = currentElement.id
           newId = currentId + '-' + uniqueId()
 
-          // All of the properties that can reference this element type.
-          let referencingElements: NodeListOf<Element>
-          Array.prototype.forEach.call(properties, (property: string) => {
-            // :NOTE: using a substring match attr selector here to deal with IE
-            // "adding extra quotes in url() attrs".
-            referencingElements = svg.querySelectorAll(
-              '[' + property + '*="' + currentId + '"]',
-            )
-            for (
-              let b = 0, referencingElementLen = referencingElements.length;
-              b < referencingElementLen;
-              b++
-            ) {
-              const referencingElement = referencingElements[b]!
-              const attrValue: string | null =
-                referencingElement.getAttribute(property)
-              if (
-                attrValue &&
-                !attrValue.match(new RegExp('url\\("?#' + currentId + '"?\\)'))
-              ) {
-                continue
-              }
-              referencingElement.setAttribute(property, 'url(#' + newId + ')')
-            }
+          iriIdMap[currentId] = newId
+          renumeratedElements.push({
+            element: currentElement,
+            currentId,
+            newId,
           })
-
-          const allLinks = svg.querySelectorAll('[*|href]')
-          const links: Element[] = []
-          for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
-            const link = allLinks[c]!
-            const href = link.getAttributeNS(xlinkNamespace, 'href')
-            /* istanbul ignore else */
-            if (href?.toString() === '#' + currentElement.id) {
-              links.push(link)
-            }
-          }
-          for (let d = 0, linksLen = links.length; d < linksLen; d++) {
-            links[d]!.setAttributeNS(xlinkNamespace, 'href', '#' + newId)
-          }
-
-          currentElement.id = newId
         }
       })
+
+      Object.keys(iriElementsAndProperties).forEach((key) => {
+        properties = iriElementsAndProperties[key]!
+
+        // All of the properties that can reference this element type.
+        let referencingElements: NodeListOf<Element>
+        Array.prototype.forEach.call(properties, (property: string) => {
+          referencingElements = svg.querySelectorAll('[' + property + ']')
+          for (
+            let b = 0, referencingElementLen = referencingElements.length;
+            b < referencingElementLen;
+            b++
+          ) {
+            const referencingElement = referencingElements[b]!
+            const attrValue: string | null =
+              referencingElement.getAttribute(property)
+            /* istanbul ignore else */
+            if (attrValue) {
+              const nextValue = replaceIriReferences(attrValue, iriIdMap)
+              if (nextValue !== attrValue) {
+                referencingElement.setAttribute(property, nextValue)
+              }
+            }
+          }
+        })
+      })
+
+      const allLinks = svg.querySelectorAll('*')
+      for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
+        const link = allLinks[c]!
+        const href = link.getAttribute('href')
+        /* istanbul ignore else */
+        if (href) {
+          const nextHref = replaceHrefReference(href, iriIdMap)
+          if (nextHref !== href) {
+            link.setAttribute('href', nextHref)
+          }
+        }
+
+        const xlinkHref = link.getAttributeNS(xlinkNamespace, 'href')
+        /* istanbul ignore else */
+        if (xlinkHref) {
+          const nextXlinkHref = replaceHrefReference(xlinkHref, iriIdMap)
+          if (nextXlinkHref !== xlinkHref) {
+            link.setAttributeNS(xlinkNamespace, 'href', nextXlinkHref)
+          }
+        }
+      }
+
+      const styleElements = svg.querySelectorAll('[style]')
+      for (
+        let d = 0, styleElementsLen = styleElements.length;
+        d < styleElementsLen;
+        d++
+      ) {
+        const styleElement = styleElements[d]!
+        const styleValue = styleElement.getAttribute('style')
+        /* istanbul ignore else */
+        if (styleValue) {
+          const nextStyleValue = replaceIriReferences(styleValue, iriIdMap)
+          if (nextStyleValue !== styleValue) {
+            styleElement.setAttribute('style', nextStyleValue)
+          }
+        }
+      }
+
+      const styleTagElements = svg.querySelectorAll('style')
+      for (
+        let e = 0, styleTagElementsLen = styleTagElements.length;
+        e < styleTagElementsLen;
+        e++
+      ) {
+        const styleTagElement = styleTagElements[e]!
+        const textContent = styleTagElement.textContent
+        /* istanbul ignore else */
+        if (textContent) {
+          const nextTextContent = replaceIriReferences(textContent, iriIdMap)
+          if (nextTextContent !== textContent) {
+            styleTagElement.textContent = nextTextContent
+          }
+        }
+      }
+
+      for (
+        let f = 0, renumeratedElementsLen = renumeratedElements.length;
+        f < renumeratedElementsLen;
+        f++
+      ) {
+        renumeratedElements[f]!.element.id = renumeratedElements[f]!.newId
+      }
     }
 
     // Remove any unwanted/invalid namespaces that might have been added by SVG
