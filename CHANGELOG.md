@@ -1,9 +1,17 @@
 # Changelog
 
+## [v11.1.1](https://github.com/tanem/svg-injector/tree/v11.1.1) (2026-02-13)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.1.0...v11.1.1)
+
+#### :house: Internal
+
+- [#1554](https://github.com/tanem/svg-injector/pull/1554) Fix security issues in examples ([@tanem](https://github.com/tanem))
+- [#1553](https://github.com/tanem/svg-injector/pull/1553) Fix audit issues ([@tanem](https://github.com/tanem))
+
 ## [v11.1.0](https://github.com/tanem/svg-injector/tree/v11.1.0) (2026-02-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.0.1...v11.1.0)
 
-#### undefined
+#### :memo: Documentation
 
 - [#1551](https://github.com/tanem/svg-injector/pull/1551) Remove mootools example ([@tanem](https://github.com/tanem))
 - [#1550](https://github.com/tanem/svg-injector/pull/1550) Fix examples tsconfig.json files ([@tanem](https://github.com/tanem))
@@ -48,7 +56,7 @@
 
 - [#1503](https://github.com/tanem/svg-injector/pull/1503) Switch to PW for testing ([@tanem](https://github.com/tanem))
 
-#### undefined
+#### :memo: Documentation
 
 - [#1502](https://github.com/tanem/svg-injector/pull/1502) Add copilot instructions ([@tanem](https://github.com/tanem))
 
