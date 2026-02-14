@@ -1,3 +1,4 @@
+import extractSymbol from './extract-symbol'
 import loadSvgCached from './load-svg-cached'
 import loadSvgUncached from './load-svg-uncached'
 import type { BeforeEach, Errback, EvalScripts } from './types'
@@ -46,16 +47,38 @@ const injectElement = (
   // Try to avoid loading the orginal image src if possible.
   el.setAttribute('src', '')
 
+  // Strip fragment identifier for sprite support. The base URL is used for
+  // loading/caching so all symbols from the same sprite share one request.
+  const hashIndex = elUrl.indexOf('#')
+  const baseUrl = hashIndex !== -1 ? elUrl.slice(0, hashIndex) : elUrl
+  const symbolId = hashIndex !== -1 ? elUrl.slice(hashIndex + 1) : null
+
   const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
 
-  loadSvg(elUrl, httpRequestWithCredentials, (error, svg) => {
+  loadSvg(baseUrl, httpRequestWithCredentials, (error, loadedSvg) => {
     /* istanbul ignore else */
-    if (!svg) {
+    if (!loadedSvg) {
       // TODO: Extract.
       injectedElements.splice(injectedElements.indexOf(el), 1)
       ;(el as ElementType) = null
       callback(error)
       return
+    }
+
+    let svg = loadedSvg
+
+    if (symbolId) {
+      const symbolSvg = extractSymbol(loadedSvg, symbolId)
+
+      /* istanbul ignore else */
+      if (!symbolSvg) {
+        injectedElements.splice(injectedElements.indexOf(el), 1)
+        ;(el as ElementType) = null
+        callback(new Error(`Symbol "${symbolId}" not found in ${baseUrl}`))
+        return
+      }
+
+      svg = symbolSvg
     }
 
     const elId = el.getAttribute('id')

@@ -26,6 +26,28 @@ import { SVGInjector } from '@tanem/svg-injector'
 SVGInjector(document.getElementById('inject-me'))
 ```
 
+## SVG Sprite Support
+
+You can inject individual symbols from an SVG sprite sheet by appending a fragment identifier to the `data-src` URL. The library will fetch the sprite file, extract the `<symbol>` matching the fragment ID, and inject it as a standalone inline `<svg>`.
+
+```html
+<div class="icon" data-src="sprite.svg#icon-star"></div>
+<div class="icon" data-src="sprite.svg#icon-heart"></div>
+```
+
+```js
+import { SVGInjector } from '@tanem/svg-injector'
+
+SVGInjector(document.getElementsByClassName('icon'))
+```
+
+When `cacheRequests` is `true` (the default), the sprite file is fetched once and reused for all symbol extractions, so multiple icons from the same sprite file result in only a single HTTP request.
+
+**Limitations:**
+
+- Each `<symbol>` must be self-contained. Shared `<defs>` at the root level of the sprite (e.g. gradients or filters referenced by multiple symbols) are **not** copied into the extracted SVG. If your symbols depend on shared definitions, use individual SVG files instead or inline the required definitions within each `<symbol>`.
+- Only `<symbol>` elements are supported for extraction. The fragment ID must match the `id` of a `<symbol>` in the sprite.
+
 ## Avoiding XSS
 
 Be careful when injecting arbitrary third-party SVGs into the DOM, as this opens the door to XSS attacks. If you must inject third-party SVGs, it is highly recommended to sanitise the SVG before injecting. The following example uses [DOMPurify](https://github.com/cure53/DOMPurify) to strip out attributes and tags that can execute arbitrary JavaScript. Note that this can alter the behaviour of the SVG.
@@ -49,6 +71,7 @@ SVGInjector(document.getElementById('inject-me'), {
 - Basic Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/basic-usage)
 - API Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/api-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/api-usage)
 - IRI Renumeration: [Source](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/iri-renumeration)
+- Sprite Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/sprite-usage)
 - UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
 - UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)
 
