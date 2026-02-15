@@ -1,5 +1,12 @@
 # Changelog
 
+## [v11.2.1](https://github.com/tanem/svg-injector/tree/v11.2.1) (2026-02-15)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.0...v11.2.1)
+
+#### :bug: Bug Fix
+
+- [#1557](https://github.com/tanem/svg-injector/pull/1557) Use image/svg+xml for overrideMimeType instead of text/xml ([@tanem](https://github.com/tanem))
+
 ## [v11.2.0](https://github.com/tanem/svg-injector/tree/v11.2.0) (2026-02-15)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.1.1...v11.2.0)
 
