@@ -1,5 +1,12 @@
 # Changelog
 
+## [v11.2.0](https://github.com/tanem/svg-injector/tree/v11.2.0) (2026-02-15)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.1.1...v11.2.0)
+
+#### :rocket: Enhancement
+
+- [#1556](https://github.com/tanem/svg-injector/pull/1556) Add SVG sprite support with tests and docs ([@tanem](https://github.com/tanem))
+
 ## [v11.1.1](https://github.com/tanem/svg-injector/tree/v11.1.1) (2026-02-13)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.1.0...v11.1.1)
 
