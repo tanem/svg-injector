@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVGInjector Sprite Usage Example</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 2rem;
+      }
+      .icon {
+        width: 48px;
+        height: 48px;
+        margin: 0.5rem;
+        color: #333;
+        transition: color 0.2s;
+      }
+      .icon:hover {
+        color: #e74c3c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SVG Sprite Injection</h1>
+    <p>
+      Each icon below is extracted from a single
+      <code>sprite.svg</code> file and injected inline, so you can style them
+      with CSS (try hovering).
+    </p>
+    <div class="inject-me icon" data-src="sprite.svg#icon-star"></div>
+    <div class="inject-me icon" data-src="sprite.svg#icon-heart"></div>
+    <div class="inject-me icon" data-src="sprite.svg#icon-thumbs-up"></div>
+    <script type="module" src="index.ts"></script>
+  </body>
+</html>

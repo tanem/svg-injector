@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "esnext",
+    "target": "es2020",
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "rootDir": ".",
+    "moduleResolution": "bundler"
+  },
+  "files": ["index.ts"]
+}
