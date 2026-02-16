@@ -7,7 +7,6 @@ const loadSvgUncached = (
   callback: Errback,
 ) => {
   makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
-    /* istanbul ignore else */
     if (error) {
       callback(error)
     } else if (

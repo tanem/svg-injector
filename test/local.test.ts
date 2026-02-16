@@ -1,8 +1,7 @@
-import { expect, test } from '@playwright/test'
 import * as path from 'path'
 import { pathToFileURL } from 'url'
+import { expect, test } from './playwright/coverage'
 import { addSvgInjector, formatHtml, injectSvg } from './playwright/test-utils'
-import './playwright/coverage'
 
 const fixturesDir = path.resolve(__dirname, 'fixtures')
 const thumbUpPath =

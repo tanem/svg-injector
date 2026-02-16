@@ -31,7 +31,6 @@ const loadSvgCached = (
   queueRequest(url, callback)
 
   makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
-    /* istanbul ignore else */
     if (error) {
       cache.set(url, error)
     } else if (

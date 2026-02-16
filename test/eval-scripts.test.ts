@@ -1,7 +1,6 @@
-import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { expect, test } from './playwright/coverage'
 import { formatHtml, injectSvg, setupPage } from './playwright/test-utils'
-import './playwright/coverage'
 
 const injectHtml = `
   <div
