@@ -28,25 +28,7 @@ SVGInjector(document.getElementById('inject-me'))
 
 ## SVG Sprite Support
 
-You can inject individual symbols from an SVG sprite sheet by appending a fragment identifier to the `data-src` URL. The library will fetch the sprite file, extract the `<symbol>` matching the fragment ID, and inject it as a standalone inline `<svg>`.
-
-```html
-<div class="icon" data-src="sprite.svg#icon-star"></div>
-<div class="icon" data-src="sprite.svg#icon-heart"></div>
-```
-
-```js
-import { SVGInjector } from '@tanem/svg-injector'
-
-SVGInjector(document.getElementsByClassName('icon'))
-```
-
-When `cacheRequests` is `true` (the default), the sprite file is fetched once and reused for all symbol extractions, so multiple icons from the same sprite file result in only a single HTTP request.
-
-**Limitations:**
-
-- Each `<symbol>` must be self-contained. Shared `<defs>` at the root level of the sprite (e.g. gradients or filters referenced by multiple symbols) are **not** copied into the extracted SVG. If your symbols depend on shared definitions, use individual SVG files instead or inline the required definitions within each `<symbol>`.
-- Only `<symbol>` elements are supported for extraction. The fragment ID must match the `id` of a `<symbol>` in the sprite.
+You can inject individual symbols from an SVG sprite sheet by appending a fragment identifier (e.g. `sprite.svg#icon-star`) to the `data-src` URL. See the [sprite usage example](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage) for full documentation and known limitations.
 
 ## Avoiding XSS
 
