@@ -97,6 +97,7 @@ This project follows strict versioning conventions for dependencies:
 - **No arrow function class methods**: this is a functional codebase with no classes.
 - **Strict TypeScript and ESLint**: `tsconfig.base.json` and `eslint.config.mjs` enforce strict type safety. Never use `any` types; use `unknown` when type is truly dynamic. Use non-null assertions (`!`) only with runtime guarantees (e.g., array access within bounds-checked loops).
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
+- **Comment style**: Use `//` comments, not `/* */` (except for istanbul/eslint directives). Comments are wrapped to 80 columns.
 
 ## IRI Renumeration
 
@@ -121,6 +122,7 @@ When `renumerateIRIElements` is `true` (the default), the injector rewrites `id`
 - Keep `.github/copilot-instructions.md`, `README.md`, and `MIGRATION.md` up to date when making changes that affect the public API, build pipeline, testing patterns, or code conventions.
 - Use NZ English in documentation (e.g. "serialise", "normalise", "colour", "behaviour").
 - **Copilot instructions should only contain information that cannot be readily inferred from the source code.** Do not duplicate implementation details (e.g. function names, processing order, data structures) that an agent can discover by reading the relevant files. Focus on conventions, design decisions, known limitations, and non-obvious constraints.
+- **README structure follows [standard-readme](https://github.com/RichardLitt/standard-readme).** Keep the main `README.md` concise and scannable. Detailed feature documentation (usage examples, caveats, limitations) belongs in a `README.md` within the relevant `examples/` subdirectory, linked from the main README.
 
 ## Writing Style
 

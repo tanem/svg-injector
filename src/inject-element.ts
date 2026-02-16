@@ -6,6 +6,9 @@ import uniqueId from './unique-id'
 
 type ElementType = Element | HTMLElement | null
 
+// Tracks elements currently being injected. Prevents duplicate injection if
+// SVGInjector is called with the same element twice before the first injection
+// completes.
 const injectedElements: ElementType[] = []
 const ranScripts: Record<string, boolean> = {}
 const svgNamespace = 'http://www.w3.org/2000/svg'
@@ -27,22 +30,17 @@ const injectElement = (
     return
   }
 
-  // Make sure we aren't already in the process of injecting this element to
-  // avoid a race condition if multiple injections for the same element are run.
-  // :NOTE: Using indexOf() only _after_ we check for SVG support and bail, so
-  // no need for IE8 indexOf() polyfill.
   if (injectedElements.indexOf(el) !== -1) {
-    // TODO: Extract.
     injectedElements.splice(injectedElements.indexOf(el), 1)
+    // Release the DOM reference to allow GC. The cast is needed because the
+    // parameter is typed as NonNullable.
     ;(el as ElementType) = null
     return
   }
 
-  // Remember the request to inject this element, in case other injection calls
-  // are also trying to replace this element before we finish.
   injectedElements.push(el)
-
-  // Try to avoid loading the orginal image src if possible.
+  // Clear src to prevent the browser from fetching the original image URL while
+  // the SVG load is in progress.
   el.setAttribute('src', '')
 
   // Strip fragment identifier for sprite support. The base URL is used for
@@ -55,7 +53,6 @@ const injectElement = (
 
   loadSvg(baseUrl, httpRequestWithCredentials, (error, loadedSvg) => {
     if (!loadedSvg) {
-      // TODO: Extract.
       injectedElements.splice(injectedElements.indexOf(el), 1)
       ;(el as ElementType) = null
       callback(error)
@@ -115,7 +112,6 @@ const injectElement = (
 
     svg.setAttribute('data-src', elUrl)
 
-    // Copy all the data elements to the svg.
     const elData: Attr[] = [].filter.call(el.attributes, (at: Attr) => {
       return /^data-\w[\w-]*$/.test(at.name)
     })
@@ -128,20 +124,13 @@ const injectElement = (
     })
 
     if (renumerateIRIElements) {
-      // Make sure any internally referenced clipPath ids and their clip-path
-      // references are unique.
+      // Rewrite IRI element ids to be unique across injection instances.
+      // Browsers skip clipPaths in hidden parent elements, so duplicate ids
+      // cause all but the first instance to lose clipping. Reference:
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=376027.
       //
-      // This addresses the issue of having multiple instances of the same SVG
-      // on a page and only the first clipPath id is referenced.
-      //
-      // Browsers often shortcut the SVG Spec and don't use clipPaths contained
-      // in parent elements that are hidden, so if you hide the first SVG
-      // instance on the page, then all other instances lose their clipping.
-      // Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=376027
-
-      // Handle all defs elements that have iri capable attributes as defined by
-      // w3c: http://www.w3.org/TR/SVG/linking.html#processingIRI. Mapping IRI
-      // addressable elements to the properties that can reference them.
+      // IRI-addressable elements mapped to referencing properties per the SVG
+      // spec: http://www.w3.org/TR/SVG/linking.html#processingIRI.
       const iriElementsAndProperties: Record<string, string[]> = {
         clipPath: ['clip-path'],
         'color-profile': ['color-profile'],
@@ -214,7 +203,6 @@ const injectElement = (
       Object.keys(iriElementsAndProperties).forEach((key) => {
         properties = iriElementsAndProperties[key]!
 
-        // All of the properties that can reference this element type.
         let referencingElements: NodeListOf<Element>
         Array.prototype.forEach.call(properties, (property: string) => {
           referencingElements = svg.querySelectorAll('[' + property + ']')
@@ -300,14 +288,12 @@ const injectElement = (
       }
     }
 
-    // Remove any unwanted/invalid namespaces that might have been added by SVG
-    // editing tools.
+    // Remove invalid namespaces that SVG editing tools may have added.
     svg.removeAttribute('xmlns:a')
 
-    // Post page load injected SVGs don't automatically have their script
-    // elements run, so we'll need to make that happen, if requested.
+    // Injected SVGs don't automatically run their script elements, so extract
+    // and evaluate them manually if requested.
 
-    // Find then prune the scripts.
     const scripts = svg.querySelectorAll('script')
     const scriptsToEval: string[] = []
     let script: string | null
@@ -317,7 +303,7 @@ const injectElement = (
       const scriptElement = scripts[i]!
       scriptType = scriptElement.getAttribute('type')
 
-      // Only process javascript types. SVG defaults to 'application/ecmascript'
+      // Only process JavaScript types. SVG defaults to 'application/ecmascript'
       // for unset types.
       /* istanbul ignore else */
       if (
@@ -326,21 +312,17 @@ const injectElement = (
         scriptType === 'application/javascript' ||
         scriptType === 'text/javascript'
       ) {
-        // innerText for IE, textContent for other browsers.
         script = scriptElement.innerText || scriptElement.textContent
 
-        // Stash.
         /* istanbul ignore else */
         if (script) {
           scriptsToEval.push(script)
         }
 
-        // Tidy up and remove the script element since we don't need it anymore.
         svg.removeChild(scriptElement)
       }
     }
 
-    // Run/Eval the scripts if needed.
     if (
       scriptsToEval.length > 0 &&
       (evalScripts === 'always' ||
@@ -351,24 +333,18 @@ const injectElement = (
         l < scriptsToEvalLen;
         l++
       ) {
-        // :NOTE: Yup, this is a form of eval, but it is being used to eval code
-        // the caller has explictely asked to be loaded, and the code is in a
-        // caller defined SVG file... not raw user input.
-        //
-        // Also, the code is evaluated in a closure and not in the global scope.
-        // If you need to put something in global scope, use 'window'.
+        // This is a form of eval, but only for code the caller has explicitly
+        // asked to load from their own SVG files. The code runs in a closure,
+        // not the global scope.
         new Function(scriptsToEval[l]!)(window)
       }
 
-      // Remember we already ran scripts for this svg.
       ranScripts[elUrl] = true
     }
 
-    // :WORKAROUND: IE doesn't evaluate <style> tags in SVGs that are
-    // dynamically added to the page. This trick will trigger IE to read and use
-    // any existing SVG <style> tags.
-    //
-    // Reference: https://github.com/iconic/SVGInjector/issues/23.
+    // Some browsers don't evaluate <style> tags in SVGs that are dynamically
+    // added to the page. This triggers a re-read. Reference:
+    // https://github.com/iconic/SVGInjector/issues/23.
     const styleTags = svg.querySelectorAll('style')
     Array.prototype.forEach.call(styleTags, (styleTag: HTMLStyleElement) => {
       styleTag.textContent += ''
@@ -386,12 +362,7 @@ const injectElement = (
       return
     }
 
-    // Replace the image with the svg.
     el.parentNode.replaceChild(svg, el)
-
-    // Now that we no longer need it, drop references to the original element so
-    // it can be GC'd.
-    // TODO: Extract
     injectedElements.splice(injectedElements.indexOf(el), 1)
     ;(el as ElementType) = null
 

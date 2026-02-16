@@ -26,7 +26,7 @@ const loadSvgCached = (
     // Errors are always refetched.
   }
 
-  // Seed the cache to indicate we are loading this URL.
+  // Seed the cache to indicate this URL is loading.
   cache.set(url, undefined)
   queueRequest(url, callback)
 

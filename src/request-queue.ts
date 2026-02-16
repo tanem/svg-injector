@@ -16,7 +16,7 @@ export const processRequestQueue = (url: string) => {
   }
 
   for (let i = 0, len = callbacks.length; i < len; i++) {
-    // Make these calls async so we avoid blocking the page/renderer.
+    // Async to avoid blocking the renderer.
     setTimeout(() => {
       if (Array.isArray(requestQueue[url])) {
         const cacheValue = cache.get(url)
