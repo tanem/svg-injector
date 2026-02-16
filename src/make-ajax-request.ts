@@ -10,6 +10,10 @@ const makeAjaxRequest = (
 
   httpRequest.onreadystatechange = () => {
     try {
+      // URLs with a .svg extension skip content-type validation. This avoids
+      // failures on the file:// protocol where browsers don't send Content-Type
+      // headers, and is unnecessary when the extension already indicates SVG
+      // content.
       if (!/\.svg/i.test(url) && httpRequest.readyState === 2) {
         const contentType = httpRequest.getResponseHeader('Content-Type')
         if (!contentType) {
@@ -33,6 +37,7 @@ const makeAjaxRequest = (
           )
         }
 
+        // Browsers return status 0 (not 200) for successful file:// loads.
         if (
           httpRequest.status === 200 ||
           (isLocal() && httpRequest.status === 0)
@@ -61,7 +66,6 @@ const makeAjaxRequest = (
 
   httpRequest.withCredentials = httpRequestWithCredentials
 
-  // Defensive check for old browsers that might not have overrideMimeType
   /* istanbul ignore else */
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (httpRequest.overrideMimeType) {

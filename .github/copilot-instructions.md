@@ -97,6 +97,7 @@ This project follows strict versioning conventions for dependencies:
 - **No arrow function class methods**: this is a functional codebase with no classes.
 - **Strict TypeScript and ESLint**: `tsconfig.base.json` and `eslint.config.mjs` enforce strict type safety. Never use `any` types; use `unknown` when type is truly dynamic. Use non-null assertions (`!`) only with runtime guarantees (e.g., array access within bounds-checked loops).
 - **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
+- **Comment style**: Use `//` comments, not `/* */` (except for istanbul/eslint directives). Comments are wrapped to 80 columns.
 
 ## IRI Renumeration
 

@@ -160,6 +160,8 @@ test.describe('SVGInjector', () => {
     })
 
     const actual = formatHtml(result.html)
+    // Firefox serialises SVG attributes in a different order than Chromium and
+    // WebKit, so we need browser-specific expected strings.
     const expectedFirefox =
       '<svg width="150" height="150" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="injected-svg inject-me" data-src="/fixtures/style-tag.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>circle {fill: orange;stroke: black;stroke-width: 10px;}</style><circle cx="50" cy="50" r="40"></circle></svg>'
     const expectedDefault =
@@ -559,6 +561,9 @@ test.describe('SVGInjector', () => {
     expect(result.error).toBe('Parent node is null')
   })
 
+  // Some older libraries (e.g. MooTools) replace window.Document with a plain
+  // function. This verifies injection still works when Document is not the
+  // native constructor.
   test('handles Document wrangling via old libs', async ({ page }) => {
     await setupPage(page)
 

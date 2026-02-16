@@ -22,6 +22,9 @@ test.describe('eval scripts', () => {
   const expectedDefault =
     '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" class="injected-svg inject-me" data-src="/fixtures/script.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><circle cx="50" cy="50" r="15" fill="green"></circle></svg>'
 
+  // Replace window.alert with a counter. Playwright's default dialog handling
+  // would auto-dismiss alerts without tracking them, so we need a controlled
+  // way to verify how many times scripts in the injected SVGs call alert().
   const setupAlerts = async (page: Page) => {
     await page.evaluate(() => {
       ;(window as unknown as AlertWindow).__alertCount = 0

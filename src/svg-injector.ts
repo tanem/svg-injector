@@ -62,6 +62,7 @@ const SVGInjector = (
       (error, svg) => {
         afterEach(error, svg)
         afterAll(1)
+        // Release the DOM reference to allow GC.
         elements = null
       },
     )

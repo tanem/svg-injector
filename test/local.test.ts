@@ -17,6 +17,9 @@ interface LocalWindow extends Window {
 }
 
 test.describe('local', () => {
+  // Lets the real XHR fail naturally on a file:// page. The browser's
+  // cross-origin restrictions cause the request to fail, triggering the
+  // local-specific error message via isLocal() in make-ajax-request.ts.
   test('not found', async ({ page }) => {
     await addSvgInjector(page)
     await page.goto(blankFileUrl)
@@ -37,6 +40,11 @@ test.describe('local', () => {
     )
   })
 
+  // Playwright browsers enforce cross-origin restrictions on file:// pages, so
+  // a real XHR to a local SVG file would fail. The mock below simulates what a
+  // successful local XHR looks like: status 0 (not 200), no Content-Type
+  // header, and a populated responseXML. This exercises the `isLocal() &&
+  // httpRequest.status === 0` success path in make-ajax-request.ts.
   test('ok', async ({ page }) => {
     await addSvgInjector(page)
     await page.goto(blankFileUrl)
