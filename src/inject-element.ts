@@ -22,7 +22,6 @@ const injectElement = (
 ) => {
   const elUrl = el.getAttribute('data-src') ?? el.getAttribute('src')
 
-  /* istanbul ignore else */
   if (!elUrl) {
     callback(new Error('Invalid data-src or src attribute'))
     return
@@ -32,7 +31,6 @@ const injectElement = (
   // avoid a race condition if multiple injections for the same element are run.
   // :NOTE: Using indexOf() only _after_ we check for SVG support and bail, so
   // no need for IE8 indexOf() polyfill.
-  /* istanbul ignore else */
   if (injectedElements.indexOf(el) !== -1) {
     // TODO: Extract.
     injectedElements.splice(injectedElements.indexOf(el), 1)
@@ -56,7 +54,6 @@ const injectElement = (
   const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
 
   loadSvg(baseUrl, httpRequestWithCredentials, (error, loadedSvg) => {
-    /* istanbul ignore else */
     if (!loadedSvg) {
       // TODO: Extract.
       injectedElements.splice(injectedElements.indexOf(el), 1)
@@ -70,7 +67,6 @@ const injectElement = (
     if (symbolId) {
       const symbolSvg = extractSymbol(loadedSvg, symbolId)
 
-      /* istanbul ignore else */
       if (!symbolSvg) {
         injectedElements.splice(injectedElements.indexOf(el), 1)
         ;(el as ElementType) = null
@@ -82,25 +78,21 @@ const injectElement = (
     }
 
     const elId = el.getAttribute('id')
-    /* istanbul ignore else */
     if (elId) {
       svg.setAttribute('id', elId)
     }
 
     const elTitle = el.getAttribute('title')
-    /* istanbul ignore else */
     if (elTitle) {
       svg.setAttribute('title', elTitle)
     }
 
     const elWidth = el.getAttribute('width')
-    /* istanbul ignore else */
     if (elWidth) {
       svg.setAttribute('width', elWidth)
     }
 
     const elHeight = el.getAttribute('height')
-    /* istanbul ignore else */
     if (elHeight) {
       svg.setAttribute('height', elHeight)
     }
@@ -117,7 +109,6 @@ const injectElement = (
     svg.setAttribute('class', mergedClasses)
 
     const elStyle = el.getAttribute('style')
-    /* istanbul ignore else */
     if (elStyle) {
       svg.setAttribute('style', elStyle)
     }
@@ -136,7 +127,6 @@ const injectElement = (
       }
     })
 
-    /* istanbul ignore else */
     if (renumerateIRIElements) {
       // Make sure any internally referenced clipPath ids and their clip-path
       // references are unique.
@@ -251,7 +241,6 @@ const injectElement = (
       for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
         const link = allLinks[c]!
         const href = link.getAttribute('href')
-        /* istanbul ignore else */
         if (href) {
           const nextHref = replaceHrefReference(href, iriIdMap)
           if (nextHref !== href) {
@@ -260,7 +249,6 @@ const injectElement = (
         }
 
         const xlinkHref = link.getAttributeNS(xlinkNamespace, 'href')
-        /* istanbul ignore else */
         if (xlinkHref) {
           const nextXlinkHref = replaceHrefReference(xlinkHref, iriIdMap)
           if (nextXlinkHref !== xlinkHref) {
@@ -353,7 +341,6 @@ const injectElement = (
     }
 
     // Run/Eval the scripts if needed.
-    /* istanbul ignore else */
     if (
       scriptsToEval.length > 0 &&
       (evalScripts === 'always' ||

@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './playwright/coverage'
 import uniqueId from '../src/unique-id'
-import './playwright/coverage'
 
 test('unique id generates unique ids', () => {
   expect(uniqueId()).toBe(1)

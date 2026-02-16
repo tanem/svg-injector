@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
 import * as fs from 'fs/promises'
 import * as path from 'path'
 
@@ -12,28 +12,37 @@ const sanitize = (value: string) => {
   return value.replace(/[^a-zA-Z0-9_-]+/g, '_')
 }
 
-test.afterEach(async ({ page }, testInfo) => {
-  if (process.env.COVERAGE !== '1') {
-    return
-  }
+const test = base.extend<{ _collectCoverage: void }>({
+  _collectCoverage: [
+    async ({ page }, use, testInfo) => {
+      await use()
 
-  try {
-    const coverage = await page.evaluate(
-      () => (window as unknown as CoverageWindow).__coverage__ ?? null,
-    )
+      if (process.env.COVERAGE !== '1') {
+        return
+      }
 
-    if (!coverage) {
-      return
-    }
+      try {
+        const coverage = await page.evaluate(
+          () => (window as unknown as CoverageWindow).__coverage__ ?? null,
+        )
 
-    await fs.mkdir(coverageDir, { recursive: true })
+        if (!coverage) {
+          return
+        }
 
-    const title = sanitize(testInfo.titlePath.join('-'))
-    const fileName = `${testInfo.project.name}-${title}.json`
-    const filePath = path.join(coverageDir, fileName)
+        await fs.mkdir(coverageDir, { recursive: true })
 
-    await fs.writeFile(filePath, JSON.stringify(coverage), 'utf8')
-  } catch {
-    // Ignore coverage collection failures to avoid masking test results.
-  }
+        const title = sanitize(testInfo.titlePath.join('-'))
+        const fileName = `${testInfo.project.name}-${title}.json`
+        const filePath = path.join(coverageDir, fileName)
+
+        await fs.writeFile(filePath, JSON.stringify(coverage), 'utf8')
+      } catch {
+        // Ignore coverage collection failures to avoid masking test results.
+      }
+    },
+    { auto: true },
+  ],
 })
+
+export { expect, test }

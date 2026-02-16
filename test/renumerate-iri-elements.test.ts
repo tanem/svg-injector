@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './playwright/coverage'
 import { formatHtml, injectSvg, setupPage } from './playwright/test-utils'
-import './playwright/coverage'
 
 test.describe('renumerate iri elements', () => {
   test('renumerateIRIElements: false', async ({ page }) => {

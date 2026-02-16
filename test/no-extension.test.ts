@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './playwright/coverage'
 import { formatHtml, injectSvg, setupPage } from './playwright/test-utils'
-import './playwright/coverage'
 
 test.describe('no extension', () => {
   test('missing content type', async ({ page, browserName }) => {

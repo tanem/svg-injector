@@ -6,7 +6,6 @@ const extractSymbol = (
 ): SVGSVGElement | null => {
   const symbol = spriteSvg.querySelector('#' + CSS.escape(symbolId))
 
-  /* istanbul ignore else */
   if (symbol?.tagName.toLowerCase() !== 'symbol') {
     return null
   }
