@@ -1,5 +1,18 @@
 # Changelog
 
+## [v11.2.2](https://github.com/tanem/svg-injector/tree/v11.2.2) (2026-02-16)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.1...v11.2.2)
+
+#### :memo: Documentation
+
+- [#1561](https://github.com/tanem/svg-injector/pull/1561) Tidy and improve comments ([@tanem](https://github.com/tanem))
+- [#1560](https://github.com/tanem/svg-injector/pull/1560) Tidy README.md ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#1559](https://github.com/tanem/svg-injector/pull/1559) Fix code coverage setup ([@tanem](https://github.com/tanem))
+- [#1558](https://github.com/tanem/svg-injector/pull/1558) Optimise workflows ([@tanem](https://github.com/tanem))
+
 ## [v11.2.1](https://github.com/tanem/svg-injector/tree/v11.2.1) (2026-02-15)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.0...v11.2.1)
 
