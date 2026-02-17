@@ -30,6 +30,10 @@ SVGInjector(document.getElementById('inject-me'))
 
 You can inject individual symbols from an SVG sprite sheet by appending a fragment identifier (e.g. `sprite.svg#icon-star`) to the `data-src` URL. See the [sprite usage example](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage) for full documentation and known limitations.
 
+## Data URL Support
+
+When a bundler like Vite inlines small SVGs as `data:image/svg+xml` URLs, the library parses the SVG content directly from the data URL without making a network request. This avoids Content Security Policy violations and unnecessary XHR overhead. See the [data URL usage example](https://github.com/tanem/svg-injector/tree/master/examples/data-url-usage) for supported formats and known limitations.
+
 ## Avoiding XSS
 
 Be careful when injecting arbitrary third-party SVGs into the DOM, as this opens the door to XSS attacks. If you must inject third-party SVGs, it is highly recommended to sanitise the SVG before injecting. The following example uses [DOMPurify](https://github.com/cure53/DOMPurify) to strip out attributes and tags that can execute arbitrary JavaScript. Note that this can alter the behaviour of the SVG.
@@ -53,6 +57,7 @@ SVGInjector(document.getElementById('inject-me'), {
 - Basic Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/basic-usage)
 - API Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/api-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/api-usage)
 - IRI Renumeration: [Source](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/iri-renumeration)
+- Data URL Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/data-url-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/data-url-usage)
 - Sprite Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/sprite-usage)
 - UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
 - UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)

@@ -2,133 +2,58 @@
 
 ## Project Overview
 
-A browser DOM library that replaces elements (with `data-src` or `src` attributes pointing to SVG files) with inline SVG markup via XMLHttpRequest. Published as `@tanem/svg-injector` to npm.
+A browser DOM library that replaces elements (with `data-src` or `src` attributes pointing to SVG files or data URLs) with inline SVG markup. Published as `@tanem/svg-injector` to npm.
 
-## Architecture
+## Known Limitations
 
-The injection pipeline flows through these modules in `src/`:
+These constraints are not expressed in the source code and affect how features should be used or extended.
 
-1. **`svg-injector.ts`**: public API entry point. Accepts single element or element collections, iterates and delegates to `injectElement`.
-2. **`inject-element.ts`**: core orchestrator. Loads SVG (cached or uncached), transfers attributes from the original element to the SVG, renumerates IRI elements for uniqueness, handles script eval, calls `beforeEach` hook, then replaces the DOM element via `parentNode.replaceChild`.
-3. **`load-svg-cached.ts`** / **`load-svg-uncached.ts`**: two loading strategies. Cached path uses `cache.ts` (a `Map<string, SVGSVGElement | Error | undefined>`) and `request-queue.ts` to deduplicate concurrent requests for the same URL.
-4. **`make-ajax-request.ts`**: XHR wrapper that validates content-type (`image/svg+xml` or `text/plain`) and handles local file protocol detection via `is-local.ts`.
-5. **`unique-id.ts`**: simple incrementing counter used to make IRI element IDs unique across multiple injected instances of the same SVG.
-
-Key design decisions:
-
-- SVG cloning (`clone-svg.ts`) uses `cloneNode(true)` to avoid mutating cached originals.
-- Request queue callbacks are fired via `setTimeout(fn, 0)` to avoid blocking the renderer.
-- The `injectedElements` array in `inject-element.ts` is module-level state that prevents duplicate injection of the same element.
-
-## SVG Sprite Support
-
-When the `data-src` or `src` URL contains a fragment identifier (e.g. `sprite.svg#icon-name`), the injector fetches the base URL, extracts the `<symbol>` with the matching ID, and converts it to a standalone `<svg>` for injection.
-
-Key design decisions:
-
-- The fragment is stripped before passing the URL to the loader, so the cache keys by base URL. All symbols from the same sprite share one cache entry and one XHR request.
-- Extraction operates on the cloned sprite (from `clone-svg.ts`), never mutating the cached original.
-
-**Known limitations:**
+### SVG Sprites
 
 - **Self-contained symbols only.** Shared root-level `<defs>` (gradients, filters, clip paths referenced by multiple symbols) are not resolved into the extracted SVG. Symbols must contain all their own definitions or use individual SVG files.
 - **Only `<symbol>` elements are supported.** The fragment ID must match the `id` attribute of a `<symbol>` element in the sprite. Other element types (e.g. `<g>`, `<svg>`) are not extracted.
 - **`<use>` chains within symbols are not resolved.** If a symbol internally references another symbol via `<use>`, the reference will break after extraction.
 
-## Build Pipeline
+### Data URLs
 
-```
-npm run build  →  clean → compile (tsc) → bundle (rollup)
-```
+- **Only `data:image/svg+xml` MIME types are supported.** Other image data URLs (e.g. `data:image/png`) are not handled and will fall through to XHR (which will fail).
+- **`DOMParser` error detection is best-effort.** Browsers embed a `<parsererror>` element in the returned document on invalid input; the library checks for this but the error message format varies by browser.
 
-- **`compile`**: TypeScript compiles `src/` → `compiled/` using `tsconfig.base.json` (target: ES5, module: ESNext).
-- **`bundle`**: Rollup produces 5 outputs from `compiled/index.js`: CJS dev/prod, ESM, UMD dev/prod. See `rollup.config.mjs`.
-- **`postbundle`**: Copies `index.js` (CJS env-switcher) into `dist/`.
-- The root `index.js` is a CJS entry that selects dev/prod bundle based on `NODE_ENV`.
+### IRI Renumeration
 
-## Testing
-
-Tests run in real browsers via **Playwright** (`@playwright/test`). Each test file uses Playwright's `test` / `test.describe` / `expect` APIs directly.
-
-```bash
-npm test                    # Full pipeline: check:types → lint → build → test:playwright
-npm run test:playwright     # Run only browser tests (requires prior build)
-npm run test:coverage       # Full pipeline with coverage: build:coverage → test → report
-```
-
-Key testing patterns:
-
-- **`test/playwright/test-utils.ts`** provides `setupPage()` (creates a route-intercepted page serving a base HTML document and SVG fixtures), `injectSvg()` (injects SVG via the UMD bundle inside the page and returns serialised HTML + callback data), `addSvgInjector()` (adds the UMD bundle as an init script), and `formatHtml()` (normalises whitespace).
-- Tests use `page.route()` to intercept fixture requests and serve files from `test/fixtures/` with configurable status codes, content types, and bodies. No dev server is needed.
-- Tests compare serialised HTML strings and branch on `browserName` (firefox vs others) because browsers serialise SVG attributes in different orders. IE-specific branches have been removed.
-- SVG fixtures live in `test/fixtures/`.
-- Each test gets a fresh browser context automatically (Playwright's default isolation), so there is no manual cache/queue cleanup needed between tests.
-- **`test/playwright/coverage.ts`** is imported as a side-effect in every test file (`import './playwright/coverage'`). It collects `window.__coverage__` after each test (when `COVERAGE=1`) and writes per-test JSON files to `.nyc_output/`.
-- **Coverage**: Instrumented via `babel-plugin-istanbul` in the Rollup build (enabled when `COVERAGE=1`). After tests, `scripts/coverage-report.js` merges the per-test coverage JSON files, remaps through source maps, filters to `src/` only (excluding `src/index.ts` and `src/types.ts`), and outputs lcov to `coverage/`. No explicit threshold is enforced; coverage is uploaded to Codecov in CI.
-- **`playwright.config.ts`** defines three projects: chromium, firefox, webkit. CI uses `retries: 1` and `workers: 2`.
+- **All matching element types are renumerated, not just those inside `<defs>`.** If an SVG has `<path id="TX">` outside `<defs>` (e.g. a US map), that ID will be rewritten. Users who need to query injected elements by their original IDs should set `renumerateIRIElements: false`. See [#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023).
+- **String references in `<script>` blocks are not updated.** If SVG scripts use `document.getElementById('oldId')`, those strings will not be rewritten.
+- **CSS ID selectors in `<style>` elements are not updated.** Only `url(#id)` references within `<style>` text are rewritten. A rule like `#myId { fill: red }` will still reference the old ID.
 
 ## Dependency Management
 
-This project follows strict versioning conventions for dependencies:
-
-- **Runtime `dependencies`**: Use caret ranges (`^1.2.3`) to allow compatible updates. Install with `npm install --save package@version`.
-- **`devDependencies`**: Use exact pinned versions (`1.2.3`, no caret) for reproducible builds. Install with `npm install --save-dev --save-exact package@version`.
-
-**Current major versions:**
-
-- **ESLint**: v9.x (not v10). `@typescript-eslint` doesn't yet support ESLint v10. Update ESLint and @typescript-eslint together as a monorepo group.
-- **TypeScript**: v5.x
-- **Rollup**: v4.x
-- **Playwright**: v1.x
-
-**Updating dependencies:**
-
-- Always verify changes with `npm test` (alias: `npmt`) after each update.
-- Update related packages together (e.g., ESLint ecosystem, Rollup plugins, @typescript-eslint + ESLint).
-- Check for formatting changes after updating prettier and run `npm run format` if needed.
+- **Runtime `dependencies`**: caret ranges (`^1.2.3`). Install with `npm install --save package@version`.
+- **`devDependencies`**: exact pinned versions (`1.2.3`, no caret). Install with `npm install --save-dev --save-exact package@version`.
+- **ESLint**: v9.x (not v10). `@typescript-eslint` doesn't yet support ESLint v10. Update ESLint and @typescript-eslint together.
+- Always verify with `npm test` after each update.
 - After updating @playwright/test, run `npx playwright install` to update browser binaries.
-- Commit each logical group of updates separately with conventional commit messages matching Renovate's format: `Update dependency <name> to v<version>` or `Update <monorepo> monorepo to v<version>`.
+- Check for formatting changes after updating prettier and run `npm run format` if needed.
+- When adding or removing dependencies, review `renovate.json` for obsolete package rules and other config files (`codecov.yml`, CI workflows) that may reference removed tools.
+- Commit each logical group of updates separately: `Update dependency <name> to v<version>` or `Update <monorepo> monorepo to v<version>`.
 
 ## Code Conventions
 
-- **One default export per module**: each `src/*.ts` file exports a single function or value as `export default`.
-- **Types in `src/types.ts`**: shared callback types (`AfterAll`, `BeforeEach`, `Errback`, `EvalScripts`) live here, marked `/* istanbul ignore file */`.
-- **`/* istanbul ignore else */`** comments are used in source to skip branches that only run in specific browsers.
-- **No arrow function class methods**: this is a functional codebase with no classes.
-- **Strict TypeScript and ESLint**: `tsconfig.base.json` and `eslint.config.mjs` enforce strict type safety. Never use `any` types; use `unknown` when type is truly dynamic. Use non-null assertions (`!`) only with runtime guarantees (e.g., array access within bounds-checked loops).
-- **Formatting**: Prettier handles all JS/TS formatting. Run `npm run format` or check with `npm run check:format`.
-- **Comment style**: Use `//` comments, not `/* */` (except for istanbul/eslint directives). Comments are wrapped to 80 columns.
+- One default export per module in `src/`.
+- Functional codebase, no classes.
+- Never use `any`; use `unknown` when type is truly dynamic.
+- Use non-null assertions (`!`) only with runtime guarantees (e.g. array access within bounds-checked loops).
+- Use `//` comments, not `/* */` (except for istanbul/eslint directives).
+- `/* istanbul ignore else */` marks branches that only run in specific browsers.
 
-## IRI Renumeration
-
-When `renumerateIRIElements` is `true` (the default), the injector rewrites `id` attributes on IRI-addressable SVG elements to prevent cross-instance conflicts when the same SVG is injected multiple times. The implementation details (which elements, which attributes, processing order) can be read directly from `inject-element.ts`.
-
-**Known limitations:**
-
-- **All matching element types are renumerated, not just those inside `<defs>`.** If an SVG has `<path id="TX">` outside `<defs>` (e.g. a US map), that ID will be rewritten. Users who need to query injected elements by their original IDs should set `renumerateIRIElements: false`. See [#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023).
-- **String references in `<script>` blocks are not updated.** If SVG scripts use `document.getElementById('oldId')`, those strings will not be rewritten. Arbitrary JavaScript cannot be reliably parsed for ID references.
-- **CSS ID selectors in `<style>` elements are not updated.** Only `url(#id)` references within `<style>` text are rewritten. A rule like `#myId { fill: red }` will still reference the old ID. This could be addressed in future if demand arises.
-
-## Working with This Codebase
-
-- The public API surface is just `SVGInjector` and the types re-exported from `src/index.ts`.
-- When modifying IRI renumeration logic in `inject-element.ts`, verify against `test/renumerate-iri-elements.test.ts` which has extensive expected-output strings.
-- The `content-type` npm package is a runtime dependency used in `make-ajax-request.ts` for response validation.
-- CI runs tests on Chromium, Firefox, and WebKit via Playwright. BrowserStack / IE testing has been removed.
-- **When adding or removing dependencies**, always review `renovate.json` for obsolete package rules (version constraints, allowedVersions) and other config files (`codecov.yml`, CI workflows) that may reference removed tools or frameworks.
-
-## Documentation
+## Documentation and Writing Style
 
 - Keep `.github/copilot-instructions.md`, `README.md`, and `MIGRATION.md` up to date when making changes that affect the public API, build pipeline, testing patterns, or code conventions.
-- Use NZ English in documentation (e.g. "serialise", "normalise", "colour", "behaviour").
-- **Copilot instructions should only contain information that cannot be readily inferred from the source code.** Do not duplicate implementation details (e.g. function names, processing order, data structures) that an agent can discover by reading the relevant files. Focus on conventions, design decisions, known limitations, and non-obvious constraints.
-- **README structure follows [standard-readme](https://github.com/RichardLitt/standard-readme).** Keep the main `README.md` concise and scannable. Detailed feature documentation (usage examples, caveats, limitations) belongs in a `README.md` within the relevant `examples/` subdirectory, linked from the main README.
-
-## Writing Style
-
-- Use simple, direct technical language. Avoid marketing speak or hyperbole.
-- Do not use em dashes (`—`). Use colons, full stops, or other punctuation appropriate for technical writing.
-- Code comments should only document non-obvious behaviour, constraints, or design decisions. Do not comment things that are clear from the code itself.
+- Use NZ English (e.g. "serialise", "normalise", "colour", "behaviour").
+- Copilot instructions should only contain information that cannot be readily inferred from the source code.
+- README structure follows [standard-readme](https://github.com/RichardLitt/standard-readme). Detailed feature documentation belongs in `examples/*/README.md`, linked from the main README.
+- Use simple, direct technical language. No marketing speak.
+- Do not use em dashes (`—`). Use colons, full stops, or other punctuation.
+- Code comments should only document non-obvious behaviour, constraints, or design decisions.
 
 ## Commits
 

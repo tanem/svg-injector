@@ -1,6 +1,7 @@
 import extractSymbol from './extract-symbol'
 import loadSvgCached from './load-svg-cached'
 import loadSvgUncached from './load-svg-uncached'
+import parseDataUrl from './parse-data-url'
 import type { BeforeEach, Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
@@ -49,9 +50,18 @@ const injectElement = (
   const baseUrl = hashIndex !== -1 ? elUrl.slice(0, hashIndex) : elUrl
   const symbolId = hashIndex !== -1 ? elUrl.slice(hashIndex + 1) : null
 
-  const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
+  // Data URLs already contain the SVG content, so parse them directly instead
+  // of making a pointless XHR. This avoids CSP violations that occur when
+  // browsers (or bundlers like Vite) inline SVGs as data URIs.
+  const dataUrlResult = parseDataUrl(baseUrl)
+  if (dataUrlResult instanceof Error) {
+    injectedElements.splice(injectedElements.indexOf(el), 1)
+    ;(el as ElementType) = null
+    callback(dataUrlResult)
+    return
+  }
 
-  loadSvg(baseUrl, httpRequestWithCredentials, (error, loadedSvg) => {
+  const handleLoadedSvg = (error: Error | null, loadedSvg?: SVGSVGElement) => {
     if (!loadedSvg) {
       injectedElements.splice(injectedElements.indexOf(el), 1)
       ;(el as ElementType) = null
@@ -367,7 +377,21 @@ const injectElement = (
     ;(el as ElementType) = null
 
     callback(null, svg)
-  })
+  }
+
+  if (dataUrlResult) {
+    // Use setTimeout to match the async behaviour of the XHR path. Callers may
+    // depend on injection being asynchronous (e.g. reading DOM state after
+    // calling SVGInjector but before the callback fires).
+    setTimeout(() => {
+      handleLoadedSvg(null, dataUrlResult)
+    }, 0)
+    return
+  }
+
+  const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
+
+  loadSvg(baseUrl, httpRequestWithCredentials, handleLoadedSvg)
 }
 
 export default injectElement
