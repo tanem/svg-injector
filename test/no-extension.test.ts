@@ -20,7 +20,12 @@ test.describe('no extension', () => {
     // no error is returned. Chromium and Firefox surface the missing header.
     const expectedError =
       browserName === 'webkit' ? null : 'Content type not found'
-    expect(result.afterEachCalls[0]?.error ?? null).toBe(expectedError)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error ?? null).toBe(expectedError)
+    if (browserName !== 'webkit') {
+      expect(result.afterEachCalls[0]!.svg).toBe(null)
+    }
+    expect(result.elementsLoaded).toBe(1)
   })
 
   test('invalid media type', async ({ page }) => {
@@ -36,7 +41,10 @@ test.describe('no extension', () => {
       selector: '.inject-me',
     })
 
-    expect(result.afterEachCalls[0]?.error).toBe('invalid media type')
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe('invalid media type')
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
   })
 
   test('invalid content type', async ({ page }) => {
@@ -52,9 +60,12 @@ test.describe('no extension', () => {
       selector: '.inject-me',
     })
 
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'Invalid content type: text/html',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
   })
 
   test('image/svg+xml', async ({ page }) => {

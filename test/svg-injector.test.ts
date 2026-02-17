@@ -77,27 +77,49 @@ test.describe('SVGInjector', () => {
 
     expect(result.elementsLoaded).toBe(0)
     expect(result.afterEachCalls).toHaveLength(0)
+    expect(result.html).toBe('')
   })
 
   test('injection in progress', async ({ page }) => {
     await setupPage(page)
 
-    await page.evaluate(() => {
-      document.body.innerHTML = ''
-      const container = document.createElement('div')
-      container.innerHTML = `
-        <div
-          class="inject-me"
-          data-src="/fixtures/in-progress.svg"
-        ></div>
-      `
-      document.body.appendChild(container)
-      const { SVGInjector } = (window as unknown as SvgInjectorWindow)
-        .SVGInjector
-      const element = container.querySelector('.inject-me')
-      SVGInjector(element)
-      SVGInjector(element)
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        afterEachCallCount: number
+      }>((resolve) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        let afterEachCallCount = 0
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        const element = container.querySelector('.inject-me')
+        SVGInjector(element, {
+          afterEach: () => {
+            afterEachCallCount++
+          },
+          afterAll: () => {
+            resolve({
+              html: container.innerHTML,
+              afterEachCallCount,
+            })
+          },
+        })
+        SVGInjector(element)
+      })
     })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toBe(thumbUpSvg)
+    expect(result.afterEachCallCount).toBe(1)
   })
 
   test('attributes', async ({ page }) => {
@@ -174,6 +196,12 @@ test.describe('SVGInjector', () => {
 
   test('cached success', async ({ page }) => {
     await setupPage(page)
+
+    let requestCount = 0
+    await page.route('**/fixtures/thumb-up.svg', async (route) => {
+      requestCount++
+      await route.fallback()
+    })
 
     const result = await page.evaluate(() => {
       return new Promise<{
@@ -252,6 +280,7 @@ test.describe('SVGInjector', () => {
     expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(
       formatHtml(result.containerTwoHtml),
     )
+    expect(requestCount).toBe(1)
   })
 
   test('uncached requests fetch fresh data', async ({ page }) => {
@@ -317,52 +346,70 @@ test.describe('SVGInjector', () => {
   test('errors should not be cached', async ({ page }) => {
     await setupPage(page)
 
+    let requestCount = 0
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/flaky.svg', async (route) => {
+      requestCount += 1
+      if (requestCount === 1) {
+        await route.fulfill({ status: 404, body: '' })
+      } else {
+        await route.fulfill({
+          status: 200,
+          body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>',
+          headers: { 'content-type': 'image/svg+xml' },
+        })
+      }
+    })
+
     const result = await page.evaluate(() => {
-      return new Promise<{ errors: Array<string | null> }>((resolve) => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve) => {
         document.body.innerHTML = ''
 
-        const errors: Array<string | null> = []
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
         const { SVGInjector } = (window as unknown as SvgInjectorWindow)
           .SVGInjector
 
-        const inject = (html: string, done: () => void) => {
+        const inject = (done: () => void) => {
           const container = document.createElement('div')
-          container.innerHTML = html
+          container.innerHTML = `
+            <div
+              class="inject-me"
+              data-src="/fixtures/flaky.svg"
+            ></div>
+          `
           document.body.appendChild(container)
           SVGInjector(container.querySelector('.inject-me'), {
-            afterEach: (error: Error | null) => {
-              errors.push(error ? error.message : null)
+            afterEach: (error: Error | null, svg?: Element | null) => {
+              afterEachCalls.push({
+                error: error ? error.message : null,
+                svg: svg
+                  ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                  : null,
+              })
             },
             afterAll: () => done(),
           })
         }
 
-        inject(
-          `
-            <div
-              class="inject-me"
-              data-src="/fixtures/not-found.svg"
-            ></div>
-          `,
-          () => {
-            inject(
-              `
-                <div
-                  class="inject-me"
-                  data-src="/fixtures/still-not-found.svg"
-                ></div>
-              `,
-              () => resolve({ errors }),
-            )
-          },
-        )
+        inject(() => {
+          inject(() => resolve({ afterEachCalls }))
+        })
       })
     })
 
-    expect(result.errors).toHaveLength(2)
-    expect(result.errors[1]).toBe(
-      'Unable to load SVG file: /fixtures/still-not-found.svg',
+    expect(requestCount).toBe(2)
+    expect(result.afterEachCalls).toHaveLength(2)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to load SVG file: /fixtures/flaky.svg',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(result.afterEachCalls[1]!.svg).toContain('viewBox="0 0 10 10"')
   })
 
   test('svg not found error', async ({ page }) => {
@@ -379,9 +426,11 @@ test.describe('SVGInjector', () => {
     })
 
     expect(result.elementsLoaded).toBe(1)
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'Unable to load SVG file: /fixtures/not-found.svg',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
   test('invalid src error', async ({ page }) => {
@@ -397,9 +446,11 @@ test.describe('SVGInjector', () => {
     })
 
     expect(result.elementsLoaded).toBe(1)
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'Invalid data-src or src attribute',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
   test('unknown exception', async ({ page }) => {
@@ -422,12 +473,15 @@ test.describe('SVGInjector', () => {
       selector: '.inject-me',
     })
 
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.elementsLoaded).toBe(1)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'There was a problem injecting the SVG: 500 Internal Server Error',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
-  test('default `afterAll` callback', async ({ page }) => {
+  test('completes without explicit `afterAll`', async ({ page }) => {
     await setupPage(page)
 
     const result = await page.evaluate(() => {
@@ -535,9 +589,12 @@ test.describe('SVGInjector', () => {
       options: { cacheRequests: false },
     })
 
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.elementsLoaded).toBe(1)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'There was a problem injecting the SVG: 500 Internal Server Error',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
   test('returns an error when parent node is null', async ({ page }) => {

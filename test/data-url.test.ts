@@ -113,9 +113,16 @@ test.describe('data URL support', () => {
       selectorAll: true,
     })
 
+    const actualFirst = formatHtml(result.afterEachCalls[0]!.svg ?? '')
+    const actualSecond = formatHtml(result.afterEachCalls[1]!.svg ?? '')
+    const expectedEncoded = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${encodedDataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+    const expectedBase64 = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${base64DataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+
     expect(result.afterEachCalls).toHaveLength(2)
     expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(actualFirst).toBe(expectedEncoded)
     expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(actualSecond).toBe(expectedBase64)
     expect(result.elementsLoaded).toBe(2)
   })
 
@@ -161,6 +168,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Symbol "nonexistent" not found',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -183,6 +191,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Data URL did not contain a valid SVG element',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -202,7 +211,8 @@ test.describe('data URL support', () => {
     })
 
     expect(result.afterEachCalls).toHaveLength(1)
-    expect(result.afterEachCalls[0]!.error).toBeTruthy()
+    expect(result.afterEachCalls[0]!.error).toBe('Invalid base64 in data URL')
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -225,6 +235,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Unsupported data URL format',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -297,6 +308,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Invalid encoding in data URL',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -319,6 +331,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Invalid encoding in data URL',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -343,6 +356,7 @@ test.describe('data URL support', () => {
     expect(result.afterEachCalls[0]!.error).toContain(
       'Data URL SVG parse error',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 })

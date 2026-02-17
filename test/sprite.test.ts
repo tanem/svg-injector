@@ -106,6 +106,7 @@ test.describe('sprite support', () => {
     expect(result.afterEachCalls[0]!.error).toBe(
       'Symbol "nonexistent" not found in /fixtures/sprite.svg',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 
@@ -171,7 +172,10 @@ test.describe('sprite support', () => {
     })
 
     expect(result.afterEachCalls).toHaveLength(1)
-    expect(result.afterEachCalls[0]!.error).toBeTruthy()
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to load SVG file: /fixtures/nonexistent-sprite.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
     expect(result.elementsLoaded).toBe(1)
   })
 })
