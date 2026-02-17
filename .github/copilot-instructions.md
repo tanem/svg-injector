@@ -29,7 +29,7 @@ These constraints are not expressed in the source code and affect how features s
 
 - **Runtime `dependencies`**: caret ranges (`^1.2.3`). Install with `npm install --save package@version`.
 - **`devDependencies`**: exact pinned versions (`1.2.3`, no caret). Install with `npm install --save-dev --save-exact package@version`.
-- **ESLint**: v9.x (not v10). `@typescript-eslint` doesn't yet support ESLint v10. Update ESLint and @typescript-eslint together.
+- **ESLint and @typescript-eslint**: Update together to maintain compatibility.
 - Always verify with `npm test` after each update.
 - After updating @playwright/test, run `npx playwright install` to update browser binaries.
 - Check for formatting changes after updating prettier and run `npm run format` if needed.
