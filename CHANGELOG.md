@@ -1,5 +1,16 @@
 # Changelog
 
+## [v11.3.0](https://github.com/tanem/svg-injector/tree/v11.3.0) (2026-02-17)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.2...v11.3.0)
+
+#### :rocket: Enhancement
+
+- [#1562](https://github.com/tanem/svg-injector/pull/1562) Add data URL support for data:image/svg+xml URLs ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#1563](https://github.com/tanem/svg-injector/pull/1563) Update ESLint to v10 and @typescript-eslint monorepo to v8.56.0 ([@tanem](https://github.com/tanem))
+
 ## [v11.2.2](https://github.com/tanem/svg-injector/tree/v11.2.2) (2026-02-16)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.1...v11.2.2)
 
