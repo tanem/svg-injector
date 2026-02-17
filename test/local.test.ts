@@ -35,9 +35,11 @@ test.describe('local', () => {
     })
 
     expect(result.elementsLoaded).toBe(1)
-    expect(result.afterEachCalls[0]?.error).toBe(
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
       'Note: SVG injection ajax calls do not work locally without adjusting security settings in your browser. Or consider using a local webserver.',
     )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
   // Playwright browsers enforce cross-origin restrictions on file:// pages, so
