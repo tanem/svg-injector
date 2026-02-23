@@ -1,5 +1,12 @@
 # Changelog
 
+## [v11.3.1](https://github.com/tanem/svg-injector/tree/v11.3.1) (2026-02-23)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.0...v11.3.1)
+
+#### :house: Internal
+
+- [#1564](https://github.com/tanem/svg-injector/pull/1564) Update dependency tar to v7.5.8 [SECURITY] ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v11.3.0](https://github.com/tanem/svg-injector/tree/v11.3.0) (2026-02-17)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.2.2...v11.3.0)
 
