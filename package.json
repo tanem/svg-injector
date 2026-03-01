@@ -61,7 +61,7 @@
     "istanbul-reports": "3.2.0",
     "npm-run-all2": "8.0.4",
     "prettier": "3.8.1",
-    "rollup": "4.57.1",
+    "rollup": "4.59.0",
     "rollup-plugin-filesize": "10.0.0",
     "shx": "0.4.0",
     "tanem-scripts": "8.0.2",
