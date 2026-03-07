@@ -55,6 +55,14 @@ These constraints are not expressed in the source code and affect how features s
 - Do not use em dashes (`—`). Use colons, full stops, or other punctuation.
 - Code comments should only document non-obvious behaviour, constraints, or design decisions.
 
+## Example Tests
+
+- `npm test` builds and verifies all examples in `examples/` via Playwright (`test/examples.test.ts`).
+- `npm run test:examples` runs only example verification (useful for quick iteration).
+- When adding, removing, or renaming an example, update the `parcelExamples` or `umdExamples` arrays in `test/examples.test.ts` and the `parcelExamples` array in `scripts/build-examples.js`.
+- Parcel examples must be listed in `scripts/build-examples.js` so they are built with the local library before testing.
+- UMD examples are served as static HTML. Their unpkg CDN requests are intercepted and fulfilled with the local UMD build.
+
 ## Commits
 
 - Prefer single-line commit messages.

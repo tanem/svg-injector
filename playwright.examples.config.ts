@@ -2,8 +2,7 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './test',
-  testMatch: '**/*.test.ts',
-  testIgnore: 'examples.test.ts',
+  testMatch: 'examples.test.ts',
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : undefined,
@@ -15,6 +14,7 @@ export default defineConfig({
     ? [['dot'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
   use: {
+    baseURL: 'http://localhost:4567',
     trace: 'retain-on-failure',
   },
   projects: [
@@ -22,13 +22,10 @@ export default defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium' },
     },
-    {
-      name: 'firefox',
-      use: { browserName: 'firefox' },
-    },
-    {
-      name: 'webkit',
-      use: { browserName: 'webkit' },
-    },
   ],
+  webServer: {
+    command: 'npx serve examples -l 4567 --no-clipboard',
+    port: 4567,
+    reuseExistingServer: !process.env.CI,
+  },
 })

@@ -9,6 +9,7 @@
     "eslint.config.mjs",
     "index.js",
     "playwright.config.ts",
+    "playwright.examples.config.ts",
     "rollup.config.mjs"
   ]
 }
