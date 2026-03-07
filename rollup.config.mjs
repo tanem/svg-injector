@@ -1,7 +1,6 @@
 import { DEFAULT_EXTENSIONS } from '@babel/core'
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
-import filesize from 'rollup-plugin-filesize'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import terser from '@rollup/plugin-terser'
@@ -58,14 +57,12 @@ const getPlugins = (bundleType) => [
     }),
   ...(isProduction(bundleType)
     ? [
-        filesize(),
         terser({
           output: { comments: false },
           compress: {
             keep_infinity: true,
             pure_getters: true,
           },
-          warnings: true,
           ecma: 5,
           toplevel: false,
         }),
