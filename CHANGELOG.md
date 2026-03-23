@@ -1,5 +1,13 @@
 # Changelog
 
+## [v11.3.2](https://github.com/tanem/svg-injector/tree/v11.3.2) (2026-03-23)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.1...v11.3.2)
+
+#### :house: Internal
+
+- [#1568](https://github.com/tanem/svg-injector/pull/1568) Automate example verification with Playwright ([@tanem](https://github.com/tanem))
+- [#1567](https://github.com/tanem/svg-injector/pull/1567) Fix npm audit vulnerabilities ([@tanem](https://github.com/tanem))
+
 ## [v11.3.1](https://github.com/tanem/svg-injector/tree/v11.3.1) (2026-02-23)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.0...v11.3.1)
 
