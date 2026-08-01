@@ -4,6 +4,10 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 ## v12.0.0
 
+**Added**
+
+- The `elements` parameter accepts a plain array. Its type was `HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null`, which rejected the `Element[]` the README has always documented, even though the runtime handled it. It is now also `readonly Element[]`, so `Array.from(...)` results, array literals and frozen arrays type-check without a cast. The type is exported as `Elements`.
+
 **Breaking**
 
 - Removed the UMD builds. `dist/svg-injector.umd.development.js` and `dist/svg-injector.umd.production.js` are no longer published, so a plain `<script src>` tag no longer defines `window.SVGInjector`. The CommonJS and ES module builds remain, under new filenames: see the packaging entry below.

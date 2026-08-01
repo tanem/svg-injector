@@ -64,7 +64,7 @@ SVGInjector(document.getElementById('inject-me'), {
 
 **Arguments**
 
-- `elements` - A single DOM element or array of elements, with `src` or `data-src` attributes defined, to inject.
+- `elements` - The elements to inject, each with a `src` or `data-src` attribute defined. Accepts a single `Element`, an `Element` array, a `NodeList` (e.g. from `querySelectorAll`), an `HTMLCollection` (e.g. from `getElementsByClassName`), or `null`. A `null` or empty argument injects nothing and calls `afterAll(0)`.
 - `options` - _Optional_ An object containing the optional arguments defined below. Defaults to `{}`.
   - `afterAll(elementsLoaded)` - _Optional_ A callback which is called when all elements have been processed. `elementsLoaded` is the total number of elements loaded. Defaults to `() => undefined`.
   - `afterEach(err, svg)` - _Optional_ A callback which is called when each element is processed. `svg` is the newly injected SVG DOM element. Defaults to `() => undefined`.

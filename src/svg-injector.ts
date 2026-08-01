@@ -1,7 +1,11 @@
 import injectElement from './inject-element'
-import type { AfterAll, BeforeEach, Errback, EvalScripts } from './types'
-
-type Elements = HTMLCollectionOf<Element> | NodeListOf<Element> | Element | null
+import type {
+  AfterAll,
+  BeforeEach,
+  Elements,
+  Errback,
+  EvalScripts,
+} from './types'
 
 interface OptionalArgs {
   afterAll?: AfterAll

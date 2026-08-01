@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 import { promises as fs } from 'fs'
 import * as path from 'path'
+import type { SVGInjector } from '../../src'
 
 const baseHtml = '<!doctype html><html><head></head><body></body></html>'
 const baseUrl = 'http://localhost/'
@@ -104,29 +105,18 @@ type InjectArgs = {
   html: string
   selector: string | null
   selectorAll?: boolean
+  // Pass the matches as a plain array instead of the live `NodeList`. Only
+  // meaningful alongside `selectorAll`.
+  asArray?: boolean
   options?: InjectOptions
 }
 
-type SvgInjectorCallback = (error: Error | null, svg?: Element | null) => void
-
-type SvgInjectorOptions = InjectOptions & {
-  afterAll?: (elementsLoaded: number) => void
-  afterEach?: SvgInjectorCallback
-  beforeEach?: (svg: Element) => void
-}
-
-type SvgInjectorElements =
-  | Element
-  | NodeListOf<Element>
-  | HTMLCollectionOf<Element>
-  | null
-
+// The global the IIFE bundle defines is the module's own export, so type it
+// from the source: the suite then type-checks against the published signature
+// rather than against a copy of it that can drift.
 interface SvgInjectorWindow extends Window {
   SVGInjector: {
-    SVGInjector: (
-      elements: SvgInjectorElements,
-      options?: SvgInjectorOptions,
-    ) => void
+    SVGInjector: typeof SVGInjector
   }
 }
 
@@ -138,21 +128,32 @@ type InjectResult = {
 
 export const injectSvg = async (
   page: Page,
-  { html, selector, selectorAll = false, options = {} }: InjectArgs,
+  {
+    html,
+    selector,
+    selectorAll = false,
+    asArray = false,
+    options = {},
+  }: InjectArgs,
 ): Promise<InjectResult> => {
   return page.evaluate(
-    ({ html, selector, selectorAll, options }) => {
+    ({ html, selector, selectorAll, asArray, options }) => {
       return new Promise<InjectResult>((resolve) => {
         document.body.innerHTML = ''
         const container = document.createElement('div')
         container.innerHTML = html
         document.body.appendChild(container)
 
-        const element = selector
-          ? selectorAll
-            ? container.querySelectorAll(selector)
-            : container.querySelector(selector)
-          : null
+        const resolveElements = () => {
+          if (!selector) {
+            return null
+          }
+          if (!selectorAll) {
+            return container.querySelector(selector)
+          }
+          const matches = container.querySelectorAll(selector)
+          return asArray ? Array.from(matches) : matches
+        }
 
         const afterEachCalls: Array<{
           error: string | null
@@ -179,14 +180,14 @@ export const injectSvg = async (
 
         const { SVGInjector } = (window as unknown as SvgInjectorWindow)
           .SVGInjector
-        SVGInjector(element as SvgInjectorElements, {
+        SVGInjector(resolveElements(), {
           afterAll,
           afterEach,
           ...options,
         })
       })
     },
-    { html, selector, selectorAll, options },
+    { html, selector, selectorAll, asArray, options },
   )
 }
 

@@ -67,6 +67,52 @@ test.describe('SVGInjector', () => {
     expect(result.elementsLoaded).toBe(2)
   })
 
+  test('array of elements', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        ></div>
+        <div
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+      selectorAll: true,
+      asArray: true,
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `${thumbUpSvg}${thumbUpSvg}`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(2)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(thumbUpSvg)
+    expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(thumbUpSvg)
+    expect(result.elementsLoaded).toBe(2)
+  })
+
+  test('empty array', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: '',
+      selector: '.inject-me',
+      selectorAll: true,
+      asArray: true,
+    })
+
+    expect(result.elementsLoaded).toBe(0)
+    expect(result.afterEachCalls).toHaveLength(0)
+    expect(result.html).toBe('')
+  })
+
   test('null element', async ({ page }) => {
     await setupPage(page)
 
