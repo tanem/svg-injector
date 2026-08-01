@@ -2,20 +2,20 @@
   "name": "data-url-usage",
   "version": "1.0.0",
   "description": "SVGInjector Data URL Usage Example",
+  "type": "module",
   "scripts": {
-    "build": "parcel build index.html",
-    "start": "parcel index.html --open"
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "start": "vite"
   },
   "dependencies": {
     "@tanem/svg-injector": "latest"
-  },
-  "overrides": {
-    "braces": "3.0.3"
   },
   "keywords": [
     "@tanem/svg-injector"
   ],
   "devDependencies": {
-    "parcel": "2.16.4"
+    "vite": "^8.2.0"
   }
 }

@@ -63,8 +63,8 @@ These constraints are not expressed in the source code and affect how features s
 
 - `npm test` builds and verifies all examples in `examples/` via Playwright (`test/examples.test.ts`).
 - `npm run test:examples` runs only example verification (useful for quick iteration).
-- When adding, removing, or renaming an example, update the `parcelExamples` array in `test/examples.test.ts` and in `scripts/build-examples.js`.
-- Parcel examples must be listed in `scripts/build-examples.js` so they are built with the local library before testing.
+- When adding, removing, or renaming an example, update the `examples` array in `test/examples.test.ts` and in `scripts/build-examples.js`. An example must be listed in `scripts/build-examples.js` so it is built with the local library before testing.
+- Examples are Vite apps. SVG files the injector fetches at runtime live in `<example>/public/`, since a `data-src` attribute is an opaque string to the bundler. `base: './'` in `vite.config.js` keeps built asset URLs relative, because the suite serves every example's output under `<example>/dist/` on one static server.
 
 ## Commits
 

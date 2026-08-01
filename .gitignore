@@ -1,7 +1,6 @@
 *.log
 .DS_Store
 .cache
-.parcel-cache
 .vscode
 coverage
 dist

@@ -22,6 +22,20 @@ SVGInjector(document.querySelectorAll('[data-src]'))
 
 The library detects the `data:image/svg+xml` prefix and parses the SVG content directly using `DOMParser`. No XHR is made, which avoids Content Security Policy violations that would otherwise occur when attempting to fetch a `data:` URI.
 
+## Getting a data URL from the bundler
+
+The last icon in this example does not hard-code its URL. It imports a local SVG file and assigns the result to `data-src`:
+
+```js
+import inlinedByVite from './inlined-by-vite.svg'
+
+document.getElementById('inlined-by-vite').setAttribute('data-src', inlinedByVite)
+```
+
+Vite resolves that import to a data URL when the file is under `build.assetsInlineLimit` (4 kB by default), in dev as well as in the production build. A file over the limit resolves to a normal URL instead, which the library fetches over the network as usual.
+
+The assignment has to happen in script because `data-src` is an opaque attribute to Vite's HTML handling — an import is the only reference the bundler follows. That is also why the SVG files in the other examples live in `public/`: they are named in `data-src` and never imported, so the bundler must copy them across untouched.
+
 ## Supported formats
 
 Everything between `data:image/svg+xml` and the first comma is read as an RFC 2397 parameter list: semicolon-separated, with case-insensitive names and values. A `base64` parameter selects base64 decoding, otherwise the data is percent-decoded.

@@ -12,8 +12,8 @@ const waitForInjection = async (page: Page, expectedCount: number) => {
   )
 }
 
-// Parcel examples serve their build output from <example>/dist/.
-const parcelExamples = [
+// Examples serve their Vite build output from <example>/dist/.
+const examples = [
   {
     name: 'basic-usage',
     expectedSvgCount: 1,
@@ -24,7 +24,7 @@ const parcelExamples = [
   },
   {
     name: 'data-url-usage',
-    expectedSvgCount: 5,
+    expectedSvgCount: 6,
   },
   {
     name: 'iri-renumeration',
@@ -36,7 +36,7 @@ const parcelExamples = [
   },
 ]
 
-for (const example of parcelExamples) {
+for (const example of examples) {
   test(`${example.name}: SVGs are injected`, async ({ page }) => {
     const errors: string[] = []
     page.on('pageerror', (err) => errors.push(err.message))
@@ -60,9 +60,27 @@ for (const example of parcelExamples) {
 
 test('data-url-usage: multi-byte text decodes as UTF-8', async ({ page }) => {
   await page.goto('/data-url-usage/dist/')
-  await waitForInjection(page, 5)
+  await waitForInjection(page, 6)
 
   await expect(page.locator('svg.label text')).toHaveText('café 🎉')
+})
+
+// The last icon's data-src is whatever Vite resolved an SVG import to, so
+// this pins the parser against the bundler's actual output rather than
+// against a hand-written copy of it. The injector carries the element's id
+// and the resolved URL across onto the SVG it swaps in.
+test('data-url-usage: the bundler-inlined icon is injected from a data URL', async ({
+  page,
+}) => {
+  await page.goto('/data-url-usage/dist/')
+  await waitForInjection(page, 6)
+
+  const injected = page.locator('svg#inlined-by-vite')
+  await expect(injected).toHaveAttribute(
+    'data-src',
+    /^data:image\/svg\+xml[,;]/,
+  )
+  await expect(injected.locator('path')).toHaveCount(1)
 })
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {
