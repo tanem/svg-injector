@@ -221,6 +221,277 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCallCount).toBe(1)
   })
 
+  // The same element can appear more than once in the collection passed to
+  // `SVGInjector`. The duplicate has to report an error so the `afterAll` count
+  // still completes.
+  test('same element twice in one collection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        afterAllCalls: number[]
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const element = container.querySelector('.inject-me')!
+        const elements = [element, element] as unknown as NodeListOf<Element>
+
+        const afterAllCalls: number[] = []
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterAll\` was not called. \`afterEach\` calls: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(elements, {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            afterAllCalls.push(elementsLoaded)
+            // Defer so a second `afterAll` call would be recorded too.
+            setTimeout(() => {
+              resolve({
+                html: container.innerHTML,
+                afterAllCalls,
+                afterEachCalls,
+              })
+            }, 0)
+          },
+        })
+      })
+    })
+
+    expect(formatHtml(result.html)).toBe(thumbUpSvg)
+    expect(result.afterAllCalls).toEqual([2])
+    expect(result.afterEachCalls).toHaveLength(2)
+    // The duplicate errors synchronously, so it is reported first.
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(thumbUpSvg)
+  })
+
+  // Repeated calls while an injection is in flight must all error, and must not
+  // start a second injection of the same element.
+  test('repeated calls for an element with an injection in flight', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.route('**/fixtures/thumb-up.svg', async (route) => {
+      requestCount++
+      await route.fallback()
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        calls: Array<{ call: number; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const element = container.querySelector('.inject-me')
+        const calls: Array<{
+          call: number
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every call. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const record = (call: number) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              call,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+            if (calls.length === 3) {
+              clearTimeout(timeoutId)
+              setTimeout(() => {
+                resolve({ html: container.innerHTML, calls })
+              }, 0)
+            }
+          }
+        }
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        // Uncached so that a duplicate injection would show up as a second
+        // request.
+        SVGInjector(element, { cacheRequests: false, afterEach: record(1) })
+        SVGInjector(element, { cacheRequests: false, afterEach: record(2) })
+        SVGInjector(element, { cacheRequests: false, afterEach: record(3) })
+      })
+    })
+
+    expect(formatHtml(result.html)).toBe(thumbUpSvg)
+    expect(requestCount).toBe(1)
+    expect(result.calls).toHaveLength(3)
+
+    const byCall = new Map(result.calls.map((call) => [call.call, call]))
+    expect(byCall.get(2)!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byCall.get(3)!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byCall.get(1)!.error).toBe(null)
+    expect(formatHtml(byCall.get(1)!.svg ?? '')).toBe(thumbUpSvg)
+  })
+
+  // A duplicate call for one element must not unguard another element whose
+  // injection is still in flight.
+  test('duplicate call does not disturb another in-flight injection', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    await page.route('**/fixtures/slow.svg', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      await route.fulfill({
+        status: 200,
+        body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>',
+        headers: { 'content-type': 'image/svg+xml' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        calls: Array<{ name: string; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            id="a"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+          <div
+            id="b"
+            data-src="/fixtures/slow.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const a = container.querySelector('#a')
+        const b = container.querySelector('#b')
+        const calls: Array<{
+          name: string
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every call. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const record = (name: string) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              name,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+            if (
+              calls.some((call) => call.name === 'b-first') &&
+              calls.some((call) => call.name === 'b-second')
+            ) {
+              clearTimeout(timeoutId)
+              setTimeout(() => {
+                resolve({ html: container.innerHTML, calls })
+              }, 0)
+            }
+          }
+        }
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        SVGInjector(a, {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            record('a-first')(error, svg)
+            // `a` has finished, but `b` is still in flight, so this call must
+            // be rejected as a duplicate.
+            SVGInjector(b, { afterEach: record('b-second') })
+          },
+        })
+        SVGInjector(b, { afterEach: record('b-first') })
+        SVGInjector(a, { afterEach: record('a-duplicate') })
+      })
+    })
+
+    const byName = new Map(result.calls.map((call) => [call.name, call]))
+    expect(byName.get('b-second')?.error).toBe(
+      'Injection already in progress: /fixtures/slow.svg',
+    )
+    expect(byName.get('a-duplicate')?.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byName.get('a-first')?.error).toBe(null)
+    expect(byName.get('b-first')?.error).toBe(null)
+    expect(result.html).toContain('viewBox="0 0 10 10"')
+    expect(result.calls).toHaveLength(4)
+  })
+
   test('attributes', async ({ page }) => {
     await setupPage(page)
 

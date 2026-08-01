@@ -5,18 +5,17 @@ import parseDataUrl from './parse-data-url'
 import type { BeforeEach, Errback, EvalScripts } from './types'
 import uniqueId from './unique-id'
 
-type ElementType = Element | HTMLElement | null
-
 // Tracks elements currently being injected. Prevents duplicate injection if
 // SVGInjector is called with the same element twice before the first injection
-// completes.
-const injectedElements: ElementType[] = []
+// completes. Entries are removed by the completion and error paths of the
+// injection that added them.
+const elementsInFlight = new Set<Element>()
 const ranScripts: Record<string, boolean> = {}
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
 const injectElement = (
-  el: NonNullable<ElementType>,
+  el: Element,
   evalScripts: EvalScripts,
   renumerateIRIElements: boolean,
   cacheRequests: boolean,
@@ -31,15 +30,15 @@ const injectElement = (
     return
   }
 
-  if (injectedElements.indexOf(el) !== -1) {
-    injectedElements.splice(injectedElements.indexOf(el), 1)
-    // Release the DOM reference to allow GC. The cast is needed because the
-    // parameter is typed as NonNullable.
-    ;(el as ElementType) = null
+  if (elementsInFlight.has(el)) {
+    // Leave the element marked: the injection that added it is still running
+    // and owns the removal. Reporting an error keeps the `afterEach` and
+    // `afterAll` accounting in `SVGInjector` correct.
+    callback(new Error(`Injection already in progress: ${elUrl}`))
     return
   }
 
-  injectedElements.push(el)
+  elementsInFlight.add(el)
   // Clear src to prevent the browser from fetching the original image URL while
   // the SVG load is in progress.
   el.setAttribute('src', '')
@@ -55,16 +54,26 @@ const injectElement = (
   // browsers (or bundlers like Vite) inline SVGs as data URIs.
   const dataUrlResult = parseDataUrl(baseUrl)
   if (dataUrlResult instanceof Error) {
-    injectedElements.splice(injectedElements.indexOf(el), 1)
-    ;(el as ElementType) = null
+    elementsInFlight.delete(el)
     callback(dataUrlResult)
     return
   }
 
+  // The request queue can dispatch a callback that has already run: a retry
+  // queued from inside a callback lands in the array the queue is iterating,
+  // which stops that array being cleared. Every branch below finishes the
+  // injection, so ignore anything after the first, keeping `callback` to one
+  // call per `injectElement`.
+  let settled = false
+
   const handleLoadedSvg = (error: Error | null, loadedSvg?: SVGSVGElement) => {
+    if (settled) {
+      return
+    }
+    settled = true
+
     if (!loadedSvg) {
-      injectedElements.splice(injectedElements.indexOf(el), 1)
-      ;(el as ElementType) = null
+      elementsInFlight.delete(el)
       callback(error)
       return
     }
@@ -75,8 +84,7 @@ const injectElement = (
       const symbolSvg = extractSymbol(loadedSvg, symbolId)
 
       if (!symbolSvg) {
-        injectedElements.splice(injectedElements.indexOf(el), 1)
-        ;(el as ElementType) = null
+        elementsInFlight.delete(el)
         callback(new Error(`Symbol "${symbolId}" not found in ${baseUrl}`))
         return
       }
@@ -366,15 +374,13 @@ const injectElement = (
     beforeEach(svg)
 
     if (!el.parentNode) {
-      injectedElements.splice(injectedElements.indexOf(el), 1)
-      ;(el as ElementType) = null
+      elementsInFlight.delete(el)
       callback(new Error('Parent node is null'))
       return
     }
 
     el.parentNode.replaceChild(svg, el)
-    injectedElements.splice(injectedElements.indexOf(el), 1)
-    ;(el as ElementType) = null
+    elementsInFlight.delete(el)
 
     callback(null, svg)
   }
