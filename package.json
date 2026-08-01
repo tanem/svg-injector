@@ -21,6 +21,20 @@
   "module": "dist/svg-injector.mjs",
   "types": "dist/svg-injector.d.cts",
   "sideEffects": false,
+  "size-limit": [
+    {
+      "name": "ESM bundle",
+      "path": "dist/svg-injector.mjs",
+      "gzip": true,
+      "limit": "5.5 kB"
+    },
+    {
+      "name": "CJS bundle",
+      "path": "dist/svg-injector.cjs",
+      "gzip": true,
+      "limit": "5.5 kB"
+    }
+  ],
   "files": [
     "dist",
     "src"
@@ -43,9 +57,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.58.2",
+    "@size-limit/file": "13.0.2",
     "@types/node": "25.2.3",
     "@typescript-eslint/eslint-plugin": "8.56.0",
     "@typescript-eslint/parser": "8.56.0",
@@ -54,8 +70,10 @@
     "monocart-coverage-reports": "2.12.12",
     "npm-run-all2": "8.0.4",
     "prettier": "3.8.1",
+    "publint": "0.3.22",
     "serve": "14.2.6",
     "shx": "0.4.0",
+    "size-limit": "13.0.2",
     "tanem-scripts": "8.0.7",
     "tsdown": "0.22.14",
     "typescript": "5.9.3"
@@ -71,9 +89,13 @@
     "clean:test-dist": "shx rm -rf test/dist",
     "format": "prettier --write \"**/*.{cjs,cts,js,mjs,mts,ts}\"",
     "lint": "eslint .",
+    "package:attw": "attw --pack .",
+    "package:publint": "publint",
+    "postbuild": "run-s package:*",
     "release": "tanem-scripts release",
-    "test": "run-s check:* lint build test:playwright build:examples test:examples:playwright",
-    "test:coverage": "run-s check:* lint build test:playwright:coverage",
+    "size": "size-limit",
+    "test": "run-s check:* lint build size test:playwright build:examples test:examples:playwright",
+    "test:coverage": "run-s check:* lint build size test:playwright:coverage",
     "test:examples": "run-s build build:examples test:examples:playwright",
     "build:examples": "node scripts/build-examples.js",
     "test:examples:playwright": "playwright test --config playwright.examples.config.ts",
