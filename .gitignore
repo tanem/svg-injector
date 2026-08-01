@@ -1,7 +1,6 @@
 *.log
 .DS_Store
 .cache
-.nyc_output
 .parcel-cache
 .vscode
 coverage

@@ -42,8 +42,7 @@ These constraints are not expressed in the source code and affect how features s
 - Functional codebase, no classes.
 - Never use `any`; use `unknown` when type is truly dynamic.
 - Use non-null assertions (`!`) only with runtime guarantees (e.g. array access within bounds-checked loops).
-- Use `//` comments, not `/* */` (except for istanbul/eslint directives).
-- `/* istanbul ignore else */` marks branches that only run in specific browsers.
+- Use `//` comments, not `/* */` (except for eslint directives).
 
 ## Documentation and Writing Style
 
@@ -58,6 +57,7 @@ These constraints are not expressed in the source code and affect how features s
 ## Tests
 
 - The Playwright suite loads the library from `test/dist/svg-injector.iife.js`, an unpublished IIFE bundle produced by the second config in `tsdown.config.mts` alongside the published builds. It exists because the tests need a classic script that defines a global, and the published CommonJS and ES module builds leave their dependencies external and define no global.
+- `npm run test:coverage` sets `COVERAGE=1`, which makes the fixture in `test/playwright/coverage.ts` collect native V8 coverage from that bundle. Playwright's `page.coverage` is Chromium-only, so the numbers come from the chromium project alone while all three browsers run the whole suite. `test/playwright/coverage-teardown.ts` maps the data back to `src/*.ts` through the bundle's source map and writes `coverage/lcov.info` for Codecov.
 
 ## Example Tests
 

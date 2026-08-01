@@ -519,6 +519,27 @@ test.describe('SVGInjector', () => {
     expect(actual).toBe(expected)
   })
 
+  test('empty data attribute', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          data-empty=""
+          data-foo="foo"
+          data-src="/fixtures/thumb-up.svg"
+          id="thumb-up"
+        ></div>
+      `,
+      selector: '#thumb-up',
+    })
+
+    const actual = formatHtml(result.html)
+
+    expect(actual).toContain('data-foo="foo"')
+    expect(actual).not.toContain('data-empty')
+  })
+
   test('no class attribute', async ({ page }) => {
     await setupPage(page)
 

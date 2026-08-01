@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 export type AfterAll = (elementsLoaded: number) => void
 
 export type BeforeEach = (svg: SVGSVGElement) => void

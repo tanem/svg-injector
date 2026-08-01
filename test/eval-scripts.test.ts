@@ -76,6 +76,39 @@ test.describe('eval scripts', () => {
     expect(await getAlertCount(page)).toBe(4)
   })
 
+  test('non-JavaScript and empty script elements', async ({ page }) => {
+    await setupPage(page, {
+      fixtureOverrides: {
+        '/fixtures/other-scripts.svg': {
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><script type="text/plain">alert(\'ran script\');</script><script></script><circle cx="5" cy="5" r="4"></circle></svg>',
+        },
+      },
+    })
+    await setupAlerts(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/other-scripts.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+      options: { evalScripts: 'always' },
+    })
+
+    const actual = formatHtml(result.html)
+
+    // Only JavaScript types are extracted, so the text/plain block survives
+    // injection untouched. The empty JavaScript block is removed but has
+    // nothing to evaluate.
+    expect(actual).toContain(
+      '<script type="text/plain">alert(\'ran script\');</script>',
+    )
+    expect(actual).not.toContain('<script></script>')
+    expect(await getAlertCount(page)).toBe(0)
+  })
+
   test('always', async ({ page, browserName }) => {
     await setupPage(page)
     await setupAlerts(page)

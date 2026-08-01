@@ -135,7 +135,6 @@ const injectElement = (
     })
 
     Array.prototype.forEach.call(elData, (dataAttr: Attr) => {
-      /* istanbul ignore else */
       if (dataAttr.name && dataAttr.value) {
         svg.setAttribute(dataAttr.name, dataAttr.value)
       }
@@ -232,7 +231,6 @@ const injectElement = (
             const referencingElement = referencingElements[b]!
             const attrValue: string | null =
               referencingElement.getAttribute(property)
-            /* istanbul ignore else */
             if (attrValue) {
               const nextValue = replaceIriReferences(attrValue, iriIdMap)
               if (nextValue !== attrValue) {
@@ -271,7 +269,6 @@ const injectElement = (
       ) {
         const styleElement = styleElements[d]!
         const styleValue = styleElement.getAttribute('style')
-        /* istanbul ignore else */
         if (styleValue) {
           const nextStyleValue = replaceIriReferences(styleValue, iriIdMap)
           if (nextStyleValue !== styleValue) {
@@ -288,7 +285,6 @@ const injectElement = (
       ) {
         const styleTagElement = styleTagElements[e]!
         const textContent = styleTagElement.textContent
-        /* istanbul ignore else */
         if (textContent) {
           const nextTextContent = replaceIriReferences(textContent, iriIdMap)
           if (nextTextContent !== textContent) {
@@ -323,7 +319,6 @@ const injectElement = (
 
       // Only process JavaScript types. SVG defaults to 'application/ecmascript'
       // for unset types.
-      /* istanbul ignore else */
       if (
         !scriptType ||
         scriptType === 'application/ecmascript' ||
@@ -332,7 +327,6 @@ const injectElement = (
       ) {
         script = scriptElement.innerText || scriptElement.textContent
 
-        /* istanbul ignore else */
         if (script) {
           scriptsToEval.push(script)
         }

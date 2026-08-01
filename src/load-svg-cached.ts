@@ -17,7 +17,6 @@ const loadSvgCached = (
       return
     }
 
-    /* istanbul ignore else */
     if (cacheValue instanceof SVGSVGElement) {
       callback(null, cloneSvg(cacheValue))
       return

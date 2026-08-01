@@ -20,12 +20,9 @@ export const processRequestQueue = (url: string) => {
     setTimeout(() => {
       if (Array.isArray(requestQueue[url])) {
         const cacheValue = cache.get(url)
-        const callback = callbacks[i]
-
-        /* istanbul ignore if */
-        if (!callback) {
-          return
-        }
+        // `i` is bounded by the length read when the loop started, and nothing
+        // removes entries from `callbacks`.
+        const callback = callbacks[i]!
 
         if (cacheValue instanceof SVGSVGElement) {
           callback(null, cloneSvg(cacheValue))

@@ -33,4 +33,7 @@ jobs:
           path: playwright-report
       - uses: codecov/codecov-action@v5
         with:
+          # The action defaults this to false, which turned a dead coverage
+          # pipeline into a green build.
+          fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}

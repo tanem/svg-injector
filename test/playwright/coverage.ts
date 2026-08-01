@@ -1,45 +1,42 @@
 import { test as base, expect } from '@playwright/test'
-import * as fs from 'fs/promises'
-import * as path from 'path'
+import { CoverageReport } from 'monocart-coverage-reports'
+import coverageOptions from './coverage-options'
 
-const coverageDir = path.resolve(process.cwd(), '.nyc_output')
-
-interface CoverageWindow extends Window {
-  __coverage__?: Record<string, unknown>
-}
-
-const sanitize = (value: string) => {
-  return value.replace(/[^a-zA-Z0-9_-]+/g, '_')
-}
-
+// `page.coverage` is Chromium-only. Coverage measures which lines the tests
+// execute rather than how browsers behave, so collecting it from one project
+// is enough: firefox and webkit still run the whole suite.
 const test = base.extend<{ _collectCoverage: void }>({
   _collectCoverage: [
-    async ({ page }, use, testInfo) => {
+    async ({ browserName, page }, use) => {
+      const collect = process.env.COVERAGE === '1' && browserName === 'chromium'
+
+      if (collect) {
+        // The suite navigates after installing the bundle, so the counters have
+        // to survive navigation.
+        await page.coverage.startJSCoverage({ resetOnNavigation: false })
+      }
+
       await use()
 
-      if (process.env.COVERAGE !== '1') {
+      if (!collect) {
         return
       }
 
-      try {
-        const coverage = await page.evaluate(
-          () => (window as unknown as CoverageWindow).__coverage__ ?? null,
-        )
+      const report = new CoverageReport(coverageOptions)
+      // Drop the page's other scripts before caching: every entry carries its
+      // own source, and `unique-id.test.ts` never loads a page at all, which
+      // `add()` rejects as empty data.
+      const entries = (await page.coverage.stopJSCoverage()).filter(
+        report.getEntryFilter(),
+      )
 
-        if (!coverage) {
-          return
-        }
-
-        await fs.mkdir(coverageDir, { recursive: true })
-
-        const title = sanitize(testInfo.titlePath.join('-'))
-        const fileName = `${testInfo.project.name}-${title}.json`
-        const filePath = path.join(coverageDir, fileName)
-
-        await fs.writeFile(filePath, JSON.stringify(coverage), 'utf8')
-      } catch {
-        // Ignore coverage collection failures to avoid masking test results.
+      if (entries.length === 0) {
+        return
       }
+
+      // Each worker appends to the shared cache under `coverage/.cache`, which
+      // the global teardown merges into the report.
+      await report.add(entries)
     },
     { auto: true },
   ],

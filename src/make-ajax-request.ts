@@ -66,11 +66,7 @@ const makeAjaxRequest = (
 
   httpRequest.withCredentials = httpRequestWithCredentials
 
-  /* istanbul ignore else */
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (httpRequest.overrideMimeType) {
-    httpRequest.overrideMimeType('image/svg+xml')
-  }
+  httpRequest.overrideMimeType('image/svg+xml')
 
   httpRequest.send()
 }

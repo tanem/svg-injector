@@ -307,6 +307,32 @@ test.describe('renumerate iri elements', () => {
     expect(actual).toContain('fill:url(#g1-1);stroke:url(#g2-2);')
   })
 
+  test('empty attribute and style element values', async ({ page }) => {
+    await setupPage(page, {
+      fixtureOverrides: {
+        '/fixtures/empty-values.svg': {
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><defs><linearGradient id="grad"><stop offset="0%" stop-color="#000"></stop></linearGradient></defs><style></style><rect width="10" height="10" fill="" style=""></rect><circle cx="5" cy="5" r="4" fill="url(#grad)"></circle></svg>',
+        },
+      },
+    })
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/empty-values.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toContain('id="grad-1"')
+    expect(actual).toContain('fill="url(#grad-1)"')
+    expect(actual).toContain('fill="" style=""')
+    expect(actual).toContain('<style></style>')
+  })
+
   test('id prefix collisions', async ({ page }) => {
     await setupPage(page, {
       fixtureOverrides: {
