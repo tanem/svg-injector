@@ -106,9 +106,9 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 
 ## Installation
 
-> ⚠️This library uses [`Array.from()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from), so if you're targeting [browsers that don't support that method](https://kangax.github.io/compat-table/es6/#test-Array_static_methods), you'll need to ensure an appropriate polyfill is included manually. See [this issue comment](https://github.com/tanem/svg-injector/issues/97#issuecomment-483365473) for further detail.
+> ⚠️This library is tested against current Chromium, Firefox and WebKit via Playwright. A browser is supported if the suite covers it.
 
-> ⚠️As of v11, this library is only tested against modern browsers (Chromium, Firefox, WebKit) via Playwright. IE and other legacy browsers are no longer supported. If you need IE support, pin `@tanem/svg-injector@^10`.
+> ⚠️The published build is es2019, so the oldest browsers it runs in are Chrome 66, Firefox 58, Safari 11.1 and Edge 79. A polyfill cannot extend that: the syntax itself will not parse. v11 was published as es5 and reaches Chrome 45, Firefox 32 and Safari 9, and v10 is the last line that supports IE. Bundlers do not transpile `node_modules` by default, so a project targeting older browsers than these has to opt this package in: see [MIGRATION.md](MIGRATION.md#v1200).
 
 > ⚠️This library targets browsers and uses APIs that [jsdom](https://github.com/jsdom/jsdom) does not provide, so a test suite running under jsdom (Jest's default environment) needs polyfills: [`CSS.escape`](https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape_static) for sprite support, and [`TextDecoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder) for base64 data URLs. In a Jest setup file:
 >

@@ -60,6 +60,24 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 - Raised the compile target from `es5` to `es2019`. v11 already dropped explicit legacy browser support, so the es5 emit was overhead. The output stays parseable by webpack 4, which cannot handle ES2020 syntax such as `?.` and `??`.
 
+  This reaches consumer builds. Bundlers do not transpile `node_modules` by default, so a project whose own browser targets are wider than es2019 used to receive es5 from this package and now receives arrow functions, `const`/`let`, template literals, `for...of` and optional catch binding. The oldest browsers that can run the v12 build are Chrome 66, Firefox 58, Safari 11.1 and Edge 79, against Chrome 45, Firefox 32 and Safari 9 for v11. Neither figure was ever a tested guarantee: the suite has run against current Chromium, Firefox and WebKit since v11, and v11's lower floor was a by-product of its Babel config.
+
+  Vite needs no package-specific setting, because `build.target` applies to the whole output chunk, dependencies included. webpack with `babel-loader` does, since the conventional rule excludes `node_modules`:
+
+  ```js
+  {
+    test: /\.m?js$/,
+    exclude: /node_modules\/(?!@tanem\/svg-injector)/,
+    use: 'babel-loader',
+  }
+  ```
+
+  Next.js has a dedicated option:
+
+  ```js
+  module.exports = { transpilePackages: ['@tanem/svg-injector'] }
+  ```
+
 - `src` is now published alongside `dist`, so the declaration maps shipped with the build resolve to the original TypeScript sources.
 
 **Fixed**

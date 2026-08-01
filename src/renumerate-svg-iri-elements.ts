@@ -18,9 +18,11 @@ const iriElementsAndProperties: Record<string, string[]> = {
 }
 
 // Several element types share referencing properties (`fill`, `stroke`), so
-// collapse the table to the distinct set of properties to look up.
+// collapse the table to the distinct set of properties to look up. Spread
+// rather than `Array.prototype.flat`: this runs at module scope, so requiring
+// an ES2019 built-in here would throw on import rather than on first use.
 const referencingProperties = new Set(
-  Object.values(iriElementsAndProperties).flat(),
+  ([] as string[]).concat(...Object.values(iriElementsAndProperties)),
 )
 
 const replaceIriReferences = (value: string, iriIdMap: Map<string, string>) => {
