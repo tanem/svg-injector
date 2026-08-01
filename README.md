@@ -129,6 +129,12 @@ The package has no runtime dependencies.
 
 This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
 
+## Contributing
+
+Issues and pull requests are welcome. `npm run test:playwright` is the development loop, run against a current `npm run build`; `npm test` runs the full gate.
+
+Repo conventions that aren't visible in the code, such as the PR labels that drive releases, the fixture routing the Playwright suite relies on, and the library's known limitations, live in [AGENTS.md](AGENTS.md). Coding agents read it from the repo root, so keep it in sync when a change invalidates something it states.
+
 ## License
 
 MIT
