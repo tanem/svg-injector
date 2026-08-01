@@ -24,6 +24,31 @@ const base64DataUrl =
 const charsetDataUrl =
   'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(thumbUpSvgRaw)
 
+// Uppercase charset value.
+const upperCaseCharsetDataUrl =
+  'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(thumbUpSvgRaw)
+
+// Charset value without the hyphen.
+const unhyphenatedCharsetDataUrl =
+  'data:image/svg+xml;charset=utf8,' + encodeURIComponent(thumbUpSvgRaw)
+
+// Charset parameter combined with base64.
+const charsetBase64DataUrl =
+  'data:image/svg+xml;charset=utf-8;base64,' +
+  Buffer.from(thumbUpSvgRaw, 'utf8').toString('base64')
+
+// Multi-byte content: an accented Latin character and a character outside the
+// BMP. Decoding base64 as bytes rather than UTF-8 mojibakes both.
+const multiByteText = 'café 🎉'
+const multiByteSvgRaw =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="20" viewBox="0 0 120 20"><text x="0" y="15">' +
+  multiByteText +
+  '</text></svg>'
+const multiByteTextElement = `<text x="0" y="15">${multiByteText}</text>`
+const multiByteBase64DataUrl =
+  'data:image/svg+xml;base64,' +
+  Buffer.from(multiByteSvgRaw, 'utf8').toString('base64')
+
 // Sprite as a URL-encoded data URL with a fragment identifier.
 const spriteDataUrl =
   'data:image/svg+xml,' + encodeURIComponent(spriteRaw) + '#icon-thumb-up'
@@ -88,6 +113,123 @@ test.describe('data URL support', () => {
 
     const actual = formatHtml(result.html)
     const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${charsetDataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  test('data URL with uppercase charset', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="${upperCaseCharsetDataUrl}"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${upperCaseCharsetDataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  test('data URL with unhyphenated charset', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="${unhyphenatedCharsetDataUrl}"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${unhyphenatedCharsetDataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  test('data URL with charset and base64', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="${charsetBase64DataUrl}"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" class="injected-svg inject-me" data-src="${charsetBase64DataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  test('base64 data URL with multi-byte characters', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="${multiByteBase64DataUrl}"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="20" viewBox="0 0 120 20" class="injected-svg inject-me" data-src="${multiByteBase64DataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${multiByteTextElement}</svg>`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  test('base64 data URL with multi-byte characters and no TextDecoder', async ({
+    page,
+  }) => {
+    // jsdom does not expose TextDecoder, so the decode falls back to
+    // percent-encoding the bytes. Remove the global to exercise that path.
+    await page.addInitScript(() => {
+      delete (window as unknown as Record<string, unknown>).TextDecoder
+    })
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="${multiByteBase64DataUrl}"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="20" viewBox="0 0 120 20" class="injected-svg inject-me" data-src="${multiByteBase64DataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${multiByteTextElement}</svg>`
 
     expect(actual).toBe(expected)
     expect(result.afterEachCalls).toHaveLength(1)

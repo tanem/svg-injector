@@ -24,9 +24,14 @@ The library detects the `data:image/svg+xml` prefix and parses the SVG content d
 
 ## Supported formats
 
+Everything between `data:image/svg+xml` and the first comma is read as an RFC 2397 parameter list: semicolon-separated, with case-insensitive names and values. A `base64` parameter selects base64 decoding, otherwise the data is percent-decoded.
+
 - `data:image/svg+xml,` followed by URL-encoded SVG (percent-encoded).
 - `data:image/svg+xml;base64,` followed by base64-encoded SVG.
 - `data:image/svg+xml;charset=utf-8,` followed by URL-encoded SVG.
+- `data:image/svg+xml;charset=utf-8;base64,` followed by base64-encoded SVG.
+
+A `charset` parameter is accepted when it names UTF-8: `utf-8` or `utf8`, in any case. Base64 data is decoded as UTF-8, so multi-byte characters in `<text>` elements survive intact.
 
 ## Fragment identifiers
 
@@ -43,4 +48,5 @@ Data URLs bypass the request cache entirely since the SVG content is already emb
 ## Limitations
 
 - Only `data:image/svg+xml` MIME types are supported. Other image formats (e.g. `data:image/png`) are not handled.
+- A `charset` parameter naming anything other than UTF-8 (e.g. `charset=iso-8859-1`) is rejected with an `Unsupported data URL format` error rather than decoded with the wrong encoding. Unrecognised parameters are rejected the same way.
 - Parse errors from malformed SVG content are reported through the `afterEach` error callback.

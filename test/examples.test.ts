@@ -25,7 +25,7 @@ const parcelExamples = [
   },
   {
     name: 'data-url-usage',
-    expectedSvgCount: 2,
+    expectedSvgCount: 5,
   },
   {
     name: 'iri-renumeration',
@@ -58,6 +58,13 @@ for (const example of parcelExamples) {
     expect(errors).toEqual([])
   })
 }
+
+test('data-url-usage: multi-byte text decodes as UTF-8', async ({ page }) => {
+  await page.goto('/data-url-usage/dist/')
+  await waitForInjection(page, 5)
+
+  await expect(page.locator('svg.label text')).toHaveText('café 🎉')
+})
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {
   await page.goto('/api-usage/dist/')
