@@ -31,6 +31,18 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
+      # build-examples.js packs the library and installs the tarball into each
+      # example, so this is the end-to-end check that the published artefact
+      # resolves and runs through a real bundler.
+      - run: npm run build:examples
+      - run: npm run test:examples:playwright
+      - name: Upload examples Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report-examples
+          path: playwright-report-examples
+          if-no-files-found: ignore
       - uses: codecov/codecov-action@v5
         with:
           # The action defaults this to false, which turned a dead coverage

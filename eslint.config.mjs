@@ -19,6 +19,7 @@ export default [
       '**/coverage/',
       '**/dist/',
       '**/playwright-report/',
+      '**/playwright-report-examples/',
       '**/test-results/',
     ],
   },
