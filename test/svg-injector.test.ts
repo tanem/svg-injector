@@ -80,6 +80,105 @@ test.describe('SVGInjector', () => {
     expect(result.html).toBe('')
   })
 
+  test('empty collection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        elementsLoaded: number
+        calledSynchronously: boolean
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        document.body.appendChild(container)
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterAll` was not called'))
+        }, 5000)
+
+        let hasReturned = false
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelectorAll('.inject-me'), {
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            resolve({ elementsLoaded, calledSynchronously: !hasReturned })
+          },
+        })
+
+        hasReturned = true
+      })
+    })
+
+    expect(result.elementsLoaded).toBe(0)
+    expect(result.calledSynchronously).toBe(false)
+  })
+
+  // A live `HTMLCollection` of `div` elements shrinks as each element is
+  // replaced by its injected SVG, so the completion check has to compare
+  // against the length captured before injection started.
+  test('live collection that shrinks during injection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterAllCalls: number[]
+        afterEachCallCount: number
+        lengthAtEnd: number
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const elements = container.getElementsByTagName('div')
+        const afterAllCalls: number[] = []
+        let afterEachCallCount = 0
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called for every element'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(elements, {
+          afterEach: () => {
+            afterEachCallCount++
+            if (afterEachCallCount === 2) {
+              // `afterAll` runs synchronously after the final `afterEach`, so
+              // defer to give it a chance to fire before resolving.
+              setTimeout(() => {
+                clearTimeout(timeoutId)
+                resolve({
+                  afterAllCalls,
+                  afterEachCallCount,
+                  lengthAtEnd: elements.length,
+                })
+              }, 0)
+            }
+          },
+          afterAll: (elementsLoaded: number) => {
+            afterAllCalls.push(elementsLoaded)
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCallCount).toBe(2)
+    expect(result.lengthAtEnd).toBe(0)
+    expect(result.afterAllCalls).toEqual([2])
+  })
+
   test('injection in progress', async ({ page }) => {
     await setupPage(page)
 
