@@ -48,7 +48,9 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 - Added `"sideEffects": false`. Bundlers can now drop the package entirely from a build that imports it without referencing `SVGInjector`.
 
-- Removed the `@babel/runtime` and `tslib` runtime dependencies. Neither build emits helper imports any more. `content-type` remains the only runtime dependency.
+- Removed the `@babel/runtime` and `tslib` runtime dependencies. Neither build emits helper imports any more.
+
+- Removed the `content-type` runtime dependency. The `Content-Type` response header check now takes the media type as the text before the first `;`, trimmed and lowercased, instead of running a full RFC 7231 parse. A header carrying no media type (`; charset=utf-8`) now reports `Content type not found` rather than `invalid media type`, and a malformed header such as `invalid` reports `Invalid content type: invalid`. The same responses are accepted and rejected as before; only these two error messages changed. The package now has no runtime dependencies.
 
 - Raised the compile target from `es5` to `es2019`. v11 already dropped explicit legacy browser support, so the es5 emit was overhead. The output stays parseable by webpack 4, which cannot handle ES2020 syntax such as `?.` and `??`.
 

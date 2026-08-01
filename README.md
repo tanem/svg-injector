@@ -123,6 +123,8 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 $ npm install @tanem/svg-injector
 ```
 
+The package has no runtime dependencies.
+
 ## Credit
 
 This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.

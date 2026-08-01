@@ -1,4 +1,3 @@
-import { parse as parseContentType } from 'content-type'
 import isLocal from './is-local'
 
 const makeAjaxRequest = (
@@ -16,11 +15,15 @@ const makeAjaxRequest = (
       // content.
       if (!/\.svg/i.test(url) && httpRequest.readyState === 2) {
         const contentType = httpRequest.getResponseHeader('Content-Type')
-        if (!contentType) {
+
+        // Everything before the first `;` is the media type; the parameters
+        // that follow it are irrelevant here. A header that is absent, empty,
+        // or carries no media type is treated the same way.
+        const type = (contentType ?? '').split(';')[0]!.trim().toLowerCase()
+        if (!type) {
           throw new Error('Content type not found')
         }
 
-        const { type } = parseContentType(contentType)
         if (!(type === 'image/svg+xml' || type === 'text/plain')) {
           throw new Error(`Invalid content type: ${type}`)
         }

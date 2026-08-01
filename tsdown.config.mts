@@ -20,10 +20,7 @@ export default defineConfig([
   {
     ...shared,
     // Not published. The Playwright suite loads the library as a classic
-    // script that defines a global. Neither published build can serve that
-    // purpose: both leave their dependencies external and define no global.
-    // `onlyBundle: false` acknowledges the deliberate dependency bundling.
-    deps: { alwaysBundle: [/.*/], onlyBundle: false },
+    // script that defines a global, which neither published build does.
     dts: false,
     entry: { 'svg-injector': 'src/index.ts' },
     // Assign the global explicitly: Playwright evaluates init scripts inside a

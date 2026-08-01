@@ -42,14 +42,10 @@
     "typescript"
   ],
   "license": "MIT",
-  "dependencies": {
-    "content-type": "^1.0.5"
-  },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.58.2",
-    "@types/content-type": "1.1.9",
     "@types/node": "25.2.3",
     "@typescript-eslint/eslint-plugin": "8.56.0",
     "@typescript-eslint/parser": "8.56.0",
