@@ -74,6 +74,7 @@
     "clean:coverage": "shx rm -rf coverage",
     "clean:coverage-data": "shx rm -rf .nyc_output coverage",
     "clean:dist": "shx rm -rf dist",
+    "clean:test-dist": "shx rm -rf test/dist",
     "compile": "tsc -p tsconfig.base.json",
     "format": "prettier --write \"**/*.{js,ts}\"",
     "lint": "eslint .",

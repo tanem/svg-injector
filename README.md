@@ -59,8 +59,6 @@ SVGInjector(document.getElementById('inject-me'), {
 - IRI Renumeration: [Source](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/iri-renumeration)
 - Data URL Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/data-url-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/data-url-usage)
 - Sprite Usage: [Source](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/sprite-usage)
-- UMD Build (Development): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-dev) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-dev)
-- UMD Build (Production): [Source](https://github.com/tanem/svg-injector/tree/master/examples/umd-prod) | [Sandbox](https://codesandbox.io/s/github/tanem/svg-injector/tree/master/examples/umd-prod)
 
 ## API
 
@@ -115,11 +113,6 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 ```
 $ npm install @tanem/svg-injector
 ```
-
-There are also UMD builds available via [unpkg](https://unpkg.com/):
-
-- https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.development.js
-- https://unpkg.com/@tanem/svg-injector/dist/svg-injector.umd.production.js
 
 ## Credit
 

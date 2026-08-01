@@ -9,8 +9,7 @@ import pkg from './package.json' with { type: 'json' }
 const CJS_DEV = 'CJS_DEV'
 const CJS_PROD = 'CJS_PROD'
 const ES = 'ES'
-const UMD_DEV = 'UMD_DEV'
-const UMD_PROD = 'UMD_PROD'
+const TEST = 'TEST'
 
 const input = './compiled/index.js'
 
@@ -25,8 +24,7 @@ const getExternal = (bundleType) => {
   }
 }
 
-const isProduction = (bundleType) =>
-  bundleType === CJS_PROD || bundleType === UMD_PROD
+const isProduction = (bundleType) => bundleType === CJS_PROD
 const isCoverage = process.env.COVERAGE === '1'
 
 const getBabelConfig = () => ({
@@ -94,24 +92,28 @@ const getEsConfig = () => ({
   plugins: getPlugins(ES),
 })
 
-const getUmdConfig = (bundleType) => ({
+// Not published. The Playwright suite loads the library as a classic
+// script that defines a global, which neither published output can do:
+// the ES and CJS bundles leave their dependencies external.
+const getTestConfig = () => ({
   input,
-  external: getExternal(bundleType),
+  external: getExternal(TEST),
   output: {
-    file: `dist/svg-injector.umd.${
-      isProduction(bundleType) ? 'production' : 'development'
-    }.js`,
-    format: 'umd',
+    file: 'test/dist/svg-injector.browser.js',
+    format: 'iife',
     name: 'SVGInjector',
+    // Assign the global explicitly: Playwright evaluates init scripts
+    // inside a function scope, where the `var` declaration the IIFE
+    // wrapper emits would not become a global on its own.
+    footer: 'globalThis.SVGInjector = SVGInjector;',
     sourcemap: true,
   },
-  plugins: getPlugins(bundleType),
+  plugins: getPlugins(TEST),
 })
 
 export default [
   getCjsConfig(CJS_DEV),
   getCjsConfig(CJS_PROD),
   getEsConfig(),
-  getUmdConfig(UMD_DEV),
-  getUmdConfig(UMD_PROD),
+  getTestConfig(),
 ]

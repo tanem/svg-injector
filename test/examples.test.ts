@@ -1,4 +1,3 @@
-import * as path from 'path'
 import { expect, test } from '@playwright/test'
 
 import type { Page } from '@playwright/test'
@@ -104,46 +103,3 @@ test('iri-renumeration: afterAll logs element count', async ({ page }) => {
 
   expect(logs).toContainEqual('injected 3 elements')
 })
-
-// UMD examples are static HTML that load the library from unpkg. We
-// intercept the CDN request and serve the local build instead.
-const umdExamples = [
-  {
-    name: 'umd-dev',
-    bundleFile: 'svg-injector.umd.development.js',
-  },
-  {
-    name: 'umd-prod',
-    bundleFile: 'svg-injector.umd.production.js',
-  },
-]
-
-for (const example of umdExamples) {
-  test(`${example.name}: SVG is injected with local build`, async ({
-    page,
-  }) => {
-    const errors: string[] = []
-    page.on('pageerror', (err) => errors.push(err.message))
-
-    const bundlePath = path.resolve(__dirname, '..', 'dist', example.bundleFile)
-
-    // Intercept the unpkg CDN request and serve the local UMD bundle.
-    await page.route('**/unpkg.com/**', async (route) => {
-      await route.fulfill({ path: bundlePath })
-    })
-
-    await page.goto(`/${example.name}/`)
-    await waitForInjection(page, 1)
-
-    const svgCount = await page.locator('svg').count()
-    expect(svgCount).toBe(1)
-
-    const children = await page
-      .locator('svg')
-      .first()
-      .evaluate((el) => el.children.length)
-    expect(children).toBeGreaterThan(0)
-
-    expect(errors).toEqual([])
-  })
-}
