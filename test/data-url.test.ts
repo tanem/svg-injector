@@ -208,35 +208,6 @@ test.describe('data URL support', () => {
     expect(result.elementsLoaded).toBe(1)
   })
 
-  test('base64 data URL with multi-byte characters and no TextDecoder', async ({
-    page,
-  }) => {
-    // jsdom does not expose TextDecoder, so the decode falls back to
-    // percent-encoding the bytes. Remove the global to exercise that path.
-    await page.addInitScript(() => {
-      delete (window as unknown as Record<string, unknown>).TextDecoder
-    })
-    await setupPage(page)
-
-    const result = await injectSvg(page, {
-      html: `
-        <div
-          class="inject-me"
-          data-src="${multiByteBase64DataUrl}"
-        ></div>
-      `,
-      selector: '.inject-me',
-    })
-
-    const actual = formatHtml(result.html)
-    const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="20" viewBox="0 0 120 20" class="injected-svg inject-me" data-src="${multiByteBase64DataUrl}" xmlns:xlink="http://www.w3.org/1999/xlink">${multiByteTextElement}</svg>`
-
-    expect(actual).toBe(expected)
-    expect(result.afterEachCalls).toHaveLength(1)
-    expect(result.afterEachCalls[0]!.error).toBe(null)
-    expect(result.elementsLoaded).toBe(1)
-  })
-
   test('multiple data URL elements', async ({ page }) => {
     await setupPage(page)
 

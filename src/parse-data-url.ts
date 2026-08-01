@@ -7,24 +7,11 @@ const charsetPrefix = 'charset='
 const utf8Charsets = ['utf-8', 'utf8']
 
 // Decodes the byte string atob produces, one character per byte, as UTF-8 so
-// multi-byte characters survive. Browsers all provide TextDecoder; jsdom does
-// not expose it, so the fallback percent-encodes each byte and lets
-// decodeURIComponent do the UTF-8 decoding.
-const decodeUtf8 = (bytes: string) => {
-  if (typeof TextDecoder !== 'undefined') {
-    return new TextDecoder().decode(
-      Uint8Array.from(bytes, (character) => character.charCodeAt(0)),
-    )
-  }
-
-  let percentEncoded = ''
-  for (let index = 0; index < bytes.length; index++) {
-    percentEncoded +=
-      '%' + ('0' + bytes.charCodeAt(index).toString(16)).slice(-2)
-  }
-
-  return decodeURIComponent(percentEncoded)
-}
+// multi-byte characters survive.
+const decodeUtf8 = (bytes: string) =>
+  new TextDecoder().decode(
+    Uint8Array.from(bytes, (character) => character.charCodeAt(0)),
+  )
 
 // Parses an SVG data URL (URL-encoded or base64) into an SVGSVGElement without
 // making a network request. Returns null for non-data-URL strings so callers

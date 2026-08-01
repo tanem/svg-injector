@@ -110,6 +110,15 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
 
 > ⚠️As of v11, this library is only tested against modern browsers (Chromium, Firefox, WebKit) via Playwright. IE and other legacy browsers are no longer supported. If you need IE support, pin `@tanem/svg-injector@^10`.
 
+> ⚠️This library targets browsers and uses APIs that [jsdom](https://github.com/jsdom/jsdom) does not provide, so a test suite running under jsdom (Jest's default environment) needs polyfills: [`CSS.escape`](https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape_static) for sprite support, and [`TextDecoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder) for base64 data URLs. In a Jest setup file:
+>
+> ```js
+> import 'css.escape'
+> import { TextDecoder } from 'node:util'
+>
+> globalThis.TextDecoder ??= TextDecoder
+> ```
+
 ```
 $ npm install @tanem/svg-injector
 ```
