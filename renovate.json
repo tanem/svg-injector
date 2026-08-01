@@ -1,4 +1,7 @@
 {
+  "constraints": {
+    "npm": "> 8.0.0"
+  },
   "extends": [
     "config:js-lib",
     ":rebaseStalePrs",
@@ -7,16 +10,39 @@
     ":dependencyDashboard",
     ":enableVulnerabilityAlerts"
   ],
-  "ignorePaths": ["**/node_modules/**"],
+  "ignorePaths": ["**/node_modules/**", "**/examples/**"],
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": true,
+    "minimumReleaseAge": null
   },
+  "minimumReleaseAge": "3 days",
   "packageRules": [
     {
+      "description": "Runtime dependencies reach consumers, so they are not internal. A patch or minor bump forwards an upstream fix, which is a bug fix from a consumer's point of view.",
+      "labels": ["bug"],
       "matchDepTypes": ["dependencies"],
       "rangeStrategy": "bump"
+    },
+    {
+      "automerge": false,
+      "description": "A major bump of a runtime dependency can change what consumers get: @tanem/svg-injector v11 dropped IE support and forced react-svg v17. Default to breaking and review by hand; relabel if it turns out not to be.",
+      "labels": ["breaking"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
+      "automerge": false,
+      "groupName": "eslint",
+      "matchPackageNames": [
+        "eslint",
+        "@eslint/**",
+        "typescript-eslint",
+        "@typescript-eslint/**",
+        "eslint-plugin-**",
+        "eslint-config-**"
+      ]
     }
   ],
   "prConcurrentLimit": 1,
-  "minimumReleaseAge": "3 days"
+  "semanticCommits": "disabled"
 }
