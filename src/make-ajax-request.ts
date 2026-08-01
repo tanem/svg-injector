@@ -3,7 +3,7 @@ import isLocal from './is-local'
 // Matched against the pathname rather than the whole URL: a `.svg` in a query
 // parameter (`?file=logo.svgz`) or a hostname label (`foo.svg.example.com`) is
 // not an extension. Relative URLs resolve against the document base URL, the
-// same base XHR itself uses. Data URLs never reach here — `parse-data-url`
+// same base XHR itself uses. Data URLs never reach here: `parse-data-url`
 // intercepts them.
 const hasSvgExtension = (url: string) =>
   /\.svg$/i.test(new URL(url, document.baseURI).pathname)

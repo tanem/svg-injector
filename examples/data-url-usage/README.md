@@ -34,7 +34,7 @@ document.getElementById('inlined-by-vite').setAttribute('data-src', inlinedByVit
 
 Vite resolves that import to a data URL when the file is under `build.assetsInlineLimit` (4 kB by default), in dev as well as in the production build. A file over the limit resolves to a normal URL instead, which the library fetches over the network as usual.
 
-The assignment has to happen in script because `data-src` is an opaque attribute to Vite's HTML handling — an import is the only reference the bundler follows. That is also why the SVG files in the other examples live in `public/`: they are named in `data-src` and never imported, so the bundler must copy them across untouched.
+The assignment has to happen in script because `data-src` is an opaque attribute to Vite's HTML handling: an import is the only reference the bundler follows. That is also why the SVG files in the other examples live in `public/`: they are named in `data-src` and never imported, so the bundler must copy them across untouched.
 
 ## Supported formats
 

@@ -2,7 +2,7 @@ import cloneSvg from './clone-svg'
 import makeAjaxRequest from './make-ajax-request'
 import type { Errback } from './types'
 
-// A URL is either loading — with the callbacks waiting on the response — or
+// A URL is either loading, with the callbacks waiting on the response, or
 // loaded. Failures are removed rather than recorded, which is how "errors are
 // always refetched" is implemented. The cache lasts for the lifetime of the
 // page and is unbounded by design; consumers opt out with
