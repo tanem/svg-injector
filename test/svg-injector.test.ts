@@ -803,6 +803,121 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCalls[1]!.svg).toContain('viewBox="0 0 10 10"')
   })
 
+  // A callback fired for a cached URL may start a new injection of that same
+  // URL. The injections already waiting on the original response have to
+  // receive that response — exactly once each — rather than being handed the
+  // result of the request the callback started.
+  test('injection started from a callback for the same URL', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/retry.svg', async (route) => {
+      requestCount += 1
+      if (requestCount === 1) {
+        await route.fulfill({ status: 404, body: '' })
+      } else {
+        await route.fulfill({
+          status: 200,
+          body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>',
+          headers: { 'content-type': 'image/svg+xml' },
+        })
+      }
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        calls: Array<{ name: string; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            id="first"
+            data-src="/fixtures/retry.svg"
+          ></div>
+          <div
+            id="second"
+            data-src="/fixtures/retry.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const calls: Array<{
+          name: string
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every injection. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const record = (name: string) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              name,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+
+            if (name === 'first') {
+              // The second injection is still waiting on the failed request at
+              // this point, so this call lands mid-dispatch.
+              const third = document.createElement('div')
+              third.setAttribute('data-src', '/fixtures/retry.svg')
+              container.appendChild(third)
+              SVGInjector(third, { afterEach: record('third') })
+            }
+
+            if (calls.length === 3) {
+              clearTimeout(timeoutId)
+              // Defer so a duplicate call would be recorded too.
+              setTimeout(() => {
+                resolve({ calls })
+              }, 0)
+            }
+          }
+        }
+
+        SVGInjector(container.querySelector('#first'), {
+          afterEach: record('first'),
+        })
+        SVGInjector(container.querySelector('#second'), {
+          afterEach: record('second'),
+        })
+      })
+    })
+
+    expect(result.calls).toHaveLength(3)
+
+    const byName = new Map(result.calls.map((call) => [call.name, call]))
+    expect(byName.get('first')!.error).toBe(
+      'Unable to load SVG file: /fixtures/retry.svg',
+    )
+    expect(byName.get('second')!.error).toBe(
+      'Unable to load SVG file: /fixtures/retry.svg',
+    )
+    expect(byName.get('third')!.error).toBe(null)
+    expect(byName.get('third')!.svg).toContain('viewBox="0 0 10 10"')
+    // One request for the pair that failed, one for the injection started from
+    // the callback.
+    expect(requestCount).toBe(2)
+  })
+
   // A 200 response whose body is not an SVG document has to be reported as an
   // error. On the cached path the failure must not poison the cache entry
   // either: the next injection of the same URL has to refetch.

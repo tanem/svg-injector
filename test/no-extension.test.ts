@@ -1,7 +1,64 @@
 import { expect, test } from './playwright/coverage'
-import { formatHtml, injectSvg, setupPage } from './playwright/test-utils'
+import {
+  formatHtml,
+  injectSvg,
+  setupPage,
+  type SvgInjectorWindow,
+} from './playwright/test-utils'
 
 test.describe('no extension', () => {
+  // A rejected content type aborts the request, and `abort()` re-enters the
+  // `readystatechange` handler with `readyState` 4 in Chromium and Firefox. The
+  // failure the caller sees has to be the content-type one, reported once.
+  test('reports a rejected content type once', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachErrors: Array<string | null>
+        afterAllCalls: number[]
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up?content-type=text%2Fhtml"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachErrors: Array<string | null> = []
+        const afterAllCalls: number[] = []
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterAll` was not called'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          // Uncached, so the cache cannot absorb a repeated callback.
+          cacheRequests: false,
+          afterEach: (error: Error | null) => {
+            afterEachErrors.push(error ? error.message : null)
+          },
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            afterAllCalls.push(elementsLoaded)
+            // Defer so a repeated callback would be recorded too.
+            setTimeout(() => {
+              resolve({ afterEachErrors, afterAllCalls })
+            }, 0)
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachErrors).toEqual(['Invalid content type: text/html'])
+    expect(result.afterAllCalls).toEqual([1])
+  })
+
   test('missing content type', async ({ page, browserName }) => {
     await setupPage(page)
 

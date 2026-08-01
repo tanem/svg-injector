@@ -26,12 +26,13 @@ const SVGInjector = (
   }: OptionalArgs = {},
 ) => {
   if (elements && 'length' in elements) {
-    // Capture the length up front: a live `HTMLCollection` can change length
-    // between this call and the callbacks below, as elements are replaced by
-    // their injected SVGs.
-    const elementsLength = elements.length
+    // Snapshot up front: a live `HTMLCollection` changes as elements are
+    // replaced by their injected SVGs, and a cached URL is injected
+    // synchronously, so iterating it directly would skip elements and leave
+    // the completion count unreachable.
+    const elementList = Array.from(elements)
 
-    if (elementsLength === 0) {
+    if (elementList.length === 0) {
       // Defer to match the async behaviour of the injection paths, so
       // `afterAll` never fires before `SVGInjector` returns.
       setTimeout(() => {
@@ -41,11 +42,7 @@ const SVGInjector = (
     }
 
     let elementsLoaded = 0
-    for (let i = 0; i < elementsLength; i++) {
-      const element = elements[i]
-      if (!element) {
-        continue
-      }
+    for (const element of elementList) {
       injectElement(
         element,
         evalScripts,
@@ -55,7 +52,7 @@ const SVGInjector = (
         beforeEach,
         (error, svg) => {
           afterEach(error, svg)
-          if (elementsLength === ++elementsLoaded) {
+          if (elementList.length === ++elementsLoaded) {
             afterAll(elementsLoaded)
           }
         },

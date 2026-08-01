@@ -56,6 +56,10 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 - `src` is now published alongside `dist`, so the declaration maps shipped with the build resolve to the original TypeScript sources.
 
+**Fixed**
+
+- A rejected `Content-Type` is now reported as itself when `cacheRequests` is `false`. Rejecting the header aborts the request, and the abort re-enters the request's `readystatechange` handler, which reported the aborted request as `Unable to load SVG file: <url>` in place of `Invalid content type: <type>` or `Content type not found`. The cached path already reported the content-type error.
+
 ## v11.0.0
 
 **Breaking**

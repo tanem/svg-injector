@@ -6,8 +6,17 @@ const makeAjaxRequest = (
   callback: (error: Error | null, httpRequest: XMLHttpRequest) => void,
 ) => {
   const httpRequest = new XMLHttpRequest()
+  // Every failure below aborts the request, and `abort()` re-enters this
+  // handler with `readyState` 4, where the aborted request looks like a load
+  // failure. Without this flag the caller is called back a second time with
+  // that misleading error in place of the real one.
+  let settled = false
 
   httpRequest.onreadystatechange = () => {
+    if (settled) {
+      return
+    }
+
     try {
       // URLs with a .svg extension skip content-type validation. This avoids
       // failures on the file:// protocol where browsers don't send Content-Type
@@ -45,6 +54,7 @@ const makeAjaxRequest = (
           httpRequest.status === 200 ||
           (isLocal() && httpRequest.status === 0)
         ) {
+          settled = true
           callback(null, httpRequest)
         } else {
           throw new Error(
@@ -56,6 +66,7 @@ const makeAjaxRequest = (
         }
       }
     } catch (error) {
+      settled = true
       httpRequest.abort()
       if (error instanceof Error) {
         callback(error, httpRequest)

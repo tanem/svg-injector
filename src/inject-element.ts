@@ -59,19 +59,7 @@ const injectElement = (
     return
   }
 
-  // The request queue can dispatch a callback that has already run: a retry
-  // queued from inside a callback lands in the array the queue is iterating,
-  // which stops that array being cleared. Every branch below finishes the
-  // injection, so ignore anything after the first, keeping `callback` to one
-  // call per `injectElement`.
-  let settled = false
-
   const handleLoadedSvg = (error: Error | null, loadedSvg?: SVGSVGElement) => {
-    if (settled) {
-      return
-    }
-    settled = true
-
     if (!loadedSvg) {
       elementsInFlight.delete(el)
       callback(error)

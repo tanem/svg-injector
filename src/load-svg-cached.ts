@@ -1,49 +1,73 @@
-import cache from './cache'
 import cloneSvg from './clone-svg'
 import makeAjaxRequest from './make-ajax-request'
-import { processRequestQueue, queueRequest } from './request-queue'
 import type { Errback } from './types'
+
+// A URL is either loading — with the callbacks waiting on the response — or
+// loaded. Failures are removed rather than recorded, which is how "errors are
+// always refetched" is implemented. The cache lasts for the lifetime of the
+// page and is unbounded by design; consumers opt out with
+// `cacheRequests: false`.
+type CacheEntry =
+  | { state: 'loading'; waiters: Errback[] }
+  | { state: 'loaded'; svg: SVGSVGElement }
+
+const cache = new Map<string, CacheEntry>()
+
+const notifyWaiters = (
+  waiters: Errback[],
+  error: Error | null,
+  svg?: SVGSVGElement,
+) => {
+  for (const waiter of waiters) {
+    // Async to avoid blocking the renderer. Each waiter gets its own clone so
+    // it can modify the SVG without affecting the cached original.
+    setTimeout(() => {
+      waiter(error, svg ? cloneSvg(svg) : undefined)
+    }, 0)
+  }
+}
 
 const loadSvgCached = (
   url: string,
   httpRequestWithCredentials: boolean,
   callback: Errback,
 ) => {
-  if (cache.has(url)) {
-    const cacheValue = cache.get(url)
+  const entry = cache.get(url)
 
-    if (cacheValue === undefined) {
-      queueRequest(url, callback)
-      return
-    }
-
-    if (cacheValue instanceof SVGSVGElement) {
-      callback(null, cloneSvg(cacheValue))
-      return
-    }
-
-    // Errors are always refetched.
+  if (entry?.state === 'loaded') {
+    callback(null, cloneSvg(entry.svg))
+    return
   }
 
-  // Seed the cache to indicate this URL is loading.
-  cache.set(url, undefined)
-  queueRequest(url, callback)
+  if (entry) {
+    entry.waiters.push(callback)
+    return
+  }
+
+  const waiters = [callback]
+  cache.set(url, { state: 'loading', waiters })
 
   makeAjaxRequest(url, httpRequestWithCredentials, (error, httpRequest) => {
+    const documentElement = httpRequest.responseXML?.documentElement
+
+    // Each branch replaces or removes the entry before notifying, which
+    // detaches `waiters`: a request made from one of those callbacks starts a
+    // fresh entry rather than joining the list being notified here.
     if (error) {
-      cache.set(url, error)
-    } else if (
-      httpRequest.responseXML?.documentElement instanceof SVGSVGElement
-    ) {
-      cache.set(url, httpRequest.responseXML.documentElement)
+      cache.delete(url)
+      notifyWaiters(waiters, error)
+    } else if (documentElement instanceof SVGSVGElement) {
+      cache.set(url, { state: 'loaded', svg: documentElement })
+      notifyWaiters(waiters, null, documentElement)
     } else {
-      // The request succeeded but the body is not an SVG document. Cache the
-      // error rather than leaving the loading sentinel in place: every later
-      // request for this URL would read the sentinel as "in flight", queue
-      // itself and never be called back. Errors are always refetched.
-      cache.set(url, new Error(`Unable to parse SVG from response: ${url}`))
+      // The request succeeded but the body is not an SVG document, e.g. an
+      // HTML page served with a 200 at the SVG's URL.
+      cache.delete(url)
+      notifyWaiters(
+        waiters,
+        new Error(`Unable to parse SVG from response: ${url}`),
+      )
     }
-    processRequestQueue(url)
   })
 }
 
