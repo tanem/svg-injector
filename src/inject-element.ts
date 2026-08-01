@@ -1,16 +1,16 @@
+import evalSvgScripts from './eval-svg-scripts'
 import extractSymbol from './extract-symbol'
 import loadSvgCached from './load-svg-cached'
 import loadSvgUncached from './load-svg-uncached'
 import parseDataUrl from './parse-data-url'
+import renumerateSvgIriElements from './renumerate-svg-iri-elements'
 import type { BeforeEach, Errback, EvalScripts } from './types'
-import uniqueId from './unique-id'
 
 // Tracks elements currently being injected. Prevents duplicate injection if
 // SVGInjector is called with the same element twice before the first injection
 // completes. Entries are removed by the completion and error paths of the
 // injection that added them.
 const elementsInFlight = new Set<Element>()
-const ranScripts = new Set<string>()
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
@@ -137,170 +137,13 @@ const injectElement = (
     }
 
     if (renumerateIRIElements) {
-      // Rewrite IRI element ids to be unique across injection instances.
-      // Browsers skip clipPaths in hidden parent elements, so duplicate ids
-      // cause all but the first instance to lose clipping. Reference:
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=376027.
-      //
-      // IRI-addressable elements mapped to referencing properties per the SVG
-      // spec: http://www.w3.org/TR/SVG/linking.html#processingIRI.
-      const iriElementsAndProperties: Record<string, string[]> = {
-        clipPath: ['clip-path'],
-        'color-profile': ['color-profile'],
-        cursor: ['cursor'],
-        filter: ['filter'],
-        linearGradient: ['fill', 'stroke'],
-        marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
-        mask: ['mask'],
-        path: [],
-        pattern: ['fill', 'stroke'],
-        radialGradient: ['fill', 'stroke'],
-      }
-
-      const replaceIriReferences = (
-        value: string,
-        iriIdMap: Map<string, string>,
-      ) => {
-        return value.replace(
-          /url\((['"]?)\s*#([^\s'"\)]+)\s*\1\)/g,
-          (match: string, _quote: string, iriId: string) => {
-            const newId = iriIdMap.get(iriId)
-            return newId ? `url(#${newId})` : match
-          },
-        )
-      }
-
-      const replaceHrefReference = (
-        value: string,
-        iriIdMap: Map<string, string>,
-      ) => {
-        if (!value.startsWith('#')) {
-          return value
-        }
-
-        const newId = iriIdMap.get(value.slice(1))
-        return newId ? '#' + newId : value
-      }
-
-      // Collected up front and applied last: the reference rewrites below
-      // still need to match the original ids.
-      const renumeratedElements: Array<{ element: Element; newId: string }> = []
-      const iriIdMap = new Map<string, string>()
-
-      for (const tagName of Object.keys(iriElementsAndProperties)) {
-        for (const element of svg.querySelectorAll(`${tagName}[id]`)) {
-          const newId = `${element.id}-${uniqueId()}`
-          iriIdMap.set(element.id, newId)
-          renumeratedElements.push({ element, newId })
-        }
-      }
-
-      // Several element types share referencing properties (`fill`, `stroke`),
-      // so collapse the table to the distinct set of properties to look up.
-      const referencingProperties = new Set(
-        Object.values(iriElementsAndProperties).flat(),
-      )
-
-      for (const property of referencingProperties) {
-        for (const referencingElement of svg.querySelectorAll(
-          `[${property}]`,
-        )) {
-          const value = referencingElement.getAttribute(property)
-          if (value) {
-            const nextValue = replaceIriReferences(value, iriIdMap)
-            if (nextValue !== value) {
-              referencingElement.setAttribute(property, nextValue)
-            }
-          }
-        }
-      }
-
-      for (const link of svg.querySelectorAll('*')) {
-        const href = link.getAttribute('href')
-        if (href) {
-          const nextHref = replaceHrefReference(href, iriIdMap)
-          if (nextHref !== href) {
-            link.setAttribute('href', nextHref)
-          }
-        }
-
-        const xlinkHref = link.getAttributeNS(xlinkNamespace, 'href')
-        if (xlinkHref) {
-          const nextXlinkHref = replaceHrefReference(xlinkHref, iriIdMap)
-          if (nextXlinkHref !== xlinkHref) {
-            link.setAttributeNS(xlinkNamespace, 'href', nextXlinkHref)
-          }
-        }
-      }
-
-      for (const styleElement of svg.querySelectorAll('[style]')) {
-        const styleValue = styleElement.getAttribute('style')
-        if (styleValue) {
-          const nextStyleValue = replaceIriReferences(styleValue, iriIdMap)
-          if (nextStyleValue !== styleValue) {
-            styleElement.setAttribute('style', nextStyleValue)
-          }
-        }
-      }
-
-      for (const styleTagElement of svg.querySelectorAll('style')) {
-        const textContent = styleTagElement.textContent
-        if (textContent) {
-          const nextTextContent = replaceIriReferences(textContent, iriIdMap)
-          if (nextTextContent !== textContent) {
-            styleTagElement.textContent = nextTextContent
-          }
-        }
-      }
-
-      for (const { element, newId } of renumeratedElements) {
-        element.id = newId
-      }
+      renumerateSvgIriElements(svg)
     }
 
     // Remove invalid namespaces that SVG editing tools may have added.
     svg.removeAttribute('xmlns:a')
 
-    // Injected SVGs don't automatically run their script elements, so extract
-    // and evaluate them manually if requested.
-
-    const scriptsToEval: string[] = []
-
-    for (const scriptElement of svg.querySelectorAll('script')) {
-      const scriptType = scriptElement.getAttribute('type')
-
-      // Only process JavaScript types. SVG defaults to 'application/ecmascript'
-      // for unset types.
-      if (
-        !scriptType ||
-        scriptType === 'application/ecmascript' ||
-        scriptType === 'application/javascript' ||
-        scriptType === 'text/javascript'
-      ) {
-        const script = scriptElement.textContent
-
-        if (script) {
-          scriptsToEval.push(script)
-        }
-
-        svg.removeChild(scriptElement)
-      }
-    }
-
-    if (
-      scriptsToEval.length > 0 &&
-      (evalScripts === 'always' ||
-        (evalScripts === 'once' && !ranScripts.has(elUrl)))
-    ) {
-      for (const scriptToEval of scriptsToEval) {
-        // This is a form of eval, but only for code the caller has explicitly
-        // asked to load from their own SVG files. The code runs in a closure,
-        // not the global scope.
-        new Function(scriptToEval)(window)
-      }
-
-      ranScripts.add(elUrl)
-    }
+    evalSvgScripts(svg, evalScripts, elUrl)
 
     // Some browsers don't evaluate <style> tags in SVGs that are dynamically
     // added to the page. This triggers a re-read. Reference:
