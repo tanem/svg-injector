@@ -1,5 +1,13 @@
 import isLocal from './is-local'
 
+// Matched against the pathname rather than the whole URL: a `.svg` in a query
+// parameter (`?file=logo.svgz`) or a hostname label (`foo.svg.example.com`) is
+// not an extension. Relative URLs resolve against the document base URL, the
+// same base XHR itself uses. Data URLs never reach here — `parse-data-url`
+// intercepts them.
+const hasSvgExtension = (url: string) =>
+  /\.svg$/i.test(new URL(url, document.baseURI).pathname)
+
 const makeAjaxRequest = (
   url: string,
   httpRequestWithCredentials: boolean,
@@ -22,7 +30,7 @@ const makeAjaxRequest = (
       // failures on the file:// protocol where browsers don't send Content-Type
       // headers, and is unnecessary when the extension already indicates SVG
       // content.
-      if (!/\.svg/i.test(url) && httpRequest.readyState === 2) {
+      if (httpRequest.readyState === 2 && !hasSvgExtension(url)) {
         const contentType = httpRequest.getResponseHeader('Content-Type')
 
         // Everything before the first `;` is the media type; the parameters
