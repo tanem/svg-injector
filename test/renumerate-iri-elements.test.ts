@@ -43,6 +43,26 @@ test.describe('renumerate iri elements', () => {
     expect(actual).toBe(expected)
   })
 
+  test('references to ids no element defines', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/undefined-reference.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" class="injected-svg inject-me" data-src="/fixtures/undefined-reference.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><clipPath id="clipPathTest-1"><rect x="16" y="16" width="32" height="32" style="fill:white;"></rect></clipPath></defs><circle cx="32" cy="32" r="18" clip-path="url(#clipPathTest-1)" fill="url(#constructor)" mask="url(#toString)" style="stroke:url(#hasOwnProperty);"></circle><use href="#valueOf"></use></svg>'
+
+    expect(actual).toBe(expected)
+  })
+
   test('fill', async ({ page }) => {
     await setupPage(page)
 

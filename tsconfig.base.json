@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
-    "lib": ["es2019", "dom"],
+    "lib": ["es2019", "dom", "dom.iterable"],
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitReturns": true,

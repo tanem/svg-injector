@@ -48,7 +48,7 @@ const parseDataUrl = (url: string): SVGSVGElement | Error | null => {
     if (normalized === 'base64') {
       isBase64 = true
     } else if (normalized.startsWith(charsetPrefix)) {
-      if (utf8Charsets.indexOf(normalized.slice(charsetPrefix.length)) === -1) {
+      if (!utf8Charsets.includes(normalized.slice(charsetPrefix.length))) {
         return new Error('Unsupported data URL format')
       }
     } else {

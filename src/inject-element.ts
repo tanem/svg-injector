@@ -10,7 +10,7 @@ import uniqueId from './unique-id'
 // completes. Entries are removed by the completion and error paths of the
 // injection that added them.
 const elementsInFlight = new Set<Element>()
-const ranScripts: Record<string, boolean> = {}
+const ranScripts = new Set<string>()
 const svgNamespace = 'http://www.w3.org/2000/svg'
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
@@ -130,15 +130,11 @@ const injectElement = (
 
     svg.setAttribute('data-src', elUrl)
 
-    const elData: Attr[] = [].filter.call(el.attributes, (at: Attr) => {
-      return /^data-\w[\w-]*$/.test(at.name)
-    })
-
-    Array.prototype.forEach.call(elData, (dataAttr: Attr) => {
-      if (dataAttr.name && dataAttr.value) {
-        svg.setAttribute(dataAttr.name, dataAttr.value)
+    for (const attribute of el.attributes) {
+      if (/^data-\w[\w-]*$/.test(attribute.name) && attribute.value) {
+        svg.setAttribute(attribute.name, attribute.value)
       }
-    })
+    }
 
     if (renumerateIRIElements) {
       // Rewrite IRI element ids to be unique across injection instances.
@@ -163,12 +159,12 @@ const injectElement = (
 
       const replaceIriReferences = (
         value: string,
-        iriIdMap: Record<string, string>,
+        iriIdMap: Map<string, string>,
       ) => {
         return value.replace(
           /url\((['"]?)\s*#([^\s'"\)]+)\s*\1\)/g,
           (match: string, _quote: string, iriId: string) => {
-            const newId = iriIdMap[iriId]
+            const newId = iriIdMap.get(iriId)
             return newId ? `url(#${newId})` : match
           },
         )
@@ -176,74 +172,50 @@ const injectElement = (
 
       const replaceHrefReference = (
         value: string,
-        iriIdMap: Record<string, string>,
+        iriIdMap: Map<string, string>,
       ) => {
         if (!value.startsWith('#')) {
           return value
         }
 
-        const iriId = value.slice(1)
-        const newId = iriIdMap[iriId]
+        const newId = iriIdMap.get(value.slice(1))
         return newId ? '#' + newId : value
       }
 
-      let element: string
-      let elements: NodeListOf<Element>
-      let properties: string[]
-      let currentId: string
-      let newId: string
+      // Collected up front and applied last: the reference rewrites below
+      // still need to match the original ids.
+      const renumeratedElements: Array<{ element: Element; newId: string }> = []
+      const iriIdMap = new Map<string, string>()
 
-      const renumeratedElements: Array<{
-        element: Element
-        currentId: string
-        newId: string
-      }> = []
-      const iriIdMap: Record<string, string> = {}
-
-      Object.keys(iriElementsAndProperties).forEach((key) => {
-        element = key
-        elements = svg.querySelectorAll(element + '[id]')
-        for (let a = 0, elementsLen = elements.length; a < elementsLen; a++) {
-          const currentElement = elements[a]!
-          currentId = currentElement.id
-          newId = currentId + '-' + uniqueId()
-
-          iriIdMap[currentId] = newId
-          renumeratedElements.push({
-            element: currentElement,
-            currentId,
-            newId,
-          })
+      for (const tagName of Object.keys(iriElementsAndProperties)) {
+        for (const element of svg.querySelectorAll(`${tagName}[id]`)) {
+          const newId = `${element.id}-${uniqueId()}`
+          iriIdMap.set(element.id, newId)
+          renumeratedElements.push({ element, newId })
         }
-      })
+      }
 
-      Object.keys(iriElementsAndProperties).forEach((key) => {
-        properties = iriElementsAndProperties[key]!
+      // Several element types share referencing properties (`fill`, `stroke`),
+      // so collapse the table to the distinct set of properties to look up.
+      const referencingProperties = new Set(
+        Object.values(iriElementsAndProperties).flat(),
+      )
 
-        let referencingElements: NodeListOf<Element>
-        Array.prototype.forEach.call(properties, (property: string) => {
-          referencingElements = svg.querySelectorAll('[' + property + ']')
-          for (
-            let b = 0, referencingElementLen = referencingElements.length;
-            b < referencingElementLen;
-            b++
-          ) {
-            const referencingElement = referencingElements[b]!
-            const attrValue: string | null =
-              referencingElement.getAttribute(property)
-            if (attrValue) {
-              const nextValue = replaceIriReferences(attrValue, iriIdMap)
-              if (nextValue !== attrValue) {
-                referencingElement.setAttribute(property, nextValue)
-              }
+      for (const property of referencingProperties) {
+        for (const referencingElement of svg.querySelectorAll(
+          `[${property}]`,
+        )) {
+          const value = referencingElement.getAttribute(property)
+          if (value) {
+            const nextValue = replaceIriReferences(value, iriIdMap)
+            if (nextValue !== value) {
+              referencingElement.setAttribute(property, nextValue)
             }
           }
-        })
-      })
+        }
+      }
 
-      const allLinks = svg.querySelectorAll('*')
-      for (let c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
-        const link = allLinks[c]!
+      for (const link of svg.querySelectorAll('*')) {
         const href = link.getAttribute('href')
         if (href) {
           const nextHref = replaceHrefReference(href, iriIdMap)
@@ -261,13 +233,7 @@ const injectElement = (
         }
       }
 
-      const styleElements = svg.querySelectorAll('[style]')
-      for (
-        let d = 0, styleElementsLen = styleElements.length;
-        d < styleElementsLen;
-        d++
-      ) {
-        const styleElement = styleElements[d]!
+      for (const styleElement of svg.querySelectorAll('[style]')) {
         const styleValue = styleElement.getAttribute('style')
         if (styleValue) {
           const nextStyleValue = replaceIriReferences(styleValue, iriIdMap)
@@ -277,13 +243,7 @@ const injectElement = (
         }
       }
 
-      const styleTagElements = svg.querySelectorAll('style')
-      for (
-        let e = 0, styleTagElementsLen = styleTagElements.length;
-        e < styleTagElementsLen;
-        e++
-      ) {
-        const styleTagElement = styleTagElements[e]!
+      for (const styleTagElement of svg.querySelectorAll('style')) {
         const textContent = styleTagElement.textContent
         if (textContent) {
           const nextTextContent = replaceIriReferences(textContent, iriIdMap)
@@ -293,12 +253,8 @@ const injectElement = (
         }
       }
 
-      for (
-        let f = 0, renumeratedElementsLen = renumeratedElements.length;
-        f < renumeratedElementsLen;
-        f++
-      ) {
-        renumeratedElements[f]!.element.id = renumeratedElements[f]!.newId
+      for (const { element, newId } of renumeratedElements) {
+        element.id = newId
       }
     }
 
@@ -308,14 +264,10 @@ const injectElement = (
     // Injected SVGs don't automatically run their script elements, so extract
     // and evaluate them manually if requested.
 
-    const scripts = svg.querySelectorAll('script')
     const scriptsToEval: string[] = []
-    let script: string | null
-    let scriptType: string | null
 
-    for (let i = 0, scriptsLen = scripts.length; i < scriptsLen; i++) {
-      const scriptElement = scripts[i]!
-      scriptType = scriptElement.getAttribute('type')
+    for (const scriptElement of svg.querySelectorAll('script')) {
+      const scriptType = scriptElement.getAttribute('type')
 
       // Only process JavaScript types. SVG defaults to 'application/ecmascript'
       // for unset types.
@@ -325,7 +277,7 @@ const injectElement = (
         scriptType === 'application/javascript' ||
         scriptType === 'text/javascript'
       ) {
-        script = scriptElement.innerText || scriptElement.textContent
+        const script = scriptElement.textContent
 
         if (script) {
           scriptsToEval.push(script)
@@ -338,29 +290,24 @@ const injectElement = (
     if (
       scriptsToEval.length > 0 &&
       (evalScripts === 'always' ||
-        (evalScripts === 'once' && !ranScripts[elUrl]))
+        (evalScripts === 'once' && !ranScripts.has(elUrl)))
     ) {
-      for (
-        let l = 0, scriptsToEvalLen = scriptsToEval.length;
-        l < scriptsToEvalLen;
-        l++
-      ) {
+      for (const scriptToEval of scriptsToEval) {
         // This is a form of eval, but only for code the caller has explicitly
         // asked to load from their own SVG files. The code runs in a closure,
         // not the global scope.
-        new Function(scriptsToEval[l]!)(window)
+        new Function(scriptToEval)(window)
       }
 
-      ranScripts[elUrl] = true
+      ranScripts.add(elUrl)
     }
 
     // Some browsers don't evaluate <style> tags in SVGs that are dynamically
     // added to the page. This triggers a re-read. Reference:
     // https://github.com/iconic/SVGInjector/issues/23.
-    const styleTags = svg.querySelectorAll('style')
-    Array.prototype.forEach.call(styleTags, (styleTag: HTMLStyleElement) => {
+    for (const styleTag of svg.querySelectorAll('style')) {
       styleTag.textContent += ''
-    })
+    }
 
     svg.setAttribute('xmlns', svgNamespace)
     svg.setAttribute('xmlns:xlink', xlinkNamespace)
