@@ -19,8 +19,10 @@ const notifyWaiters = (
   svg?: SVGSVGElement,
 ) => {
   for (const waiter of waiters) {
-    // Async to avoid blocking the renderer. Each waiter gets its own clone so
-    // it can modify the SVG without affecting the cached original.
+    // Deferred so a hit on an already-loaded entry, which comes through here
+    // too, calls back no earlier than a first load does. Each waiter gets its
+    // own clone so it can modify the SVG without affecting the cached
+    // original.
     setTimeout(() => {
       waiter(error, svg ? cloneSvg(svg) : undefined)
     }, 0)
@@ -35,7 +37,7 @@ const loadSvgCached = (
   const entry = cache.get(url)
 
   if (entry?.state === 'loaded') {
-    callback(null, cloneSvg(entry.svg))
+    notifyWaiters([callback], null, entry.svg)
     return
   }
 

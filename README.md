@@ -85,11 +85,13 @@ Every option is optional, and `options` itself defaults to `{}`.
 
 Called once per `SVGInjector` call, after every element has been processed. `elementsLoaded` is the number of elements processed, which includes any that failed, so it matches the number of `afterEach` calls rather than the number of SVGs that reached the page. Count the `afterEach` calls whose `error` is `null` for that.
 
-`afterAll(0)` fires for `null` and for an empty collection.
+`afterAll(0)` fires for `null` and for an empty collection. When it fires relative to the `SVGInjector` call is covered under [`afterEach`](#aftereach).
 
 #### `afterEach`
 
 Called once per element, after it has been injected or after its injection failed. On success `error` is `null` and `svg` is the injected SVG DOM element. On failure `error` is the `Error` and `svg` is `undefined`.
+
+For any element that gets as far as loading, `afterEach` and `afterAll` fire after the `SVGInjector` call has returned, whether the URL is being requested, is already cached, or is a data URL. DOM reads placed between the call and the callbacks therefore see the pre-injection DOM in every case. The exceptions are the arguments rejected before loading starts, which call back during the call: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`.
 
 ```js
 SVGInjector(document.querySelectorAll('[data-src]'), {

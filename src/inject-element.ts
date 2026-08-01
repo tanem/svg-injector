@@ -158,9 +158,8 @@ const injectElement = (
   }
 
   if (dataUrlResult) {
-    // Use setTimeout to match the async behaviour of the XHR path. Callers may
-    // depend on injection being asynchronous (e.g. reading DOM state after
-    // calling SVGInjector but before the callback fires).
+    // Deferred to match the XHR path, per the callback timing note in
+    // `svg-injector.ts`.
     setTimeout(() => {
       handleLoadedSvg(null, dataUrlResult)
     }, 0)

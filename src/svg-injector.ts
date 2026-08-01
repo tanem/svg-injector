@@ -17,6 +17,13 @@ interface OptionalArgs {
   renumerateIRIElements?: boolean
 }
 
+// Callback timing does not depend on cache state. Every element that reaches
+// a load path -- a first request, a hit on an already-loaded URL, or a data
+// URL -- has its callbacks deferred, so `afterEach` and `afterAll` never fire
+// before `SVGInjector` returns and code that reads DOM state in between sees
+// the same thing warm or cold. Arguments rejected before that point still
+// report synchronously: a missing `data-src`, an injection already in flight,
+// an unparseable data URL, and a null `elements`.
 const SVGInjector = (
   elements: Elements,
   {
@@ -30,15 +37,14 @@ const SVGInjector = (
   }: OptionalArgs = {},
 ) => {
   if (elements && 'length' in elements) {
-    // Snapshot up front: a live `HTMLCollection` changes as elements are
-    // replaced by their injected SVGs, and a cached URL is injected
-    // synchronously, so iterating it directly would skip elements and leave
-    // the completion count unreachable.
+    // Snapshot up front: a live `HTMLCollection` shrinks as its elements are
+    // replaced by their injected SVGs, so the completion count has to come
+    // from what was passed in rather than from the collection itself.
     const elementList = Array.from(elements)
 
     if (elementList.length === 0) {
-      // Defer to match the async behaviour of the injection paths, so
-      // `afterAll` never fires before `SVGInjector` returns.
+      // Deferred like the injection paths: an empty collection is a run that
+      // completed, not an argument rejected up front.
       setTimeout(() => {
         afterAll(0)
       }, 0)

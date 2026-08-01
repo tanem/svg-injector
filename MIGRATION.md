@@ -108,11 +108,17 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 - Base64 data URLs decode as UTF-8. `atob` yields one character per byte, so multi-byte characters arrived mojibaked: `café 🎉` in a `<text>` element rendered as `cafÃ© ð`. The bytes are now decoded through `TextDecoder`, which is the new requirement noted above.
 
+- A cache hit no longer calls back before `SVGInjector` returns. With `cacheRequests` left on, an injection of a URL that was already loaded ran `beforeEach`, the DOM swap, `afterEach` and `afterAll` synchronously, while a first load, a data URL and an error all deferred their callbacks. Timing therefore depended on cache state the caller cannot see: the same call site was asynchronous on an icon's first use and synchronous on every use after. The loaded-entry hit now goes through the same deferral as every other load path. This is not new in v12: v11 has the same inconsistency, and it is being fixed rather than introduced.
+
+  Code that reads DOM state between `SVGInjector(...)` and its callbacks is what notices. Such code saw the pre-injection DOM on a cold load and the post-injection DOM on a warm one; it now sees the pre-injection DOM every time. It was already broken, and fails consistently instead of intermittently.
+
+  Callbacks for an argument rejected before loading starts still fire during the `SVGInjector` call: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`.
+
 - IRI renumeration no longer rewrites references to ids that only `Object.prototype` defines. The map from old id to new id was a plain object, so a reference such as `url(#constructor)`, `url(#toString)` or `href="#valueOf"` found the inherited property and was rewritten with it, producing markup like `url(#function Object() { [native code] })`. Such a reference is left alone now, the same as any other reference to an id the file does not define.
 
 **Unchanged**
 
-- The public API. `SVGInjector(elements, options)` takes the same options with the same defaults, and the callbacks keep their signatures. The fixes above make `afterEach` and `afterAll` fire in cases where they previously did not fire at all; nothing was renamed or removed. Consumers need only the version bump.
+- The public API. `SVGInjector(elements, options)` takes the same options with the same defaults, and the callbacks keep their signatures. The fixes above make `afterEach` and `afterAll` fire in cases where they previously did not fire at all, and change when they fire on a cache hit; nothing was renamed or removed. Consumers need only the version bump.
 
 - The transport. Requests still go through `XMLHttpRequest`, so `file://` loading keeps working: browsers report status 0 and send no `Content-Type` header for those, and both are handled. Moving to `fetch` would cost that for no capability this library needs.
 
