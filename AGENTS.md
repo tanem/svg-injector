@@ -91,13 +91,16 @@ Not visible in the source, and they shape what can be built on top.
 `npm run test:playwright` is the development loop, run against a current
 `npm run build`: the suite loads the built IIFE bundle, so an unbuilt source
 change is not under test. `npm test` is the full gate, and also builds and
-verifies every example. `npm run size` and the `package:*` checks read `dist/`
-too; `postbuild` runs the latter.
+verifies every example; `npm run test:examples` is the shorter loop for a
+change confined to `examples/`. `npm run size` and the `package:*` checks read
+`dist/` too; `postbuild` runs the latter.
 
 Tests never reach the network. `test/playwright/test-utils.ts` routes
 `**/fixtures/**` to `test/fixtures/`, so adding a fixture means adding a file
 in that directory and nothing else. A `?content-type=` query on a fixture URL
-overrides the response header, and `?content-type=missing` drops it.
+overrides the response header, and `?content-type=missing` drops it. Responses
+no fixture file can express, such as a 404, a non-SVG body or an extra header,
+come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
 
 That mocking is the suite's blind spot: real-server and `file://` behaviour is
 simulated, so a change to `make-ajax-request.ts` needs checking by hand against
@@ -169,7 +172,8 @@ the bundler and nothing links it.
 
 ## Conventions
 
-- One default export per module in `src/`.
+- One default export per module in `src/`, apart from `index.ts` (barrel) and
+  `types.ts` (types only).
 - Functions, not classes.
 - Never `any`. Use `unknown` when the type is genuinely dynamic.
 - Non-null assertions only where a runtime guarantee backs them.
