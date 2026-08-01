@@ -1,3 +1,4 @@
+import defer from './defer'
 import evalSvgScripts from './eval-svg-scripts'
 import extractSymbol from './extract-symbol'
 import loadSvgCached from './load-svg-cached'
@@ -26,7 +27,9 @@ const injectElement = (
   const elUrl = el.getAttribute('data-src') ?? el.getAttribute('src')
 
   if (!elUrl) {
-    callback(new Error('Invalid data-src or src attribute'))
+    defer(() => {
+      callback(new Error('Invalid data-src or src attribute'))
+    })
     return
   }
 
@@ -34,7 +37,9 @@ const injectElement = (
     // Leave the element marked: the injection that added it is still running
     // and owns the removal. Reporting an error keeps the `afterEach` and
     // `afterAll` accounting in `SVGInjector` correct.
-    callback(new Error(`Injection already in progress: ${elUrl}`))
+    defer(() => {
+      callback(new Error(`Injection already in progress: ${elUrl}`))
+    })
     return
   }
 
@@ -54,8 +59,13 @@ const injectElement = (
   // browsers (or bundlers like Vite) inline SVGs as data URIs.
   const dataUrlResult = parseDataUrl(baseUrl)
   if (dataUrlResult instanceof Error) {
+    // The release is not deferred with the callback: a second call made in the
+    // gap starts a fresh injection rather than hitting the in-flight guard,
+    // which is how every asynchronous load error already behaves.
     elementsInFlight.delete(el)
-    callback(dataUrlResult)
+    defer(() => {
+      callback(dataUrlResult)
+    })
     return
   }
 
@@ -160,9 +170,9 @@ const injectElement = (
   if (dataUrlResult) {
     // Deferred to match the XHR path, per the callback timing note in
     // `svg-injector.ts`.
-    setTimeout(() => {
+    defer(() => {
       handleLoadedSvg(null, dataUrlResult)
-    }, 0)
+    })
     return
   }
 

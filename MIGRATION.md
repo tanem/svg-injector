@@ -92,7 +92,7 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 **Fixed**
 
-- `afterAll` is now called for an empty collection. The completion check lives in the per-element callback, so a zero-length `HTMLCollection` or `NodeList` never reached it and `afterAll` never fired at all. It is now called with `0`, deferred so it cannot fire before `SVGInjector` returns. Passing `null` already behaved this way.
+- `afterAll` is now called for an empty collection. The completion check lives in the per-element callback, so a zero-length `HTMLCollection` or `NodeList` never reached it and `afterAll` never fired at all. It is now called with `0`, deferred so it cannot fire before `SVGInjector` returns. Passing `null` already called `afterAll(0)`, and now defers it as well: see the callback timing entry below.
 
 - `afterAll` now reports the right count for a live collection. A live collection such as the result of `getElementsByTagName('div')` shrinks as each element is replaced by its injected SVG, and the completion check compared the number of elements done against the collection's current length. With two elements, `afterAll` fired with `1` after the first injection finished. The collection is now snapshotted before injection starts, so the count is taken from the elements that were passed in.
 
@@ -112,13 +112,13 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
   Code that reads DOM state between `SVGInjector(...)` and its callbacks is what notices. Such code saw the pre-injection DOM on a cold load and the post-injection DOM on a warm one; it now sees the pre-injection DOM every time. It was already broken, and fails consistently instead of intermittently.
 
-  Callbacks for an argument rejected before loading starts still fire during the `SVGInjector` call: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`.
+  Every callback is now asynchronous, on every path. In v11 the cache hit was synchronous, and so were the four paths that reject an argument before loading starts: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`. Code that calls `SVGInjector` and then inspects `afterEach`-set state on the next line, for an element it knows is invalid, is what notices the latter.
 
 - IRI renumeration no longer rewrites references to ids that only `Object.prototype` defines. The map from old id to new id was a plain object, so a reference such as `url(#constructor)`, `url(#toString)` or `href="#valueOf"` found the inherited property and was rewritten with it, producing markup like `url(#function Object() { [native code] })`. Such a reference is left alone now, the same as any other reference to an id the file does not define.
 
 **Unchanged**
 
-- The public API. `SVGInjector(elements, options)` takes the same options with the same defaults, and the callbacks keep their signatures. The fixes above make `afterEach` and `afterAll` fire in cases where they previously did not fire at all, and change when they fire on a cache hit; nothing was renamed or removed. Consumers need only the version bump.
+- The public API. `SVGInjector(elements, options)` takes the same options with the same defaults, and the callbacks keep their signatures. The fixes above make `afterEach` and `afterAll` fire in cases where they previously did not fire at all, and change when they fire on the paths that were synchronous; nothing was renamed or removed. Consumers need only the version bump.
 
 - The transport. Requests still go through `XMLHttpRequest`, so `file://` loading keeps working: browsers report status 0 and send no `Content-Type` header for those, and both are handled. Moving to `fetch` would cost that for no capability this library needs.
 

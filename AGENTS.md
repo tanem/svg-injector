@@ -33,6 +33,10 @@ split the sprite fragment off the URL, load, transform, swap.
 - `svg-injector.ts` owns the `afterEach` and `afterAll` accounting. Every path
   out of `injectElement`, errors included, calls back exactly once. Add one
   that doesn't and `afterAll` silently never fires.
+- `defer.ts` is how "no callback fires before `SVGInjector` returns" is
+  enforced. Every callback goes through it, so a new path that calls back
+  without it reintroduces the sometimes-synchronous timing v12 removed. `grep
+  defer src/` lists the sites.
 - `inject-element.ts` is that per-element pipeline, and the only module that
   chooses a load path.
 - `parse-data-url.ts` intercepts `data:image/svg+xml` before any request is

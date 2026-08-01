@@ -91,7 +91,7 @@ Called once per `SVGInjector` call, after every element has been processed. `ele
 
 Called once per element, after it has been injected or after its injection failed. On success `error` is `null` and `svg` is the injected SVG DOM element. On failure `error` is the `Error` and `svg` is `undefined`.
 
-For any element that gets as far as loading, `afterEach` and `afterAll` fire after the `SVGInjector` call has returned, whether the URL is being requested, is already cached, or is a data URL. DOM reads placed between the call and the callbacks therefore see the pre-injection DOM in every case. The exceptions are the arguments rejected before loading starts, which call back during the call: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`.
+For every element and every argument, `afterEach` and `afterAll` fire after the `SVGInjector` call has returned. DOM reads placed between the call and the callbacks therefore always see the pre-injection DOM.
 
 ```js
 SVGInjector(document.querySelectorAll('[data-src]'), {

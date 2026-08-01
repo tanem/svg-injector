@@ -1,3 +1,4 @@
+import defer from './defer'
 import injectElement from './inject-element'
 import type {
   AfterAll,
@@ -17,13 +18,11 @@ interface OptionalArgs {
   renumerateIRIElements?: boolean
 }
 
-// Callback timing does not depend on cache state. Every element that reaches
-// a load path -- a first request, a hit on an already-loaded URL, or a data
-// URL -- has its callbacks deferred, so `afterEach` and `afterAll` never fire
+// Callback timing does not depend on what was passed in or on cache state.
+// Every path out of here defers, so `afterEach` and `afterAll` never fire
 // before `SVGInjector` returns and code that reads DOM state in between sees
-// the same thing warm or cold. Arguments rejected before that point still
-// report synchronously: a missing `data-src`, an injection already in flight,
-// an unparseable data URL, and a null `elements`.
+// the pre-injection DOM in every case. `grep defer src/` lists the places that
+// enforce it.
 const SVGInjector = (
   elements: Elements,
   {
@@ -43,11 +42,9 @@ const SVGInjector = (
     const elementList = Array.from(elements)
 
     if (elementList.length === 0) {
-      // Deferred like the injection paths: an empty collection is a run that
-      // completed, not an argument rejected up front.
-      setTimeout(() => {
+      defer(() => {
         afterAll(0)
-      }, 0)
+      })
       return
     }
 
@@ -82,7 +79,9 @@ const SVGInjector = (
       },
     )
   } else {
-    afterAll(0)
+    defer(() => {
+      afterAll(0)
+    })
   }
 }
 

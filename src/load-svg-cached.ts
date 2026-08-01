@@ -1,4 +1,5 @@
 import cloneSvg from './clone-svg'
+import defer from './defer'
 import makeAjaxRequest from './make-ajax-request'
 import type { Errback } from './types'
 
@@ -23,9 +24,9 @@ const notifyWaiters = (
     // too, calls back no earlier than a first load does. Each waiter gets its
     // own clone so it can modify the SVG without affecting the cached
     // original.
-    setTimeout(() => {
+    defer(() => {
       waiter(error, svg ? cloneSvg(svg) : undefined)
-    }, 0)
+    })
   }
 }
 
