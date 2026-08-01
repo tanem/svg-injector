@@ -37,6 +37,12 @@ const loadSvgCached = (
       httpRequest.responseXML?.documentElement instanceof SVGSVGElement
     ) {
       cache.set(url, httpRequest.responseXML.documentElement)
+    } else {
+      // The request succeeded but the body is not an SVG document. Cache the
+      // error rather than leaving the loading sentinel in place: every later
+      // request for this URL would read the sentinel as "in flight", queue
+      // itself and never be called back. Errors are always refetched.
+      cache.set(url, new Error(`Unable to parse SVG from response: ${url}`))
     }
     processRequestQueue(url)
   })

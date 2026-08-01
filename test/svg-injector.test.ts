@@ -782,6 +782,214 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCalls[1]!.svg).toContain('viewBox="0 0 10 10"')
   })
 
+  // A 200 response whose body is not an SVG document has to be reported as an
+  // error. On the cached path the failure must not poison the cache entry
+  // either: the next injection of the same URL has to refetch.
+  test('non-SVG response errors and is not cached', async ({ page }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/html-page.svg', async (route) => {
+      requestCount += 1
+      await route.fulfill({
+        status: 200,
+        body: '<!DOCTYPE html><html><head><title>Not an SVG</title></head><body><p>Nope</p></body></html>',
+        headers: { 'content-type': 'text/html' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for both injections. Calls so far: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const inject = (done: () => void) => {
+          const container = document.createElement('div')
+          container.innerHTML = `
+            <div
+              class="inject-me"
+              data-src="/fixtures/html-page.svg"
+            ></div>
+          `
+          document.body.appendChild(container)
+          SVGInjector(container.querySelector('.inject-me'), {
+            afterEach: (error: Error | null, svg?: Element | null) => {
+              afterEachCalls.push({
+                error: error ? error.message : null,
+                svg: svg
+                  ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                  : null,
+              })
+            },
+            afterAll: () => done(),
+          })
+        }
+
+        inject(() => {
+          inject(() => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          })
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(2)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.afterEachCalls[1]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[1]!.svg).toBe(null)
+    // The second injection refetched rather than hanging on a cache entry left
+    // in the loading state.
+    expect(requestCount).toBe(2)
+  })
+
+  test('non-SVG response errors when uncached', async ({ page }) => {
+    await setupPage(page)
+
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/html-page.svg', async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: '<!DOCTYPE html><html><head><title>Not an SVG</title></head><body><p>Nope</p></body></html>',
+        headers: { 'content-type': 'text/html' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/html-page.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called.'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          cacheRequests: false,
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: () => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+  })
+
+  test('valid XML that is not SVG errors', async ({ page }) => {
+    await setupPage(page)
+
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/not-svg.svg', async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: '<?xml version="1.0" encoding="UTF-8"?><note><body>Not an SVG</body></note>',
+        headers: { 'content-type': 'application/xml' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/not-svg.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called.'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: () => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/not-svg.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+  })
+
   test('svg not found error', async ({ page }) => {
     await setupPage(page)
 
