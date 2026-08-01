@@ -8,7 +8,6 @@ constrains belongs there, not here.
 
 - NZ English everywhere ("colour", "behaviour", "initialise").
 - Simple, direct technical language. No marketing speak.
-- No em dashes. Use a colon, a full stop, or a pair of commas.
 - Single-line commit messages, `git log --oneline` style. Add a body only to
   explain why, and only for behaviour or type changes.
 - No conventional-commit prefixes (`feat:`, `fix:`, `chore(deps):`) in commit

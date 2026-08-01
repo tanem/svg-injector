@@ -851,7 +851,7 @@ test.describe('SVGInjector', () => {
 
   // A callback fired for a cached URL may start a new injection of that same
   // URL. The injections already waiting on the original response have to
-  // receive that response, exactly once each, rather than being handed the
+  // receive that response — exactly once each — rather than being handed the
   // result of the request the callback started.
   test('injection started from a callback for the same URL', async ({
     page,
