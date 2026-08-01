@@ -16,7 +16,6 @@ const compat = new FlatCompat({
 export default [
   {
     ignores: [
-      '**/compiled/',
       '**/coverage/',
       '**/dist/',
       '**/playwright-report/',
@@ -73,7 +72,7 @@ export default [
     },
   },
   {
-    files: ['index.js', 'scripts/**/*.js', 'examples/**/*.ts'],
+    files: ['scripts/**/*.js', 'examples/**/*.ts'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
       'no-console': 'off',

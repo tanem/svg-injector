@@ -6,7 +6,7 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 **Breaking**
 
-- Removed the UMD builds. `dist/svg-injector.umd.development.js` and `dist/svg-injector.umd.production.js` are no longer published, so a plain `<script src>` tag no longer defines `window.SVGInjector`. The CommonJS and ES module builds are unchanged, so bundler and Node consumers need no changes.
+- Removed the UMD builds. `dist/svg-injector.umd.development.js` and `dist/svg-injector.umd.production.js` are no longer published, so a plain `<script src>` tag no longer defines `window.SVGInjector`. The CommonJS and ES module builds remain, under new filenames: see the packaging entry below.
 
   Script tag users have two options. Load the ES module build from an ESM CDN:
 
@@ -25,6 +25,34 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
   ```
 
   The equivalent npm pin is `npm install @tanem/svg-injector@^11`.
+
+- Renamed the published build artefacts. The package is built with [tsdown](https://tsdown.dev) instead of TypeScript plus Rollup and Babel, and the output filenames changed to carry their module format in the extension:
+
+  | v11                                    | v12                                                     |
+  | -------------------------------------- | ------------------------------------------------------- |
+  | `dist/index.js`                        | `dist/svg-injector.cjs`                                 |
+  | `dist/svg-injector.cjs.development.js` | `dist/svg-injector.cjs`                                 |
+  | `dist/svg-injector.cjs.production.js`  | `dist/svg-injector.cjs`                                 |
+  | `dist/svg-injector.esm.js`             | `dist/svg-injector.mjs`                                 |
+  | `dist/index.d.ts`                      | `dist/svg-injector.d.cts` and `dist/svg-injector.d.mts` |
+
+  `.esm.js` could not be kept: the package declares `"type": "commonjs"`, under which Node parses any `.js` file as CommonJS.
+
+  `main`, `module` and `types` still point at the new files, so webpack 4 and TypeScript `node10` resolution keep working. Anyone importing a `dist/` path directly has to update it.
+
+- Added an `exports` map. Only the root entry and `./package.json` are importable; every other path inside the package is now private. Node ESM consumers get the ES module build rather than falling back to CommonJS.
+
+- Removed the development/production build split. The `dist/index.js` shim that switched on `process.env.NODE_ENV` is gone, and the single CommonJS build is unminified. Nothing in the source branches on `NODE_ENV`, so the two builds only differed by minification, which bundlers apply themselves.
+
+- Removed the `jsnext:main` field, superseded by `module` in 2017.
+
+- Added `"sideEffects": false`. Bundlers can now drop the package entirely from a build that imports it without referencing `SVGInjector`.
+
+- Removed the `@babel/runtime` and `tslib` runtime dependencies. Neither build emits helper imports any more. `content-type` remains the only runtime dependency.
+
+- Raised the compile target from `es5` to `es2019`. v11 already dropped explicit legacy browser support, so the es5 emit was overhead. The output stays parseable by webpack 4, which cannot handle ES2020 syntax such as `?.` and `??`.
+
+- `src` is now published alongside `dist`, so the declaration maps shipped with the build resolve to the original TypeScript sources.
 
 ## v11.0.0
 

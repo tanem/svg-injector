@@ -57,7 +57,7 @@ These constraints are not expressed in the source code and affect how features s
 
 ## Tests
 
-- The Playwright suite loads the library from `test/dist/svg-injector.browser.js`, an unpublished IIFE bundle produced by `rollup.config.mjs` alongside the published builds. It exists because the tests need a classic script that defines a global, and the published CommonJS and ES module builds leave their dependencies external.
+- The Playwright suite loads the library from `test/dist/svg-injector.iife.js`, an unpublished IIFE bundle produced by the second config in `tsdown.config.mts` alongside the published builds. It exists because the tests need a classic script that defines a global, and the published CommonJS and ES module builds leave their dependencies external and define no global.
 
 ## Example Tests
 

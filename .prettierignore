@@ -1,5 +1,4 @@
 .nyc_output
-compiled
 coverage
 dist
 playwright-report

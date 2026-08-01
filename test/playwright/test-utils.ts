@@ -4,7 +4,7 @@ import * as path from 'path'
 
 const baseHtml = '<!doctype html><html><head></head><body></body></html>'
 const baseUrl = 'http://localhost/'
-const bundlePath = path.resolve(__dirname, '../dist/svg-injector.browser.js')
+const bundlePath = path.resolve(__dirname, '../dist/svg-injector.iife.js')
 const fixturesDir = path.resolve(__dirname, '../fixtures')
 
 type FixtureOverride = {

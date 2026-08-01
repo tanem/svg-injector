@@ -4,7 +4,6 @@
 .nyc_output
 .parcel-cache
 .vscode
-compiled
 coverage
 dist
 examples/*/package-lock.json
