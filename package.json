@@ -61,7 +61,7 @@
     "rollup": "4.59.0",
     "serve": "14.2.6",
     "shx": "0.4.0",
-    "tanem-scripts": "8.0.2",
+    "tanem-scripts": "8.0.7",
     "typescript": "5.9.3"
   },
   "scripts": {
