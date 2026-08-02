@@ -27,10 +27,13 @@ const makeAjaxRequest = (
     }
 
     try {
-      // URLs with a .svg extension skip content-type validation. This avoids
-      // failures on the file:// protocol where browsers don't send Content-Type
-      // headers, and is unnecessary when the extension already indicates SVG
-      // content.
+      // URLs with a .svg extension skip content-type validation, which is
+      // unnecessary when the extension already indicates SVG content. It also
+      // keeps file:// working in WebKit, which sends no Content-Type at all
+      // there, so a local .svg would otherwise fail as `Content type not
+      // found`. Chromium and Gecko do synthesise one (`image/svg+xml` and
+      // `text/xml` respectively), so measuring this in those alone makes the
+      // bypass look removable. It is not.
       if (httpRequest.readyState === 2 && !hasSvgExtension(url)) {
         const contentType = httpRequest.getResponseHeader('Content-Type')
 
@@ -58,7 +61,10 @@ const makeAjaxRequest = (
           )
         }
 
-        // Browsers return status 0 (not 200) for successful file:// loads.
+        // WebKit returns status 0, not 200, for a successful file:// load.
+        // Chromium and Gecko report 200 there, so this allowance looks dead
+        // until Safari is tried: it is the only reason a local file injects
+        // in that engine.
         if (
           httpRequest.status === 200 ||
           (isLocal() && httpRequest.status === 0)

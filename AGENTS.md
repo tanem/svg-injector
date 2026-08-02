@@ -49,10 +49,16 @@ split the sprite fragment off the URL, load, transform, swap.
 - `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and
   `eval-svg-scripts.ts` are the transform steps, applied in that order.
 
-XHR is a decision, not leftover legacy. `file://` loads report status 0 and
-carry no `Content-Type`, and the content-type check runs at `readyState` 2 so a
-rejected response aborts before its body arrives. fetch does neither. Don't
-migrate it without new evidence.
+XHR is a decision, not leftover legacy. In WebKit a `file://` load reports
+status 0 and carries no `Content-Type`, and the content-type check runs at
+`readyState` 2 so a rejected response aborts before its body arrives. fetch
+does neither. Don't migrate it without new evidence.
+
+Safari is the engine that decides anything `file://`. Chromium and Gecko now
+report status 200 with a synthesised `Content-Type` for a local file, so the
+status-0 allowance and the `.svg` extension bypass in `make-ajax-request.ts`
+both look like dead code until Safari is tried, where they are the only reason
+a local file injects. Measured on Chrome 151, Safari 26.5 and Firefox 146.
 
 ## Known limitations
 
