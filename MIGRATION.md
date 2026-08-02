@@ -114,6 +114,8 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
   Every callback is now asynchronous, on every path. In v11 the cache hit was synchronous, and so were the four paths that reject an argument before loading starts: an element with no `data-src` or `src`, an element whose injection is already in flight, a data URL that cannot be parsed, and `SVGInjector(null)`. Code that calls `SVGInjector` and then inspects `afterEach`-set state on the next line, for an element it knows is invalid, is what notices the latter.
 
+- An SVG carrying a script inside a container element can now be injected. Scripts are collected from any depth of the file but were removed with `svg.removeChild`, which only accepts a direct child of the root `<svg>`, so a script inside `<g>`, `<defs>` or any other container threw `NotFoundError`. The throw happened inside the deferred task that runs the injection, where nothing caught it: no `afterEach`, no `afterAll`, and the element was left marked as in flight, so every later call for it reported `Injection already in progress`. Removal runs whatever `evalScripts` is set to, so such a file could not be injected at all. Scripts are now removed from wherever they sit.
+
 - IRI renumeration no longer rewrites references to ids that only `Object.prototype` defines. The map from old id to new id was a plain object, so a reference such as `url(#constructor)`, `url(#toString)` or `href="#valueOf"` found the inherited property and was rewritten with it, producing markup like `url(#function Object() { [native code] })`. Such a reference is left alone now, the same as any other reference to an id the file does not define.
 
 **Unchanged**

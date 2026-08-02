@@ -31,7 +31,9 @@ const evalSvgScripts = (
         scriptsToEval.push(script)
       }
 
-      svg.removeChild(scriptElement)
+      // `remove`, not `svg.removeChild`: the query above matches at any depth,
+      // so the script is not necessarily a direct child of the root.
+      scriptElement.remove()
     }
   }
 
