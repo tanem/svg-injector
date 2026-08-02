@@ -23,6 +23,10 @@ interface OptionalArgs {
 // before `SVGInjector` returns and code that reads DOM state in between sees
 // the pre-injection DOM in every case. `grep defer src/` lists the places that
 // enforce it.
+//
+// The completion accounting sits in a `finally` for the same reason: `afterEach`
+// is consumer code, and a throw from it must not cost the collection its
+// `afterAll`. The exception still propagates uncaught afterwards.
 const SVGInjector = (
   elements: Elements,
   {
@@ -53,8 +57,11 @@ const SVGInjector = (
       httpRequestWithCredentials,
       beforeEach,
       (error, svg) => {
-        afterEach(error, svg)
-        afterAll(1)
+        try {
+          afterEach(error, svg)
+        } finally {
+          afterAll(1)
+        }
       },
     )
   } else if (elements) {
@@ -80,9 +87,12 @@ const SVGInjector = (
         httpRequestWithCredentials,
         beforeEach,
         (error, svg) => {
-          afterEach(error, svg)
-          if (elementList.length === ++elementsLoaded) {
-            afterAll(elementsLoaded)
+          try {
+            afterEach(error, svg)
+          } finally {
+            if (elementList.length === ++elementsLoaded) {
+              afterAll(elementsLoaded)
+            }
           }
         },
       )

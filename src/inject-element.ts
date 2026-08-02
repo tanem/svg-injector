@@ -153,7 +153,19 @@ const injectElement = (
     svg.setAttribute('xmlns', svgNamespace)
     svg.setAttribute('xmlns:xlink', xlinkNamespace)
 
-    beforeEach(svg)
+    try {
+      beforeEach(svg)
+    } catch (error) {
+      // A throwing `beforeEach` is a failed injection like any other: release
+      // the guard so the element is retryable, leave the placeholder in the
+      // DOM, and report through the element's callback so the accounting stays
+      // exactly-once. The rethrow keeps the consumer's bug uncaught, which is
+      // where it belongs; it escapes the task this runs in, so it costs the
+      // other elements in the collection nothing.
+      elementsInFlight.delete(el)
+      callback(error instanceof Error ? error : new Error(String(error)))
+      throw error
+    }
 
     if (!el.parentNode) {
       elementsInFlight.delete(el)
