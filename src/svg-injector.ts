@@ -35,7 +35,29 @@ const SVGInjector = (
     renumerateIRIElements = true,
   }: OptionalArgs = {},
 ) => {
-  if (elements && 'length' in elements) {
+  // A single element is recognised before a collection is, because
+  // `HTMLFormElement` and `HTMLSelectElement` carry a `length` property:
+  // deciding on `length` first sends a lone form or select down the collection
+  // path, which iterates its controls instead of injecting the element itself.
+  // The test is `nodeType`, a property of the node, rather than
+  // `instanceof Element`, which relies on the `Element` global: an element
+  // belonging to another document's realm, or seen through an `Element` that
+  // another library has replaced, fails `instanceof` and would be mistaken for
+  // a collection.
+  if (elements && 'nodeType' in elements) {
+    injectElement(
+      elements,
+      evalScripts,
+      renumerateIRIElements,
+      cacheRequests,
+      httpRequestWithCredentials,
+      beforeEach,
+      (error, svg) => {
+        afterEach(error, svg)
+        afterAll(1)
+      },
+    )
+  } else if (elements) {
     // Snapshot up front: a live `HTMLCollection` shrinks as its elements are
     // replaced by their injected SVGs, so the completion count has to come
     // from what was passed in rather than from the collection itself.
@@ -65,19 +87,6 @@ const SVGInjector = (
         },
       )
     }
-  } else if (elements) {
-    injectElement(
-      elements,
-      evalScripts,
-      renumerateIRIElements,
-      cacheRequests,
-      httpRequestWithCredentials,
-      beforeEach,
-      (error, svg) => {
-        afterEach(error, svg)
-        afterAll(1)
-      },
-    )
   } else {
     defer(() => {
       afterAll(0)

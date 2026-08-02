@@ -15,6 +15,10 @@ interface LegacyDocumentWindow extends Window {
   Document: typeof Document | (() => void)
 }
 
+interface LegacyElementWindow extends Window {
+  Element: typeof Element | (() => void)
+}
+
 test.describe('SVGInjector', () => {
   test('single element', async ({ page }) => {
     await setupPage(page)
@@ -25,6 +29,34 @@ test.describe('SVGInjector', () => {
           class="inject-me"
           data-src="/fixtures/thumb-up.svg"
         ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toBe(thumbUpSvg)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  // `HTMLSelectElement` and `HTMLFormElement` both carry a `length` property,
+  // so a lone one of either has to be recognised as a single element rather
+  // than as a collection of its controls.
+  test('single element carrying a length property', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <select
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        >
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
       `,
       selector: '.inject-me',
     })
@@ -1523,6 +1555,45 @@ test.describe('SVGInjector', () => {
           afterEach: () => {
             ;(window as unknown as LegacyDocumentWindow).Document =
               originalDocument
+            resolve({ html: container.innerHTML })
+          },
+        })
+      })
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toBe(thumbUpSvg)
+  })
+
+  // The single-versus-collection decision reads the node's own `nodeType`
+  // rather than testing `instanceof Element`, so replacing the global leaves
+  // it unaffected. An element belonging to another document's realm fails
+  // `instanceof` the same way, and is not reachable from this test.
+  test('handles Element wrangling via old libs', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{ html: string }>((resolve) => {
+        const originalElement = (window as unknown as LegacyElementWindow)
+          .Element
+        ;(window as unknown as LegacyElementWindow).Element = function () {}
+
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          afterEach: () => {
+            ;(window as unknown as LegacyElementWindow).Element =
+              originalElement
             resolve({ html: container.innerHTML })
           },
         })
