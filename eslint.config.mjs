@@ -9,6 +9,9 @@ export default tseslint.config(
       '**/playwright-report/',
       '**/playwright-report-examples/',
       '**/test-results/',
+      // Git-excluded scratch area, and outside every tsconfig, so the
+      // type-aware rules cannot parse it. Absent for anyone else.
+      'roadmap/',
     ],
   },
   tseslint.configs.recommended,

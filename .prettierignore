@@ -1,5 +1,8 @@
 coverage
 dist
+# Git-excluded scratch area, and it holds a copied build artefact. Absent for
+# anyone else, so this entry is inert for them and keeps `npm test` passing here.
+roadmap
 playwright-report
 playwright-report-examples
 test-results
