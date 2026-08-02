@@ -370,7 +370,8 @@ test.describe('SVGInjector', () => {
     expect(formatHtml(result.html)).toBe(thumbUpSvg)
     expect(result.afterAllCalls).toEqual([2])
     expect(result.afterEachCalls).toHaveLength(2)
-    // The duplicate errors synchronously, so it is reported first.
+    // The duplicate's error is deferred like every other callback, but the
+    // defer is queued before the XHR can complete, so it still lands first.
     expect(result.afterEachCalls[0]!.error).toBe(
       'Injection already in progress: /fixtures/thumb-up.svg',
     )

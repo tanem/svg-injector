@@ -4,9 +4,9 @@ import type { CoverageReportOptions } from 'monocart-coverage-reports'
 // evaluates (Playwright's own init scripts, inline test scripts) is noise.
 const entryFilter = '**/test/dist/svg-injector.iife.js'
 
-// The bundle also carries the `content-type` dependency, and its source map
-// unpacks those sources alongside ours. `src/index.ts` only re-exports and
-// `src/types.ts` is type-only, matching the ignore list in `codecov.yml`.
+// `src/index.ts` only re-exports and `src/types.ts` is type-only, matching the
+// ignore list in `codecov.yml`. The catch-all keeps anything else the source
+// map unpacks out of the report.
 const sourceFilter = {
   'src/index.ts': false,
   'src/types.ts': false,

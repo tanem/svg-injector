@@ -107,7 +107,7 @@ SVGInjector(document.querySelectorAll('[data-src]'), {
 
 #### `beforeEach`
 
-Called with the SVG DOM element just before it replaces the placeholder element, so this is where to restyle, class or sanitise it: see [Security](#security). It isn't called for an element whose injection failed.
+Called with the SVG DOM element just before it replaces the placeholder element, so this is where to restyle, class or sanitise it: see [Security](#security). It isn't called for an element whose load failed, since there is no SVG to hand it. Failures detected after it do still call it: a placeholder removed from the DOM between the `SVGInjector` call and the swap gets `beforeEach`, then `afterEach` with `Parent node is null`.
 
 It runs after `evalScripts` has done its work, so removing `<script>` elements here does not stop them running. By this point they have already been evaluated, if the option asked for that, and stripped from the markup either way.
 

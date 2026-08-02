@@ -34,9 +34,11 @@ split the sprite fragment off the URL, load, transform, swap.
   out of `injectElement`, errors included, calls back exactly once. Add one
   that doesn't and `afterAll` silently never fires.
 - `defer.ts` is how "no callback fires before `SVGInjector` returns" is
-  enforced. Every callback goes through it, so a new path that calls back
-  without it reintroduces the sometimes-synchronous timing v12 removed. `grep
-  defer src/` lists the sites.
+  enforced. Every synchronously-reachable path defers, so a new one that calls
+  back without it reintroduces the sometimes-synchronous timing v12 removed.
+  `grep defer src/` lists the deferral sites. A path already running inside an
+  XHR event or a deferred task calls back directly, which is why
+  `load-svg-uncached.ts` and the `handleLoadedSvg` error paths hold no `defer`.
 - `inject-element.ts` is that per-element pipeline, and the only module that
   chooses a load path.
 - `parse-data-url.ts` intercepts `data:image/svg+xml` before any request is
@@ -65,11 +67,20 @@ Not visible in the source, and they shape what can be built on top.
   nested `<svg>` is not.
 - `<use>` chains inside a symbol are not resolved, so a symbol that references
   another symbol breaks once extracted.
+- The fragment is matched verbatim against the symbol id, so a percent-encoded
+  fragment (`sprite.svg#caf%C3%A9`) never matches the decoded id and fails with
+  `Symbol "caf%C3%A9" not found in ...`. Browsers decode the fragment for a
+  native `<use>`, so this diverges from platform behaviour. The literal form
+  (`sprite.svg#café`) works.
 
 ### Data URLs
 
 - Only `data:image/svg+xml` is handled. Other image data URLs fall through to
   XHR, which then fails.
+- The scheme and media type are matched case-sensitively, though RFC 2397 makes
+  both case-insensitive, so `data:IMAGE/SVG+XML,...` falls through to XHR.
+  Browsers fetch such a URL over XHR without complaint, so the only exposure is
+  a context where a strict CSP blocks the request.
 - `DOMParser` error detection is best effort: browsers embed a `<parsererror>`
   element rather than throwing, and its message format varies by browser.
 
@@ -125,8 +136,9 @@ bump from the labels on PRs merged since the last tag, then regenerates
   a long-lived version branch (`v12`, `v13`, ...) and merge in one PR. CI runs
   on `v*` branches, and the release workflow's
   `if: github.ref == 'refs/heads/master'` guard stops them self-publishing.
-- Exactly one label per PR. None, or more than one, throws and blocks the
-  release for everything merged alongside it. `breaking` gives a major,
+- Exactly one label per PR, not counting `safe to test`, which the release
+  script filters out before it counts. None, or more than one, throws and
+  blocks the release for everything merged alongside it. `breaking` gives a major,
   `enhancement` a minor, `bug` / `documentation` / `internal` a patch. Tooling,
   CI and dependency work is `internal`.
 - Never hand-edit `CHANGELOG.md`, `AUTHORS` or either `version` field.
