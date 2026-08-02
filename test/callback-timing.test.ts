@@ -11,6 +11,11 @@ const dataUrl = 'data:image/svg+xml,' + encodeURIComponent(thumbUpSvgRaw)
 // anything other than UTF-8 is rejected rather than decoded wrongly.
 const unparseableDataUrl = 'data:image/svg+xml;charset=shift_jis,x'
 
+// A scheme with no host: every engine's URL parser rejects it, so
+// `XMLHttpRequest.open` throws rather than starting a request. The message it
+// throws with is browser-specific, so tests only assert that one arrived.
+const unparseableUrl = 'http://'
+
 type Timing = {
   // Both are recorded from a flag set on the line after the `SVGInjector`
   // call, so `false` means the callback ran before that call returned.
@@ -176,6 +181,21 @@ test.describe('callback timing', () => {
     const [first] = await measureTimings(page, unparseableDataUrl, 1)
 
     expect(first!.error).toBe('Unsupported data URL format')
+    expect(first!.injected).toBe(false)
+    expect(first!.afterEachAfterReturn).toBe(true)
+    expect(first!.afterAllAfterReturn).toBe(true)
+  })
+
+  // `open()` throws synchronously for a URL the parser rejects, which without
+  // a catch escapes `SVGInjector` itself rather than reaching `afterEach`.
+  test('an unparseable URL calls back after SVGInjector returns', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    const [first] = await measureTimings(page, unparseableUrl, 1)
+
+    expect(first!.error).not.toBe(null)
     expect(first!.injected).toBe(false)
     expect(first!.afterEachAfterReturn).toBe(true)
     expect(first!.afterAllAfterReturn).toBe(true)

@@ -1172,6 +1172,123 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCalls[0]!.svg).toBe(null)
   })
 
+  // A URL the parser rejects makes `XMLHttpRequest.open` throw before a
+  // request is made. The throw has to be reported like any other load failure:
+  // the rest of the collection still injects, and the cache entry the failed
+  // load created is removed so the next injection retries.
+  test('unparseable URL errors without stopping the rest of the collection', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        elementsLoaded: number
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div class="inject-me" data-src="http://"></div>
+          <div class="inject-me" data-src="/fixtures/thumb-up.svg"></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterAll\` did not fire. Calls so far: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelectorAll('.inject-me'), {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            resolve({ elementsLoaded, afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.elementsLoaded).toBe(2)
+    expect(result.afterEachCalls).toHaveLength(2)
+    // The message `open()` throws with is browser-specific, so only its
+    // presence is asserted.
+    const errors = result.afterEachCalls.map((call) => call.error)
+    expect(errors.filter((error) => error !== null)).toHaveLength(1)
+    expect(errors).toContain(null)
+    expect(
+      result.afterEachCalls.find((call) => call.error === null)!.svg,
+    ).toContain(`d="${thumbUpPath}"`)
+  })
+
+  test('unparseable URL is not cached', async ({ page }) => {
+    await setupPage(page)
+
+    const errors = await page.evaluate(() => {
+      return new Promise<Array<string | null>>((resolve, reject) => {
+        document.body.innerHTML = ''
+
+        const collected: Array<string | null> = []
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for both injections. Calls so far: ${JSON.stringify(
+                collected,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const inject = (done: () => void) => {
+          const el = document.createElement('div')
+          el.setAttribute('data-src', 'http://')
+          document.body.appendChild(el)
+          SVGInjector(el, {
+            afterEach: (error: Error | null) => {
+              collected.push(error ? error.message : null)
+            },
+            afterAll: () => done(),
+          })
+        }
+
+        // The second injection has to report rather than join a cache entry
+        // the first left stuck in the loading state.
+        inject(() => {
+          inject(() => {
+            clearTimeout(timeoutId)
+            resolve(collected)
+          })
+        })
+      })
+    })
+
+    expect(errors).toHaveLength(2)
+    expect(errors[0]).not.toBe(null)
+    expect(errors[1]).not.toBe(null)
+  })
+
   test('svg not found error', async ({ page }) => {
     await setupPage(page)
 

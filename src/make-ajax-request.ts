@@ -1,3 +1,4 @@
+import defer from './defer'
 import isLocal from './is-local'
 
 // Matched against the pathname rather than the whole URL: a `.svg` in a query
@@ -84,13 +85,32 @@ const makeAjaxRequest = (
     }
   }
 
-  httpRequest.open('GET', url)
+  try {
+    // `open()` throws synchronously when the URL parser rejects the URL, which
+    // without this catch escapes the `SVGInjector` call itself and leaves the
+    // caller's callbacks unfired. The browser's own message names the real
+    // problem, so it is reported unchanged.
+    httpRequest.open('GET', url)
 
-  httpRequest.withCredentials = httpRequestWithCredentials
+    httpRequest.withCredentials = httpRequestWithCredentials
 
-  httpRequest.overrideMimeType('image/svg+xml')
+    httpRequest.overrideMimeType('image/svg+xml')
 
-  httpRequest.send()
+    httpRequest.send()
+  } catch (error) {
+    settled = true
+    if (error instanceof Error) {
+      // Deferred where the `onreadystatechange` path is not: the loaders call
+      // back directly on the assumption that they are only reached from XHR
+      // events, so a synchronous failure here would otherwise report before
+      // `SVGInjector` returns.
+      defer(() => {
+        callback(error, httpRequest)
+      })
+    } else {
+      throw error
+    }
+  }
 }
 
 export default makeAjaxRequest
