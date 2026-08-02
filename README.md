@@ -173,7 +173,8 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   },
   afterEach(error, svg) {
     if (error) {
-      throw error
+      console.error(error)
+      return
     }
     console.log(`injected ${svg.outerHTML}`)
   },

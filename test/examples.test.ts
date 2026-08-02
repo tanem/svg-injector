@@ -108,6 +108,40 @@ test('api-usage: afterAll logs element count', async ({ page }) => {
   expect(logs).toContainEqual('injected 2 elements')
 })
 
+// Examples are copied, so their afterEach has to model the recommended way to
+// handle a failure: report it, and let the rest of the collection finish. Only
+// the error path tells a reporting callback from a throwing one, and no example
+// has a failing injection, so the failure is injected here. A throw from
+// afterEach reaches the page as an uncaught exception, which is what the
+// pageerror assertion catches.
+for (const { name, asset } of [
+  { name: 'api-usage', asset: 'icon-one.svg' },
+  { name: 'iri-renumeration', asset: 'icon.svg' },
+]) {
+  test(`${name}: a failed injection is reported, not thrown`, async ({
+    page,
+  }) => {
+    const pageErrors: string[] = []
+    page.on('pageerror', (err) => pageErrors.push(err.message))
+    const consoleErrors: string[] = []
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text())
+      }
+    })
+
+    await page.route(`**/${name}/dist/${asset}`, (route) =>
+      route.fulfill({ status: 404 }),
+    )
+
+    await page.goto(`/${name}/dist/`)
+    await expect
+      .poll(() => consoleErrors.join('\n'))
+      .toContain(`Unable to load SVG file: ${asset}`)
+    expect(pageErrors).toEqual([])
+  })
+}
+
 test('iri-renumeration: afterAll logs element count', async ({ page }) => {
   const logs: string[] = []
   page.on('console', (msg) => {
