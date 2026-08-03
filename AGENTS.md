@@ -122,6 +122,11 @@ come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
 That mocking is the suite's blind spot: real-server and `file://` behaviour is
 simulated, so a change to `make-ajax-request.ts` needs checking by hand against
 an actual server or an actual `file://` load before it is believed.
+`test/manual/` is that check. It is not run by `npm test` and not wired into
+CI, deliberately: nothing in it is mocked, which is the whole point. Run it and
+record the result in the PR when you touch `make-ajax-request.ts` or
+`load-svg-cached.ts`, and update its expected values in the same commit as any
+deliberate change to either.
 
 All three browser projects must pass. Coverage numbers come from chromium
 alone, because Playwright's `page.coverage` is Chromium-only, but the whole

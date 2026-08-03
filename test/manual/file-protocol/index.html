@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <meta charset="utf-8" />
+    <title>svg-injector — file:// transport checks</title>
+    <!--
+      A classic script, so the browser loads it from a sibling directory over
+      file:// without a server. An ES module would not: file:// module loads
+      are blocked as cross-origin. `npm run build` writes it, so the check
+      always runs against the current build rather than a vendored copy.
+    -->
+    <script src="../../dist/svg-injector.iife.js"></script>
+    <style>
+      body { font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2rem; }
+      table { border-collapse: collapse; margin-top: 1rem; }
+      th, td { border: 1px solid #bbb; padding: 0.4rem 0.7rem; text-align: left; }
+      .pass { background: #e6f5e9; }
+      .fail { background: #fdeceb; }
+      #summary { font-weight: bold; font-size: 1.05rem; }
+      #host { position: absolute; left: -9999px; }
+    </style>
+  </head>
+  <body>
+    <h1>file:// transport check</h1>
+    <p>
+      Open this file directly from disk, not through a server. What the
+      transport reports for <code>file://</code> is engine-specific, so the
+      table records the observed status and <code>Content-Type</code> beside
+      each verdict: those two values are what the <code>.svg</code> extension
+      bypass and <code>isLocal()</code> exist to handle, and they cannot be
+      inferred from one browser.
+    </p>
+    <p>
+      Chromium and WebKit block <code>file://</code> &rarr;
+      <code>file://</code> XHR at default settings. In Chrome, run with
+      <code>--allow-file-access-from-files</code>; in Safari, enable
+      Develop &rarr; Developer Settings &rarr; Disable Local File
+      Restrictions. Without that, every case reports the local-security error
+      and only the no-hang assertions mean anything.
+    </p>
+    <p id="protocol"></p>
+    <div id="summary">running…</div>
+    <div id="out"></div>
+    <div id="host"></div>
+
+    <script>
+      const inject = window.SVGInjector.SVGInjector
+      const host = document.getElementById('host')
+      document.getElementById('protocol').textContent =
+        `location.protocol is "${window.location.protocol}" — must be "file:" for this check to mean anything.`
+
+      // `settled` decides the verdict: 'injects', 'errors', or 'either' where
+      // the outcome is legitimately engine-specific and only the absence of a
+      // hang, plus exactly one afterEach, is being asserted.
+      const cases = [
+        // .svg extension skips the content-type check, so the load turns on
+        // whatever status the engine reports for file://.
+        ['./icon.svg', 'injects'],
+        // No extension, so the content-type check runs against whatever header
+        // the engine synthesises for a local file. Chromium sniffs text/plain,
+        // which the check allows, and injects; Firefox reports text/xml, which
+        // it rejects. Both are correct: the assertion is that it resolves once
+        // either way rather than hanging.
+        ['./icon-no-extension', 'either'],
+        // Missing file.
+        ['./does-not-exist.svg', 'errors'],
+      ]
+
+      // Read straight off the transport, so the table shows the two values the
+      // verdicts turn on rather than leaving them to be inferred.
+      const probe = (url) =>
+        new Promise((resolve) => {
+          const xhr = new XMLHttpRequest()
+          let seen = null
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 2) {
+              seen = {
+                status: xhr.status,
+                contentType: xhr.getResponseHeader('Content-Type'),
+              }
+            }
+            if (xhr.readyState === 4) {
+              resolve(seen ?? { status: xhr.status, contentType: null, noHeaders: true })
+            }
+          }
+          xhr.onerror = () => resolve({ blocked: true })
+          try {
+            xhr.open('GET', url)
+            xhr.overrideMimeType('image/svg+xml')
+            xhr.send()
+          } catch (e) {
+            resolve({ blocked: true })
+          }
+        })
+
+      const run = async ([url, expected]) => {
+        const seen = await probe(url)
+
+        return new Promise((resolve) => {
+          host.innerHTML = ''
+          const el = document.createElement('div')
+          el.dataset.src = url
+          host.appendChild(el)
+
+          let calls = 0
+          let message = ''
+          let injected = false
+
+          inject(el, {
+            afterEach(error, svg) {
+              calls++
+              if (error) message = error.message
+              if (svg) injected = true
+            },
+            afterAll() {
+              // afterAll fires on the last afterEach, so a second call would
+              // land after it. The wait is what catches the double-callback.
+              setTimeout(() => {
+                const actual = injected
+                  ? 'injected'
+                  : message
+                    ? 'error'
+                    : 'nothing'
+                const outcomeOk =
+                  expected === 'injects'
+                    ? injected
+                    : expected === 'errors'
+                      ? !!message
+                      : actual !== 'nothing'
+
+                resolve({
+                  url,
+                  expected,
+                  actual,
+                  transport: seen.blocked
+                    ? 'blocked by the browser'
+                    : `status ${seen.status}, ${
+                        seen.noHeaders
+                          ? 'no readyState 2'
+                          : `Content-Type ${seen.contentType ?? '(none)'}`
+                      }`,
+                  calls,
+                  message,
+                  pass: outcomeOk && calls === 1,
+                })
+              }, 120)
+            },
+          })
+        })
+      }
+
+      ;(async () => {
+        const rows = []
+        for (const c of cases) rows.push(await run(c))
+        const failed = rows.filter((r) => !r.pass).length
+        const summary = document.getElementById('summary')
+        summary.textContent = failed ? `${failed} of ${rows.length} FAILED` : `all ${rows.length} passed`
+        summary.className = failed ? 'fail' : 'pass'
+        document.getElementById('out').innerHTML =
+          '<table><thead><tr><th>url</th><th>transport reports</th><th>expected</th><th>actual</th><th>afterEach calls</th><th>message</th><th>verdict</th></tr></thead><tbody>' +
+          rows.map((r) =>
+            `<tr class="${r.pass ? 'pass' : 'fail'}"><td>${r.url}</td><td>${r.transport}</td><td>${r.expected}</td><td>${r.actual}</td><td>${r.calls}</td><td>${r.message}</td><td>${r.pass ? 'PASS' : 'FAIL'}</td></tr>`,
+          ).join('') +
+          '</tbody></table>'
+      })()
+    </script>
+  </body>
+</html>
