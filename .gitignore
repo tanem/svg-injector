@@ -1,13 +1,11 @@
 *.log
 .DS_Store
 .cache
-.nyc_output
-.parcel-cache
 .vscode
-compiled
 coverage
 dist
 examples/*/package-lock.json
 node_modules
 playwright-report
+playwright-report-examples
 test-results

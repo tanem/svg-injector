@@ -7,7 +7,7 @@ const rootDir = path.resolve(__dirname, '..')
 const examplesDir = path.join(rootDir, 'examples')
 const distDir = path.join(rootDir, 'dist')
 
-const parcelExamples = [
+const examples = [
   'api-usage',
   'basic-usage',
   'data-url-usage',
@@ -41,34 +41,19 @@ if (tarballs.length === 0) {
 const tarballPath = path.join(tmpDir, tarballs[0])
 console.log(`Tarball: ${tarballPath}\n`)
 
-for (const name of parcelExamples) {
+for (const name of examples) {
   const exampleDir = path.join(examplesDir, name)
   console.log(`Building ${name}...`)
 
-  // Clean previous build artefacts so Parcel starts fresh.
-  const parcelCache = path.join(exampleDir, '.parcel-cache')
+  // Clean previous build artefacts so the build starts fresh.
   const exampleDist = path.join(exampleDir, 'dist')
-  if (fs.existsSync(parcelCache)) {
-    fs.rmSync(parcelCache, { recursive: true })
-  }
   if (fs.existsSync(exampleDist)) {
     fs.rmSync(exampleDist, { recursive: true })
   }
 
   run('npm install', exampleDir)
   run(`npm install --no-save "${tarballPath}"`, exampleDir)
-
-  // Run copysvg if the example has SVG files that need copying to dist/.
-  const examplePkg = JSON.parse(
-    fs.readFileSync(path.join(exampleDir, 'package.json'), 'utf8'),
-  )
-  if (examplePkg.scripts?.copysvg) {
-    run('npm run copysvg', exampleDir)
-  }
-
-  // Build with --public-url ./ so asset paths are relative. This allows
-  // all examples to be served under a shared static server.
-  run('npx parcel build index.html --public-url ./', exampleDir)
+  run('npm run build', exampleDir)
 
   console.log(`  Done.\n`)
 }

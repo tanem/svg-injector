@@ -1,4 +1,3 @@
-import * as path from 'path'
 import { expect, test } from '@playwright/test'
 
 import type { Page } from '@playwright/test'
@@ -13,8 +12,8 @@ const waitForInjection = async (page: Page, expectedCount: number) => {
   )
 }
 
-// Parcel examples serve their build output from <example>/dist/.
-const parcelExamples = [
+// Examples serve their Vite build output from <example>/dist/.
+const examples = [
   {
     name: 'basic-usage',
     expectedSvgCount: 1,
@@ -25,7 +24,7 @@ const parcelExamples = [
   },
   {
     name: 'data-url-usage',
-    expectedSvgCount: 2,
+    expectedSvgCount: 6,
   },
   {
     name: 'iri-renumeration',
@@ -37,7 +36,7 @@ const parcelExamples = [
   },
 ]
 
-for (const example of parcelExamples) {
+for (const example of examples) {
   test(`${example.name}: SVGs are injected`, async ({ page }) => {
     const errors: string[] = []
     page.on('pageerror', (err) => errors.push(err.message))
@@ -58,6 +57,31 @@ for (const example of parcelExamples) {
     expect(errors).toEqual([])
   })
 }
+
+test('data-url-usage: multi-byte text decodes as UTF-8', async ({ page }) => {
+  await page.goto('/data-url-usage/dist/')
+  await waitForInjection(page, 6)
+
+  await expect(page.locator('svg.label text')).toHaveText('café 🎉')
+})
+
+// The last icon's data-src is whatever Vite resolved an SVG import to, so
+// this pins the parser against the bundler's actual output rather than
+// against a hand-written copy of it. The injector carries the element's id
+// and the resolved URL across onto the SVG it swaps in.
+test('data-url-usage: the bundler-inlined icon is injected from a data URL', async ({
+  page,
+}) => {
+  await page.goto('/data-url-usage/dist/')
+  await waitForInjection(page, 6)
+
+  const injected = page.locator('svg#inlined-by-vite')
+  await expect(injected).toHaveAttribute(
+    'data-src',
+    /^data:image\/svg\+xml[,;]/,
+  )
+  await expect(injected.locator('path')).toHaveCount(1)
+})
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {
   await page.goto('/api-usage/dist/')
@@ -84,6 +108,40 @@ test('api-usage: afterAll logs element count', async ({ page }) => {
   expect(logs).toContainEqual('injected 2 elements')
 })
 
+// Examples are copied, so their afterEach has to model the recommended way to
+// handle a failure: report it, and let the rest of the collection finish. Only
+// the error path tells a reporting callback from a throwing one, and no example
+// has a failing injection, so the failure is injected here. A throw from
+// afterEach reaches the page as an uncaught exception, which is what the
+// pageerror assertion catches.
+for (const { name, asset } of [
+  { name: 'api-usage', asset: 'icon-one.svg' },
+  { name: 'iri-renumeration', asset: 'icon.svg' },
+]) {
+  test(`${name}: a failed injection is reported, not thrown`, async ({
+    page,
+  }) => {
+    const pageErrors: string[] = []
+    page.on('pageerror', (err) => pageErrors.push(err.message))
+    const consoleErrors: string[] = []
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text())
+      }
+    })
+
+    await page.route(`**/${name}/dist/${asset}`, (route) =>
+      route.fulfill({ status: 404 }),
+    )
+
+    await page.goto(`/${name}/dist/`)
+    await expect
+      .poll(() => consoleErrors.join('\n'))
+      .toContain(`Unable to load SVG file: ${asset}`)
+    expect(pageErrors).toEqual([])
+  })
+}
+
 test('iri-renumeration: afterAll logs element count', async ({ page }) => {
   const logs: string[] = []
   page.on('console', (msg) => {
@@ -97,46 +155,3 @@ test('iri-renumeration: afterAll logs element count', async ({ page }) => {
 
   expect(logs).toContainEqual('injected 3 elements')
 })
-
-// UMD examples are static HTML that load the library from unpkg. We
-// intercept the CDN request and serve the local build instead.
-const umdExamples = [
-  {
-    name: 'umd-dev',
-    bundleFile: 'svg-injector.umd.development.js',
-  },
-  {
-    name: 'umd-prod',
-    bundleFile: 'svg-injector.umd.production.js',
-  },
-]
-
-for (const example of umdExamples) {
-  test(`${example.name}: SVG is injected with local build`, async ({
-    page,
-  }) => {
-    const errors: string[] = []
-    page.on('pageerror', (err) => errors.push(err.message))
-
-    const bundlePath = path.resolve(__dirname, '..', 'dist', example.bundleFile)
-
-    // Intercept the unpkg CDN request and serve the local UMD bundle.
-    await page.route('**/unpkg.com/**', async (route) => {
-      await route.fulfill({ path: bundlePath })
-    })
-
-    await page.goto(`/${example.name}/`)
-    await waitForInjection(page, 1)
-
-    const svgCount = await page.locator('svg').count()
-    expect(svgCount).toBe(1)
-
-    const children = await page
-      .locator('svg')
-      .first()
-      .evaluate((el) => el.children.length)
-    expect(children).toBeGreaterThan(0)
-
-    expect(errors).toEqual([])
-  })
-}

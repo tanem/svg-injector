@@ -1,39 +1,22 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
+import tseslint from 'typescript-eslint'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
-
-export default [
+export default tseslint.config(
   {
     ignores: [
-      '**/compiled/',
       '**/coverage/',
       '**/dist/',
       '**/playwright-report/',
+      '**/playwright-report-examples/',
       '**/test-results/',
+      // Git-excluded scratch area, and outside every tsconfig, so the
+      // type-aware rules cannot parse it. Absent for anyone else.
+      'roadmap/',
     ],
   },
-  ...compat.extends('plugin:@typescript-eslint/recommended', 'prettier'),
+  tseslint.configs.recommended,
   {
-    plugins: {
-      '@typescript-eslint': typescriptEslint,
-    },
-
     languageOptions: {
-      parser: tsParser,
-      ecmaVersion: 5,
-      sourceType: 'module',
-
       parserOptions: {
         project: 'tsconfig.eslint.json',
       },
@@ -73,7 +56,7 @@ export default [
     },
   },
   {
-    files: ['index.js', 'scripts/**/*.js', 'examples/**/*.ts'],
+    files: ['scripts/**/*.js', 'examples/**/*.ts'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
       'no-console': 'off',
@@ -88,4 +71,5 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
-]
+  eslintConfigPrettier,
+)

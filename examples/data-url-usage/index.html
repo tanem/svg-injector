@@ -12,11 +12,15 @@
         width: 48px;
         height: 48px;
         margin: 0.5rem;
-        color: #333;
-        transition: color 0.2s;
       }
-      .icon:hover {
-        color: #e74c3c;
+      /* Only the label inherits a colour: its <text> is filled with
+         currentColor, whereas the icons carry no fill and paint black. See
+         the sprite usage example for icons styled through currentColor. */
+      .label {
+        width: 240px;
+        height: 48px;
+        margin: 0.5rem;
+        color: #333;
       }
     </style>
   </head>
@@ -38,6 +42,40 @@
       class="inject-me icon"
       data-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnIHZpZXdCb3g9JzAgMCA4IDgnPjxwYXRoIGQ9J001IDFMMyAzSDFWN0gzTDUgOVYxWicvPjwvc3ZnPg=="
     ></div>
+    <h2>URL-encoded with a charset parameter</h2>
+    <p>
+      The parameter list is case-insensitive, so <code>charset=UTF-8</code> and
+      <code>charset=utf8</code> are treated the same as
+      <code>charset=utf-8</code>.
+    </p>
+    <div
+      class="inject-me icon"
+      data-src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'8'%20height%3D'8'%20viewBox%3D'0%200%208%208'%3E%3Cpath%20d%3D'M4.47%200c-.19.02-.37.15-.47.34-.13.26-1.09%202.19-1.28%202.38-.19.19-.44.28-.72.28v4h3.5c.21%200%20.39-.13.47-.31%200%200%201.03-2.91%201.03-3.19%200-.28-.22-.5-.5-.5h-1.5c-.28%200-.5-.25-.5-.5s.39-1.58.47-1.84c.08-.26-.05-.54-.31-.63-.07-.02-.12-.04-.19-.03zm-4.47%203v4h1v-4h-1z'%2F%3E%3C%2Fsvg%3E"
+    ></div>
+    <h2>Base64-encoded with a charset parameter</h2>
+    <div
+      class="inject-me icon"
+      data-src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4JyBoZWlnaHQ9JzgnIHZpZXdCb3g9JzAgMCA4IDgnPjxwYXRoIGQ9J000LjQ3IDBjLS4xOS4wMi0uMzcuMTUtLjQ3LjM0LS4xMy4yNi0xLjA5IDIuMTktMS4yOCAyLjM4LS4xOS4xOS0uNDQuMjgtLjcyLjI4djRoMy41Yy4yMSAwIC4zOS0uMTMuNDctLjMxIDAgMCAxLjAzLTIuOTEgMS4wMy0zLjE5IDAtLjI4LS4yMi0uNS0uNS0uNWgtMS41Yy0uMjggMC0uNS0uMjUtLjUtLjVzLjM5LTEuNTguNDctMS44NGMuMDgtLjI2LS4wNS0uNTQtLjMxLS42My0uMDctLjAyLS4xMi0uMDQtLjE5LS4wM3ptLTQuNDcgM3Y0aDF2LTRoLTF6Jy8+PC9zdmc+"
+    ></div>
+    <h2>Base64-encoded with multi-byte text</h2>
+    <p>
+      Base64 data is decoded as UTF-8, so accented characters and characters
+      outside the Basic Multilingual Plane render as authored. This one should
+      read <code>café 🎉</code>.
+    </p>
+    <div
+      class="inject-me label"
+      data-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMjAnIGhlaWdodD0nMjQnIHZpZXdCb3g9JzAgMCAxMjAgMjQnPjx0ZXh0IHg9JzAnIHk9JzE3JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxNicgZmlsbD0nY3VycmVudENvbG9yJz5jYWbDqSDwn46JPC90ZXh0Pjwvc3ZnPg=="
+    ></div>
+    <h2>Produced by the bundler</h2>
+    <p>
+      The icon below is an <code>import</code> of a local SVG file rather than a
+      hand-written URL, so its <code>data-src</code> is whatever Vite resolves
+      that import to. The file is under
+      <code>build.assetsInlineLimit</code>, so that is a URL-encoded data URL —
+      in dev as well as in the production build.
+    </p>
+    <div id="inlined-by-vite" class="inject-me icon"></div>
     <script type="module" src="index.ts"></script>
   </body>
 </html>

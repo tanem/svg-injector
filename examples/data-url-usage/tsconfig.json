@@ -14,5 +14,5 @@
     "rootDir": ".",
     "moduleResolution": "bundler"
   },
-  "files": ["index.ts"]
+  "files": ["index.ts", "vite-env.d.ts"]
 }

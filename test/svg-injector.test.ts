@@ -15,6 +15,10 @@ interface LegacyDocumentWindow extends Window {
   Document: typeof Document | (() => void)
 }
 
+interface LegacyElementWindow extends Window {
+  Element: typeof Element | (() => void)
+}
+
 test.describe('SVGInjector', () => {
   test('single element', async ({ page }) => {
     await setupPage(page)
@@ -25,6 +29,34 @@ test.describe('SVGInjector', () => {
           class="inject-me"
           data-src="/fixtures/thumb-up.svg"
         ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toBe(thumbUpSvg)
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
+    expect(result.elementsLoaded).toBe(1)
+  })
+
+  // `HTMLSelectElement` and `HTMLFormElement` both carry a `length` property,
+  // so a lone one of either has to be recognised as a single element rather
+  // than as a collection of its controls.
+  test('single element carrying a length property', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <select
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        >
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
       `,
       selector: '.inject-me',
     })
@@ -67,6 +99,52 @@ test.describe('SVGInjector', () => {
     expect(result.elementsLoaded).toBe(2)
   })
 
+  test('array of elements', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        ></div>
+        <div
+          class="inject-me"
+          data-src="/fixtures/thumb-up.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+      selectorAll: true,
+      asArray: true,
+    })
+
+    const actual = formatHtml(result.html)
+    const expected = `${thumbUpSvg}${thumbUpSvg}`
+
+    expect(actual).toBe(expected)
+    expect(result.afterEachCalls).toHaveLength(2)
+    expect(result.afterEachCalls[0]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(thumbUpSvg)
+    expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(thumbUpSvg)
+    expect(result.elementsLoaded).toBe(2)
+  })
+
+  test('empty array', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: '',
+      selector: '.inject-me',
+      selectorAll: true,
+      asArray: true,
+    })
+
+    expect(result.elementsLoaded).toBe(0)
+    expect(result.afterEachCalls).toHaveLength(0)
+    expect(result.html).toBe('')
+  })
+
   test('null element', async ({ page }) => {
     await setupPage(page)
 
@@ -78,6 +156,105 @@ test.describe('SVGInjector', () => {
     expect(result.elementsLoaded).toBe(0)
     expect(result.afterEachCalls).toHaveLength(0)
     expect(result.html).toBe('')
+  })
+
+  test('empty collection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        elementsLoaded: number
+        calledSynchronously: boolean
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        document.body.appendChild(container)
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterAll` was not called'))
+        }, 5000)
+
+        let hasReturned = false
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelectorAll('.inject-me'), {
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            resolve({ elementsLoaded, calledSynchronously: !hasReturned })
+          },
+        })
+
+        hasReturned = true
+      })
+    })
+
+    expect(result.elementsLoaded).toBe(0)
+    expect(result.calledSynchronously).toBe(false)
+  })
+
+  // A live `HTMLCollection` of `div` elements shrinks as each element is
+  // replaced by its injected SVG, so the completion check has to compare
+  // against the length captured before injection started.
+  test('live collection that shrinks during injection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterAllCalls: number[]
+        afterEachCallCount: number
+        lengthAtEnd: number
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const elements = container.getElementsByTagName('div')
+        const afterAllCalls: number[] = []
+        let afterEachCallCount = 0
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called for every element'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(elements, {
+          afterEach: () => {
+            afterEachCallCount++
+            if (afterEachCallCount === 2) {
+              // `afterAll` runs synchronously after the final `afterEach`, so
+              // defer to give it a chance to fire before resolving.
+              setTimeout(() => {
+                clearTimeout(timeoutId)
+                resolve({
+                  afterAllCalls,
+                  afterEachCallCount,
+                  lengthAtEnd: elements.length,
+                })
+              }, 0)
+            }
+          },
+          afterAll: (elementsLoaded: number) => {
+            afterAllCalls.push(elementsLoaded)
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCallCount).toBe(2)
+    expect(result.lengthAtEnd).toBe(0)
+    expect(result.afterAllCalls).toEqual([2])
   })
 
   test('injection in progress', async ({ page }) => {
@@ -122,6 +299,278 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCallCount).toBe(1)
   })
 
+  // The same element can appear more than once in the collection passed to
+  // `SVGInjector`. The duplicate has to report an error so the `afterAll` count
+  // still completes.
+  test('same element twice in one collection', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        afterAllCalls: number[]
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const element = container.querySelector('.inject-me')!
+        const elements = [element, element] as unknown as NodeListOf<Element>
+
+        const afterAllCalls: number[] = []
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterAll\` was not called. \`afterEach\` calls: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(elements, {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            afterAllCalls.push(elementsLoaded)
+            // Defer so a second `afterAll` call would be recorded too.
+            setTimeout(() => {
+              resolve({
+                html: container.innerHTML,
+                afterAllCalls,
+                afterEachCalls,
+              })
+            }, 0)
+          },
+        })
+      })
+    })
+
+    expect(formatHtml(result.html)).toBe(thumbUpSvg)
+    expect(result.afterAllCalls).toEqual([2])
+    expect(result.afterEachCalls).toHaveLength(2)
+    // The duplicate's error is deferred like every other callback, but the
+    // defer is queued before the XHR can complete, so it still lands first.
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.afterEachCalls[1]!.error).toBe(null)
+    expect(formatHtml(result.afterEachCalls[1]!.svg ?? '')).toBe(thumbUpSvg)
+  })
+
+  // Repeated calls while an injection is in flight must all error, and must not
+  // start a second injection of the same element.
+  test('repeated calls for an element with an injection in flight', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.route('**/fixtures/thumb-up.svg', async (route) => {
+      requestCount++
+      await route.fallback()
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        calls: Array<{ call: number; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const element = container.querySelector('.inject-me')
+        const calls: Array<{
+          call: number
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every call. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const record = (call: number) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              call,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+            if (calls.length === 3) {
+              clearTimeout(timeoutId)
+              setTimeout(() => {
+                resolve({ html: container.innerHTML, calls })
+              }, 0)
+            }
+          }
+        }
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        // Uncached so that a duplicate injection would show up as a second
+        // request.
+        SVGInjector(element, { cacheRequests: false, afterEach: record(1) })
+        SVGInjector(element, { cacheRequests: false, afterEach: record(2) })
+        SVGInjector(element, { cacheRequests: false, afterEach: record(3) })
+      })
+    })
+
+    expect(formatHtml(result.html)).toBe(thumbUpSvg)
+    expect(requestCount).toBe(1)
+    expect(result.calls).toHaveLength(3)
+
+    const byCall = new Map(result.calls.map((call) => [call.call, call]))
+    expect(byCall.get(2)!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byCall.get(3)!.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byCall.get(1)!.error).toBe(null)
+    expect(formatHtml(byCall.get(1)!.svg ?? '')).toBe(thumbUpSvg)
+  })
+
+  // A duplicate call for one element must not unguard another element whose
+  // injection is still in flight.
+  test('duplicate call does not disturb another in-flight injection', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    await page.route('**/fixtures/slow.svg', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      await route.fulfill({
+        status: 200,
+        body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>',
+        headers: { 'content-type': 'image/svg+xml' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        html: string
+        calls: Array<{ name: string; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            id="a"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+          <div
+            id="b"
+            data-src="/fixtures/slow.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const a = container.querySelector('#a')
+        const b = container.querySelector('#b')
+        const calls: Array<{
+          name: string
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every call. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const record = (name: string) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              name,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+            if (
+              calls.some((call) => call.name === 'b-first') &&
+              calls.some((call) => call.name === 'b-second')
+            ) {
+              clearTimeout(timeoutId)
+              setTimeout(() => {
+                resolve({ html: container.innerHTML, calls })
+              }, 0)
+            }
+          }
+        }
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        SVGInjector(a, {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            record('a-first')(error, svg)
+            // `a` has finished, but `b` is still in flight, so this call must
+            // be rejected as a duplicate.
+            SVGInjector(b, { afterEach: record('b-second') })
+          },
+        })
+        SVGInjector(b, { afterEach: record('b-first') })
+        SVGInjector(a, { afterEach: record('a-duplicate') })
+      })
+    })
+
+    const byName = new Map(result.calls.map((call) => [call.name, call]))
+    expect(byName.get('b-second')?.error).toBe(
+      'Injection already in progress: /fixtures/slow.svg',
+    )
+    expect(byName.get('a-duplicate')?.error).toBe(
+      'Injection already in progress: /fixtures/thumb-up.svg',
+    )
+    expect(byName.get('a-first')?.error).toBe(null)
+    expect(byName.get('b-first')?.error).toBe(null)
+    expect(result.html).toContain('viewBox="0 0 10 10"')
+    expect(result.calls).toHaveLength(4)
+  })
+
   test('attributes', async ({ page }) => {
     await setupPage(page)
 
@@ -147,6 +596,27 @@ test.describe('SVGInjector', () => {
     const expected = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 8 8" id="thumb-up" title="thumb-up" class="injected-svg svg-one svg-two" style="height:20px;" data-src="/fixtures/thumb-up.svg" data-bar="bar" data-foo="foo" xmlns:xlink="http://www.w3.org/1999/xlink">${thumbUpPathElement}</svg>`
 
     expect(actual).toBe(expected)
+  })
+
+  test('empty data attribute', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          data-empty=""
+          data-foo="foo"
+          data-src="/fixtures/thumb-up.svg"
+          id="thumb-up"
+        ></div>
+      `,
+      selector: '#thumb-up',
+    })
+
+    const actual = formatHtml(result.html)
+
+    expect(actual).toContain('data-foo="foo"')
+    expect(actual).not.toContain('data-empty')
   })
 
   test('no class attribute', async ({ page }) => {
@@ -412,6 +882,446 @@ test.describe('SVGInjector', () => {
     expect(result.afterEachCalls[1]!.svg).toContain('viewBox="0 0 10 10"')
   })
 
+  // A callback fired for a cached URL may start a new injection of that same
+  // URL. The injections already waiting on the original response have to
+  // receive that response — exactly once each — rather than being handed the
+  // result of the request the callback started.
+  test('injection started from a callback for the same URL', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/retry.svg', async (route) => {
+      requestCount += 1
+      if (requestCount === 1) {
+        await route.fulfill({ status: 404, body: '' })
+      } else {
+        await route.fulfill({
+          status: 200,
+          body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>',
+          headers: { 'content-type': 'image/svg+xml' },
+        })
+      }
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        calls: Array<{ name: string; error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            id="first"
+            data-src="/fixtures/retry.svg"
+          ></div>
+          <div
+            id="second"
+            data-src="/fixtures/retry.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const calls: Array<{
+          name: string
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for every injection. Calls so far: ${JSON.stringify(
+                calls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const record = (name: string) => {
+          return (error: Error | null, svg?: Element | null) => {
+            calls.push({
+              name,
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+
+            if (name === 'first') {
+              // The second injection is still waiting on the failed request at
+              // this point, so this call lands mid-dispatch.
+              const third = document.createElement('div')
+              third.setAttribute('data-src', '/fixtures/retry.svg')
+              container.appendChild(third)
+              SVGInjector(third, { afterEach: record('third') })
+            }
+
+            if (calls.length === 3) {
+              clearTimeout(timeoutId)
+              // Defer so a duplicate call would be recorded too.
+              setTimeout(() => {
+                resolve({ calls })
+              }, 0)
+            }
+          }
+        }
+
+        SVGInjector(container.querySelector('#first'), {
+          afterEach: record('first'),
+        })
+        SVGInjector(container.querySelector('#second'), {
+          afterEach: record('second'),
+        })
+      })
+    })
+
+    expect(result.calls).toHaveLength(3)
+
+    const byName = new Map(result.calls.map((call) => [call.name, call]))
+    expect(byName.get('first')!.error).toBe(
+      'Unable to load SVG file: /fixtures/retry.svg',
+    )
+    expect(byName.get('second')!.error).toBe(
+      'Unable to load SVG file: /fixtures/retry.svg',
+    )
+    expect(byName.get('third')!.error).toBe(null)
+    expect(byName.get('third')!.svg).toContain('viewBox="0 0 10 10"')
+    // One request for the pair that failed, one for the injection started from
+    // the callback.
+    expect(requestCount).toBe(2)
+  })
+
+  // A 200 response whose body is not an SVG document has to be reported as an
+  // error. On the cached path the failure must not poison the cache entry
+  // either: the next injection of the same URL has to refetch.
+  test('non-SVG response errors and is not cached', async ({ page }) => {
+    await setupPage(page)
+
+    let requestCount = 0
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/html-page.svg', async (route) => {
+      requestCount += 1
+      await route.fulfill({
+        status: 200,
+        body: '<!DOCTYPE html><html><head><title>Not an SVG</title></head><body><p>Nope</p></body></html>',
+        headers: { 'content-type': 'text/html' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for both injections. Calls so far: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const inject = (done: () => void) => {
+          const container = document.createElement('div')
+          container.innerHTML = `
+            <div
+              class="inject-me"
+              data-src="/fixtures/html-page.svg"
+            ></div>
+          `
+          document.body.appendChild(container)
+          SVGInjector(container.querySelector('.inject-me'), {
+            afterEach: (error: Error | null, svg?: Element | null) => {
+              afterEachCalls.push({
+                error: error ? error.message : null,
+                svg: svg
+                  ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                  : null,
+              })
+            },
+            afterAll: () => done(),
+          })
+        }
+
+        inject(() => {
+          inject(() => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          })
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(2)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+    expect(result.afterEachCalls[1]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[1]!.svg).toBe(null)
+    // The second injection refetched rather than hanging on a cache entry left
+    // in the loading state.
+    expect(requestCount).toBe(2)
+  })
+
+  test('non-SVG response errors when uncached', async ({ page }) => {
+    await setupPage(page)
+
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/html-page.svg', async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: '<!DOCTYPE html><html><head><title>Not an SVG</title></head><body><p>Nope</p></body></html>',
+        headers: { 'content-type': 'text/html' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/html-page.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called.'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          cacheRequests: false,
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: () => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/html-page.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+  })
+
+  test('valid XML that is not SVG errors', async ({ page }) => {
+    await setupPage(page)
+
+    await page.unroute('**/fixtures/**')
+    await page.route('**/fixtures/not-svg.svg', async (route) => {
+      await route.fulfill({
+        status: 200,
+        body: '<?xml version="1.0" encoding="UTF-8"?><note><body>Not an SVG</body></note>',
+        headers: { 'content-type': 'application/xml' },
+      })
+    })
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/not-svg.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(new Error('`afterEach` was not called.'))
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: () => {
+            clearTimeout(timeoutId)
+            resolve({ afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.afterEachCalls).toHaveLength(1)
+    expect(result.afterEachCalls[0]!.error).toBe(
+      'Unable to parse SVG from response: /fixtures/not-svg.svg',
+    )
+    expect(result.afterEachCalls[0]!.svg).toBe(null)
+  })
+
+  // A URL the parser rejects makes `XMLHttpRequest.open` throw before a
+  // request is made. The throw has to be reported like any other load failure:
+  // the rest of the collection still injects, and the cache entry the failed
+  // load created is removed so the next injection retries.
+  test('unparseable URL errors without stopping the rest of the collection', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{
+        elementsLoaded: number
+        afterEachCalls: Array<{ error: string | null; svg: string | null }>
+      }>((resolve, reject) => {
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div class="inject-me" data-src="http://"></div>
+          <div class="inject-me" data-src="/fixtures/thumb-up.svg"></div>
+        `
+        document.body.appendChild(container)
+
+        const afterEachCalls: Array<{
+          error: string | null
+          svg: string | null
+        }> = []
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterAll\` did not fire. Calls so far: ${JSON.stringify(
+                afterEachCalls,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelectorAll('.inject-me'), {
+          afterEach: (error: Error | null, svg?: Element | null) => {
+            afterEachCalls.push({
+              error: error ? error.message : null,
+              svg: svg
+                ? svg.outerHTML || new XMLSerializer().serializeToString(svg)
+                : null,
+            })
+          },
+          afterAll: (elementsLoaded: number) => {
+            clearTimeout(timeoutId)
+            resolve({ elementsLoaded, afterEachCalls })
+          },
+        })
+      })
+    })
+
+    expect(result.elementsLoaded).toBe(2)
+    expect(result.afterEachCalls).toHaveLength(2)
+    // The message `open()` throws with is browser-specific, so only its
+    // presence is asserted.
+    const errors = result.afterEachCalls.map((call) => call.error)
+    expect(errors.filter((error) => error !== null)).toHaveLength(1)
+    expect(errors).toContain(null)
+    expect(
+      result.afterEachCalls.find((call) => call.error === null)!.svg,
+    ).toContain(`d="${thumbUpPath}"`)
+  })
+
+  test('unparseable URL is not cached', async ({ page }) => {
+    await setupPage(page)
+
+    const errors = await page.evaluate(() => {
+      return new Promise<Array<string | null>>((resolve, reject) => {
+        document.body.innerHTML = ''
+
+        const collected: Array<string | null> = []
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+
+        const timeoutId = setTimeout(() => {
+          reject(
+            new Error(
+              `\`afterEach\` did not fire for both injections. Calls so far: ${JSON.stringify(
+                collected,
+              )}`,
+            ),
+          )
+        }, 5000)
+
+        const inject = (done: () => void) => {
+          const el = document.createElement('div')
+          el.setAttribute('data-src', 'http://')
+          document.body.appendChild(el)
+          SVGInjector(el, {
+            afterEach: (error: Error | null) => {
+              collected.push(error ? error.message : null)
+            },
+            afterAll: () => done(),
+          })
+        }
+
+        // The second injection has to report rather than join a cache entry
+        // the first left stuck in the loading state.
+        inject(() => {
+          inject(() => {
+            clearTimeout(timeoutId)
+            resolve(collected)
+          })
+        })
+      })
+    })
+
+    expect(errors).toHaveLength(2)
+    expect(errors[0]).not.toBe(null)
+    expect(errors[1]).not.toBe(null)
+  })
+
   test('svg not found error', async ({ page }) => {
     await setupPage(page)
 
@@ -646,6 +1556,45 @@ test.describe('SVGInjector', () => {
           afterEach: () => {
             ;(window as unknown as LegacyDocumentWindow).Document =
               originalDocument
+            resolve({ html: container.innerHTML })
+          },
+        })
+      })
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toBe(thumbUpSvg)
+  })
+
+  // The single-versus-collection decision reads the node's own `nodeType`
+  // rather than testing `instanceof Element`, so replacing the global leaves
+  // it unaffected. An element belonging to another document's realm fails
+  // `instanceof` the same way, and is not reachable from this test.
+  test('handles Element wrangling via old libs', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{ html: string }>((resolve) => {
+        const originalElement = (window as unknown as LegacyElementWindow)
+          .Element
+        ;(window as unknown as LegacyElementWindow).Element = function () {}
+
+        document.body.innerHTML = ''
+        const container = document.createElement('div')
+        container.innerHTML = `
+          <div
+            class="inject-me"
+            data-src="/fixtures/thumb-up.svg"
+          ></div>
+        `
+        document.body.appendChild(container)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(container.querySelector('.inject-me'), {
+          afterEach: () => {
+            ;(window as unknown as LegacyElementWindow).Element =
+              originalElement
             resolve({ html: container.innerHTML })
           },
         })

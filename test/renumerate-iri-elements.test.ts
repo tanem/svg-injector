@@ -43,6 +43,26 @@ test.describe('renumerate iri elements', () => {
     expect(actual).toBe(expected)
   })
 
+  test('references to ids no element defines', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/undefined-reference.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" class="injected-svg inject-me" data-src="/fixtures/undefined-reference.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><clipPath id="clipPathTest-1"><rect x="16" y="16" width="32" height="32" style="fill:white;"></rect></clipPath></defs><circle cx="32" cy="32" r="18" clip-path="url(#clipPathTest-1)" fill="url(#constructor)" mask="url(#toString)" style="stroke:url(#hasOwnProperty);"></circle><use href="#valueOf"></use></svg>'
+
+    expect(actual).toBe(expected)
+  })
+
   test('fill', async ({ page }) => {
     await setupPage(page)
 
@@ -305,6 +325,32 @@ test.describe('renumerate iri elements', () => {
     expect(actual).toContain('id="g1-1"')
     expect(actual).toContain('id="g2-2"')
     expect(actual).toContain('fill:url(#g1-1);stroke:url(#g2-2);')
+  })
+
+  test('empty attribute and style element values', async ({ page }) => {
+    await setupPage(page, {
+      fixtureOverrides: {
+        '/fixtures/empty-values.svg': {
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><defs><linearGradient id="grad"><stop offset="0%" stop-color="#000"></stop></linearGradient></defs><style></style><rect width="10" height="10" fill="" style=""></rect><circle cx="5" cy="5" r="4" fill="url(#grad)"></circle></svg>',
+        },
+      },
+    })
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/empty-values.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toContain('id="grad-1"')
+    expect(actual).toContain('fill="url(#grad-1)"')
+    expect(actual).toContain('fill="" style=""')
+    expect(actual).toContain('<style></style>')
   })
 
   test('id prefix collisions', async ({ page }) => {

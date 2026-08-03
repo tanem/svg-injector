@@ -6,7 +6,8 @@ SVGInjector(document.getElementsByClassName('inject-me'), {
   },
   afterEach(err, svg) {
     if (err) {
-      throw err
+      console.error(err)
+      return
     }
     console.log(`injected ${svg ? svg.outerHTML : ''}`)
   },

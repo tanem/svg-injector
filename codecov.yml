@@ -9,6 +9,5 @@ ignore:
   - 'scripts'
   - 'test'
   - '*.config.ts'
-  - 'index.js'
   - 'src/index.ts'
   - 'src/types.ts'
