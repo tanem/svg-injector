@@ -63,7 +63,9 @@ export default tseslint.config(
     },
   },
   {
-    files: ['test/**/*.ts', 'playwright.config.ts'],
+    // `test/manual/**/*.mjs` is the hand-run transport harness: a node server
+    // and two Playwright probes that report their results on stdout.
+    files: ['test/**/*.ts', 'test/manual/**/*.mjs', 'playwright.config.ts'],
     rules: {
       // Allow console in tests for debugging
       'no-console': 'off',

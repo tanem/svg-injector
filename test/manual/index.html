@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <meta charset="utf-8" />
+    <title>svg-injector — real-server transport checks</title>
+    <script src="/svg-injector.iife.js"></script>
+    <style>
+      body { font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2rem; max-width: 78rem; }
+      h1 { font-size: 1.2rem; }
+      table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+      th, td { border: 1px solid #bbb; padding: 0.35rem 0.6rem; text-align: left; vertical-align: top; }
+      th { background: #eee; font-size: 0.78rem; text-transform: uppercase; }
+      .pass { background: #e6f5e9; }
+      .fail { background: #fdeceb; }
+      .verdict { font-weight: bold; }
+      #summary { font-size: 1.05rem; font-weight: bold; margin-top: 1rem; }
+      #host { position: absolute; left: -9999px; }
+      td.msg { font-size: 0.82rem; color: #444; word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    <h1>svg-injector — real-server transport checks</h1>
+    <p>
+      Each case runs against genuine response headers from
+      <code>server.mjs</code>, not Playwright route interception. Expected values
+      are derived from <code>src/make-ajax-request.ts</code> and
+      <code>src/load-svg-cached.ts</code>, so a deliberate change to either means
+      updating the expectation here alongside it.
+    </p>
+    <div id="summary">running…</div>
+    <div id="out"></div>
+    <div id="host"></div>
+
+    <script>
+      const inject = window.SVGInjector.SVGInjector
+      const host = document.getElementById('host')
+
+      // [label, url, options, expected]
+      // expected.ok      - injection succeeds
+      // expected.error   - substring the reported message must contain
+      // expected.calls   - how many times afterEach must fire (exactly-once accounting)
+      const cases = [
+        ['.svg, correct type', '/icon.svg', {}, { ok: true, calls: 1 }],
+        ['.svg, wrong type (bypass)', '/icon-wrong-type.svg', {}, { ok: true, calls: 1 }],
+        ['.svg, no Content-Type (bypass)', '/icon-no-type.svg', {}, { ok: true, calls: 1 }],
+        ['.svg via 302 redirect', '/redirect.svg', {}, { ok: true, calls: 1 }],
+        ['.svg, delayed 400ms', '/slow.svg', {}, { ok: true, calls: 1 }],
+
+        ['no ext, image/svg+xml', '/no-ext-svg', {}, { ok: true, calls: 1 }],
+        ['no ext, text/plain', '/no-ext-plain', {}, { ok: true, calls: 1 }],
+        ['no ext, type + params', '/no-ext-params', {}, { ok: true, calls: 1 }],
+        ['no ext, uppercase type', '/no-ext-uppercase', {}, { ok: true, calls: 1 }],
+
+        ['no ext, text/html', '/no-ext-html', {}, { error: 'Invalid content type: text/html', calls: 1 }],
+        ['no ext, no header', '/no-ext-no-header', {}, { error: 'Content type not found', calls: 1 }],
+        ['no ext, no media type', '/no-ext-no-mediatype', {}, { error: 'Content type not found', calls: 1 }],
+        ['no ext, malformed type', '/no-ext-malformed', {}, { error: 'Invalid content type: invalid', calls: 1 }],
+
+        // Rejecting the header aborts the request, and the abort re-enters the
+        // readystate handler. Real abort semantics are exactly what route
+        // interception cannot vouch for, so `calls: 1` is the point of these
+        // two rows: before the `settled` flag they reported twice.
+        ['no ext, text/html, cacheRequests:false', '/no-ext-html', { cacheRequests: false }, { error: 'Invalid content type: text/html', calls: 1 }],
+        ['no ext, no header, cacheRequests:false', '/no-ext-no-header', { cacheRequests: false }, { error: 'Content type not found', calls: 1 }],
+
+        ['404', '/missing.svg', {}, { error: 'Unable to load SVG file', calls: 1 }],
+        // Unparseable body: responseXML is null, so the older branch catches it
+        // before the status is ever considered.
+        ['500, unparseable body', '/server-error.svg', {}, { error: 'Unable to load SVG file', calls: 1 }],
+        // Parseable body with a non-200 status: the only route to this branch.
+        ['500, valid SVG body', '/svg-with-500.svg', {}, { error: 'There was a problem injecting the SVG: 500', calls: 1 }],
+        // Lowercase <!doctype is invalid XML, so this fails to parse outright.
+        ['200, HTML body at .svg URL', '/html-body.svg', {}, { error: 'Unable to load SVG file', calls: 1 }],
+        // Parses cleanly, but the root element is not <svg>. A body that fails
+        // to parse never reaches this branch, so the XML above has to be valid.
+        ['200, well-formed non-SVG XML', '/xml-not-svg.svg', {}, { error: 'Unable to parse SVG from response', calls: 1 }],
+
+        // The narrowing: v11 skipped the check because the whole URL contained
+        // ".svg". v12 matches the pathname, so this now needs a valid type.
+        ['.svg only in query string', '/render?file=logo.svg', {}, { error: 'Invalid content type: text/html', calls: 1 }],
+
+        // `open()` throws synchronously for a URL the parser rejects. The
+        // throw must be reported through afterEach, not escape the call.
+        ['URL the parser rejects', 'http://', {}, { error: '', calls: 1 }],
+      ]
+
+      const run = ([label, url, options, expected]) =>
+        new Promise((resolve) => {
+          host.innerHTML = ''
+          const el = document.createElement('div')
+          el.dataset.src = url
+          host.appendChild(el)
+
+          let calls = 0
+          let lastError = null
+          let injected = false
+
+          inject(el, {
+            ...options,
+            afterEach(error, svg) {
+              calls++
+              if (error) lastError = error.message
+              if (svg) injected = true
+            },
+            afterAll() {
+              // Give any stray second callback a chance to arrive before
+              // judging: firing twice is the failure mode being hunted.
+              setTimeout(() => {
+                const okCalls = calls === expected.calls
+                const okOutcome = expected.ok
+                  ? injected && !lastError
+                  : lastError !== null &&
+                    (expected.error === '' || lastError.includes(expected.error))
+                resolve({
+                  label,
+                  url,
+                  expected: expected.ok
+                    ? `inject, ${expected.calls} afterEach`
+                    : `"${expected.error || '(any error)'}", ${expected.calls} afterEach`,
+                  actual: `${injected ? 'injected' : lastError ? 'error' : 'nothing'}, ${calls} afterEach`,
+                  message: lastError ?? '',
+                  pass: okCalls && okOutcome,
+                })
+              }, 120)
+            },
+          })
+        })
+
+      // A failed load must not be cached. Left on the loading sentinel, the URL
+      // would park there forever: every later injection would wait on a
+      // response that had already arrived, and no refetch would be made. The
+      // entry is dropped instead, so a second injection hits the server again.
+      // Counted through /hits, because nothing observable on the page
+      // distinguishes a refetch from a cache hit that never resolves.
+      const refetchCheck = async () => {
+        const url = '/xml-not-svg.svg'
+        const before = (await (await fetch('/hits')).json())[url] ?? 0
+
+        for (let i = 0; i < 2; i++) {
+          await new Promise((resolve) => {
+            host.innerHTML = ''
+            const el = document.createElement('div')
+            el.dataset.src = url
+            host.appendChild(el)
+            inject(el, { afterAll: () => setTimeout(resolve, 60) })
+          })
+        }
+
+        const after = (await (await fetch('/hits')).json())[url] ?? 0
+        const requests = after - before
+        return {
+          label: 'failed load is not cached (refetches)',
+          url,
+          expected: '2 server requests',
+          actual: `${requests} server requests`,
+          message: requests < 2 ? 'second injection was served from a stale cache entry' : '',
+          pass: requests === 2,
+        }
+      }
+
+      ;(async () => {
+        const rows = []
+        for (const testCase of cases) rows.push(await run(testCase))
+        rows.push(await refetchCheck())
+
+        const failed = rows.filter((r) => !r.pass).length
+        document.getElementById('summary').textContent = failed
+          ? `${failed} of ${rows.length} FAILED`
+          : `all ${rows.length} passed`
+        document.getElementById('summary').className = failed ? 'fail' : 'pass'
+
+        document.getElementById('out').innerHTML =
+          '<table><thead><tr><th>case</th><th>url</th><th>expected</th><th>actual</th><th>message</th><th>verdict</th></tr></thead><tbody>' +
+          rows
+            .map(
+              (r) =>
+                `<tr class="${r.pass ? 'pass' : 'fail'}"><td>${r.label}</td><td>${r.url}</td><td>${r.expected}</td><td>${r.actual}</td><td class="msg">${r.message}</td><td class="verdict">${r.pass ? 'PASS' : 'FAIL'}</td></tr>`,
+            )
+            .join('') +
+          '</tbody></table>'
+      })()
+    </script>
+  </body>
+</html>
