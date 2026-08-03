@@ -113,6 +113,10 @@ Recorded so a later run has something to compare against.
 - 12.0.0, 2026-08-03, stock browsers: 23/23 HTTP in Chrome 151, Firefox 146 and
   Safari 26.5; 3/3 `file://` in Chrome 151 and Safari 26.5.
 - 12.0.0, 2026-08-04, after the move to `test/manual/`: 23/23 HTTP in Chrome
-  151 and in all three Playwright engines. `file://` re-run in the Playwright
-  engines only: 3/3 in chromium with `--allow-file-access-from-files` and in
-  firefox.
+  151 and in all three Playwright engines; 3/3 `file://` in Safari 26.5, and in
+  Playwright chromium with `--allow-file-access-from-files` and firefox.
+
+  Safari reported status 0 with no `Content-Type` on all three, and `./icon.svg`
+  injected anyway. That is the `.svg` bypass and the status-0 allowance both
+  doing real work: in Chrome and Firefox the same row passes on a synthesised
+  200, so Safari is the only run that demonstrates either is needed.
