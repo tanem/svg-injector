@@ -1,5 +1,12 @@
 # Changelog
 
+## [v12.0.0](https://github.com/tanem/svg-injector/tree/v12.0.0) (2026-08-03)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.2...v12.0.0)
+
+#### :boom: Breaking Change
+
+- [#1569](https://github.com/tanem/svg-injector/pull/1569) Modernise packaging and fix the loading bugs ([@tanem](https://github.com/tanem))
+
 ## [v11.3.2](https://github.com/tanem/svg-injector/tree/v11.3.2) (2026-03-23)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.1...v11.3.2)
 
