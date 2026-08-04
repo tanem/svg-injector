@@ -2,15 +2,15 @@ import defer from './defer'
 import injectElement from './inject-element'
 import type {
   AfterAll,
+  AfterEach,
   BeforeEach,
   Elements,
-  Errback,
   EvalScripts,
 } from './types'
 
 interface OptionalArgs {
   afterAll?: AfterAll
-  afterEach?: Errback
+  afterEach?: AfterEach
   beforeEach?: BeforeEach
   cacheRequests?: boolean
   evalScripts?: EvalScripts
@@ -27,6 +27,10 @@ interface OptionalArgs {
 // The completion accounting sits in a `finally` for the same reason: `afterEach`
 // is consumer code, and a throw from it must not cost the collection its
 // `afterAll`. The exception still propagates uncaught afterwards.
+//
+// The third `afterEach` argument is added here rather than in the pipeline
+// because both branches below already hold the element in a closure, so
+// `injectElement` and the load path under it stay per-URL and unchanged.
 const SVGInjector = (
   elements: Elements,
   {
@@ -58,7 +62,7 @@ const SVGInjector = (
       beforeEach,
       (error, svg) => {
         try {
-          afterEach(error, svg)
+          afterEach(error, svg, elements)
         } finally {
           afterAll(1)
         }
@@ -88,7 +92,7 @@ const SVGInjector = (
         beforeEach,
         (error, svg) => {
           try {
-            afterEach(error, svg)
+            afterEach(error, svg, element)
           } finally {
             if (elementList.length === ++elementsLoaded) {
               afterAll(elementsLoaded)

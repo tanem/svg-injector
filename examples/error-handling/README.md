@@ -4,7 +4,7 @@ Three placeholders, two of which cannot be injected. Both failures come from a r
 
 ## What it shows
 
-- `afterEach` fires once per element on every path, with an `Error` for the two that failed and the injected `<svg>` for the one that succeeded.
+- `afterEach` fires once per element on every path, with an `Error` for the two that failed and the injected `<svg>` for the one that succeeded. Its third argument is the element itself, which is what pairs each error with the placeholder it belongs to.
 - The error messages name their cause: `Unable to load SVG file: missing.svg` and `Invalid content type: text/html`. The content type is checked as soon as the response headers arrive, so a rejected response never has its body parsed.
 - `afterAll` receives the number of elements _processed_, failures included, so it is `3` here while only one SVG reached the page. Count the `afterEach` calls whose `error` is `null` for the number injected.
 - A failed injection leaves its placeholder in the document. Nothing is removed, so there is somewhere to put a fallback.
@@ -21,7 +21,7 @@ Vite's dev server answers an unmatched path with `index.html` and a 200 rather t
 import { SVGInjector } from '@tanem/svg-injector'
 
 SVGInjector(document.getElementsByClassName('inject-me'), {
-  afterEach(error, svg) {
+  afterEach(error, svg, element) {
     if (error) {
       console.error(error)
       return
@@ -38,20 +38,16 @@ Report the error and return. A throw from `afterEach` escapes as an uncaught exc
 
 ## Matching an error back to its element
 
-`afterEach` is called with the error and, on success, the injected SVG. It is not called with the placeholder, and only one of the two messages above names the URL, so a collection cannot pair its failures with their elements from the callback arguments alone.
-
-The example works around it in `afterAll`: an element that injected has been replaced by its SVG, which leaves the failures as the only placeholders still in the document.
+`element` is the third `afterEach` argument, and is the placeholder that was passed in. It is present on every call, failures included, which is what lets a collection put each fallback in the right place:
 
 ```js
-const placeholders = Array.from(document.getElementsByClassName('inject-me'))
-
-SVGInjector(placeholders, {
-  afterAll() {
-    for (const el of placeholders.filter((el) => el.isConnected)) {
-      // el failed
-    }
-  },
-})
+afterEach(error, svg, element) {
+  if (error) {
+    element.replaceWith(fallbackFor(element))
+  }
+}
 ```
 
-That waits for the whole collection. To react per element as soon as it fails, call `SVGInjector` once per placeholder instead and let the closure hold the element. `afterAll` then reports `1` per call rather than the collection total.
+Nothing else in the arguments identifies it. On failure there is no `svg`, only one of the two messages above names its URL, and a URL would not be enough in general anyway: two placeholders sharing one `data-src` is the normal case for a sprite.
+
+The fallback goes in as each element fails. Deriving it instead from which placeholders are still in the document — an element that injected has been replaced by its SVG — works, but only once the whole collection has finished, so one slow load holds back every fallback.
