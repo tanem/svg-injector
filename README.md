@@ -71,15 +71,15 @@ Collections are snapshotted before injection starts, so a live `HTMLCollection` 
 
 Every option is optional, and `options` itself defaults to `{}`.
 
-| Option                                                      | Type                                                  | Default   |
-| ----------------------------------------------------------- | ----------------------------------------------------- | --------- |
-| [`afterAll`](#afterall)                                     | `(elementsLoaded: number) => void`                    | noop      |
-| [`afterEach`](#aftereach)                                   | `(error: Error \| null, svg?: SVGSVGElement) => void` | noop      |
-| [`beforeEach`](#beforeeach)                                 | `(svg: SVGSVGElement) => void`                        | noop      |
-| [`cacheRequests`](#cacherequests)                           | `boolean`                                             | `true`    |
-| [`evalScripts`](#evalscripts)                               | `'always' \| 'once' \| 'never'`                       | `'never'` |
-| [`httpRequestWithCredentials`](#httprequestwithcredentials) | `boolean`                                             | `false`   |
-| [`renumerateIRIElements`](#renumerateirielements)           | `boolean`                                             | `true`    |
+| Option                                                      | Type                                                                                | Default   |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------- |
+| [`afterAll`](#afterall)                                     | `(elementsLoaded: number) => void`                                                  | noop      |
+| [`afterEach`](#aftereach)                                   | `(error: Error \| null, svg: SVGSVGElement \| undefined, element: Element) => void` | noop      |
+| [`beforeEach`](#beforeeach)                                 | `(svg: SVGSVGElement) => void`                                                      | noop      |
+| [`cacheRequests`](#cacherequests)                           | `boolean`                                                                           | `true`    |
+| [`evalScripts`](#evalscripts)                               | `'always' \| 'once' \| 'never'`                                                     | `'never'` |
+| [`httpRequestWithCredentials`](#httprequestwithcredentials) | `boolean`                                                                           | `false`   |
+| [`renumerateIRIElements`](#renumerateirielements)           | `boolean`                                                                           | `true`    |
 
 #### `afterAll`
 
@@ -91,13 +91,17 @@ Called once per `SVGInjector` call, after every element has been processed. `ele
 
 Called once per element, after it has been injected or after its injection failed. On success `error` is `null` and `svg` is the injected SVG DOM element. On failure `error` is the `Error` and `svg` is `undefined`.
 
+`element` is the element that was passed in, and is present on every call including the failures. It is how a caller that passed a collection tells which placeholder a failure belongs to: on failure there is no `svg` to identify it, several of the error messages don't name their URL, and a URL wouldn't be enough anyway, since two placeholders sharing one `data-src` is the normal case for a sprite. On success it is the original placeholder, already detached and replaced by `svg`.
+
 For every element and every argument, `afterEach` and `afterAll` fire after the `SVGInjector` call has returned. DOM reads placed between the call and the callbacks therefore always see the pre-injection DOM.
 
 ```js
 SVGInjector(document.querySelectorAll('[data-src]'), {
-  afterEach(error, svg) {
+  afterEach(error, svg, element) {
     if (error) {
-      console.error(error)
+      // `element` is the placeholder this error belongs to, and a failed
+      // injection leaves it in the document, so a fallback can go in its place.
+      console.error(`${element.getAttribute('data-src')}: ${error.message}`)
       return
     }
     console.log(`injected ${svg.outerHTML}`)
