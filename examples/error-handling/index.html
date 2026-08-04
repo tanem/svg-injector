@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVGInjector Error Handling Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        color: #1e293b;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      h2 {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+      }
+      p {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #475569;
+      }
+      .cases {
+        display: flex;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+      .case {
+        flex: 1;
+      }
+      .case p {
+        margin-top: 0;
+      }
+      /* Two lines at this column width, so the three placeholders below start
+         at the same height whichever descriptions are wrapped. */
+      .case .note {
+        min-height: 2.8rem;
+      }
+      .fallback {
+        display: inline-block;
+        padding: 0.5rem;
+        border: 1px dashed #b91c1c;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: #b91c1c;
+      }
+      #reported {
+        padding-left: 1.25rem;
+      }
+      #reported li {
+        font-family: ui-monospace, monospace;
+        font-size: 0.75rem;
+        color: #b91c1c;
+      }
+      #processed {
+        font-family: ui-monospace, monospace;
+        font-size: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Error Handling</h1>
+    <p>
+      Three placeholders, two of which cannot be injected. Every element is
+      reported to <code>afterEach</code>, whether it succeeded or failed, and
+      <code>afterAll</code> runs once all three have been processed.
+    </p>
+    <div class="cases">
+      <div class="case">
+        <h2>Missing file</h2>
+        <p class="note">Nothing is served at that path.</p>
+        <div class="inject-me" data-src="missing.svg"></div>
+      </div>
+      <div class="case">
+        <h2>Wrong content type</h2>
+        <p class="note">An SVG document served as <code>text/html</code>.</p>
+        <div class="inject-me" data-src="markup.html"></div>
+      </div>
+      <div class="case">
+        <h2>Success</h2>
+        <p class="note">A plain SVG file, for contrast.</p>
+        <div class="inject-me" data-src="icon.svg"></div>
+      </div>
+    </div>
+    <h2>Reported to <code>afterEach</code></h2>
+    <ul id="reported"></ul>
+    <p id="processed"></p>
+    <script type="module" src="index.ts"></script>
+  </body>
+</html>

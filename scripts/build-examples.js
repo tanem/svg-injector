@@ -11,6 +11,7 @@ const examples = [
   'api-usage',
   'basic-usage',
   'data-url-usage',
+  'error-handling',
   'iri-renumeration',
   'sprite-usage',
 ]
