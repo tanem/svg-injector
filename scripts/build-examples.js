@@ -14,6 +14,7 @@ const examples = [
   'error-handling',
   'eval-scripts',
   'iri-renumeration',
+  'no-bundler',
   'sprite-usage',
 ]
 

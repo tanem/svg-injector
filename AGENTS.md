@@ -193,6 +193,13 @@ built against the local library first. Any SVG the injector fetches at runtime
 has to live in `<example>/public/`, because `data-src` is an opaque string to
 the bundler and nothing links it.
 
+`no-bundler` is the exception, and has to be: Vite bundles every
+`<script type="module">` in `index.html`, `public/` included, so a Vite build
+would replace the module import that is the whole point of it. Its `build.js`
+copies the page and `dist/svg-injector.mjs` into `dist/` instead. All the
+harness needs from an example is an `npm run build` that fills
+`<example>/dist/`.
+
 ## Conventions
 
 - One default export per module in `src/`, apart from `index.ts` (barrel) and

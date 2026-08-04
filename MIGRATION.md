@@ -12,7 +12,7 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
 
 - Removed the UMD builds. `dist/svg-injector.umd.development.js` and `dist/svg-injector.umd.production.js` are no longer published, so a plain `<script src>` tag no longer defines `window.SVGInjector`. The CommonJS and ES module builds remain, under new filenames: see the packaging entry below.
 
-  Script tag users have two options. Load the ES module build from an ESM CDN:
+  Script tag users have three options. Load the ES module build from an ESM CDN:
 
   ```html
   <script type="module">
@@ -21,6 +21,8 @@ Details relating to major changes that aren't presently in `CHANGELOG.md`, due t
     SVGInjector(document.getElementById('inject-me'))
   </script>
   ```
+
+  Or self-host `dist/svg-injector.mjs` and import it by URL. The [No Bundler](https://github.com/tanem/svg-injector/tree/master/examples/no-bundler) example is a worked version of that, and [README.md](README.md#without-a-bundler) covers both forms.
 
   Or stay on v11, which keeps the UMD builds:
 
