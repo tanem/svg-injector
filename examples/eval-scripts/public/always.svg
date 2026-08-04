@@ -1,0 +1,19 @@
+<svg
+  height="48"
+  viewBox="0 0 48 48"
+  width="48"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <g>
+    <!--
+      Nested rather than at the root, which before 12.0.0 threw NotFoundError
+      on removal and jammed the element: scripts were collected at any depth
+      but removed as though they were direct children of the root <svg>.
+    -->
+    <script>
+      const runs = document.getElementById('always-runs')
+      runs.textContent = String(Number(runs.textContent) + 1)
+    </script>
+    <rect fill="#b45309" height="40" rx="4" width="40" x="4" y="4" />
+  </g>
+</svg>

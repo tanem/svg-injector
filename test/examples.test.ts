@@ -31,6 +31,10 @@ const examples = [
     expectedSvgCount: 1,
   },
   {
+    name: 'eval-scripts',
+    expectedSvgCount: 2,
+  },
+  {
     name: 'iri-renumeration',
     expectedSvgCount: 3,
   },
@@ -122,6 +126,48 @@ test('error-handling: failures report verbatim and render a fallback', async ({
   await expect(page.locator('svg.injected-svg')).toHaveCount(1)
 
   expect(pageErrors).toEqual([])
+})
+
+// The counters are written by the SVGs' own scripts, so they only move if the
+// library really evaluated them. `once` is keyed by URL and the page re-injects
+// the same two files, which is what separates the two options here.
+test('eval-scripts: once runs on the first injection, always runs on every one', async ({
+  page,
+}) => {
+  const pageErrors: string[] = []
+  page.on('pageerror', (err) => pageErrors.push(err.message))
+
+  await page.goto('/eval-scripts/dist/')
+  await waitForInjection(page, 2)
+
+  await expect(page.locator('#injection-count')).toHaveText('1')
+  await expect(page.locator('#once-runs')).toHaveText('1')
+  await expect(page.locator('#always-runs')).toHaveText('1')
+
+  await page.locator('#reinject').click()
+  await waitForInjection(page, 2)
+  await page.locator('#reinject').click()
+  await waitForInjection(page, 2)
+
+  await expect(page.locator('#injection-count')).toHaveText('3')
+  await expect(page.locator('#once-runs')).toHaveText('1')
+  await expect(page.locator('#always-runs')).toHaveText('3')
+
+  expect(pageErrors).toEqual([])
+})
+
+// Scripts are stripped from the injected markup whatever `evalScripts` is set
+// to, including the one nested inside a `<g>`, which used to throw on removal.
+test('eval-scripts: no script elements survive injection', async ({ page }) => {
+  await page.goto('/eval-scripts/dist/')
+  await waitForInjection(page, 2)
+
+  await expect(page.locator('#scripts-remaining')).toHaveText('0')
+  await expect(page.locator('svg.injected-svg script')).toHaveCount(0)
+
+  // The nested script's sibling is still there, so removal took the script and
+  // nothing else.
+  await expect(page.locator('#always-slot svg g rect')).toHaveCount(1)
 })
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {

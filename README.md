@@ -121,7 +121,7 @@ Failed loads are not cached, so a URL that errored is refetched next time. The c
 
 Whether to run script blocks found in the SVG: `'always'`, `'once'` or `'never'`. `'once'` runs a given URL's scripts on the first injection of that URL only. Leave it at `'never'` for SVGs you don't control: see [Security](#security).
 
-Injected SVGs don't run their `<script>` elements on their own, which is why this option exists. Script elements carrying JavaScript are removed from the injected markup whichever setting is used; only whether they are evaluated on the way out changes.
+Injected SVGs don't run their `<script>` elements on their own, which is why this option exists. Script elements carrying JavaScript are removed from the injected markup whichever setting is used; only whether they are evaluated on the way out changes. The [eval scripts example](https://github.com/tanem/svg-injector/tree/master/examples/eval-scripts) shows `'once'` and `'always'` side by side over repeated injections of the same file.
 
 #### `httpRequestWithCredentials`
 
@@ -198,6 +198,7 @@ Each name links to the example source, and the sandbox column opens it on CodeSa
 | [Basic Usage](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage)           | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/basic-usage)      |
 | [Data URL Usage](https://github.com/tanem/svg-injector/tree/master/examples/data-url-usage)     | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/data-url-usage)   |
 | [Error Handling](https://github.com/tanem/svg-injector/tree/master/examples/error-handling)     | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/error-handling)   |
+| [Eval Scripts](https://github.com/tanem/svg-injector/tree/master/examples/eval-scripts)         | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/eval-scripts)     |
 | [IRI Renumeration](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/iri-renumeration) |
 | [Sprite Usage](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage)         | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/sprite-usage)     |
 
