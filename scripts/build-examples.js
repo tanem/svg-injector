@@ -12,6 +12,7 @@ const examples = [
   'basic-usage',
   'data-url-usage',
   'error-handling',
+  'eval-scripts',
   'iri-renumeration',
   'sprite-usage',
 ]
