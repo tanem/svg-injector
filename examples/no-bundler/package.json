@@ -1,0 +1,21 @@
+{
+  "name": "no-bundler",
+  "version": "1.0.0",
+  "description": "SVGInjector No Bundler Example",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "npm run start",
+    "preview": "serve dist --no-clipboard",
+    "start": "npm run build && serve dist --no-clipboard"
+  },
+  "dependencies": {
+    "@tanem/svg-injector": "latest"
+  },
+  "keywords": [
+    "@tanem/svg-injector"
+  ],
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}

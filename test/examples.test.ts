@@ -39,6 +39,10 @@ const examples = [
     expectedSvgCount: 3,
   },
   {
+    name: 'no-bundler',
+    expectedSvgCount: 1,
+  },
+  {
     name: 'sprite-usage',
     expectedSvgCount: 3,
   },
@@ -168,6 +172,31 @@ test('eval-scripts: no script elements survive injection', async ({ page }) => {
   // The nested script's sibling is still there, so removal took the script and
   // nothing else.
   await expect(page.locator('#always-slot svg g rect')).toHaveCount(1)
+})
+
+// This example's acceptance criterion is a negative one: nothing in the built
+// page may need a bundler. Every other example ships a chunk under `assets/`
+// that Vite produced from an import of the package name, so the absence of one
+// here, plus a request for the self-hosted `.mjs`, is what says the page really
+// resolved the library by URL in the browser.
+test('no-bundler: the library is loaded by URL, with nothing bundled', async ({
+  page,
+}) => {
+  const paths: string[] = []
+  page.on('request', (request) => paths.push(new URL(request.url()).pathname))
+
+  await page.goto('/no-bundler/dist/')
+  await waitForInjection(page, 1)
+
+  expect(paths).toContain('/no-bundler/dist/svg-injector.mjs')
+  expect(paths.filter((path) => path.includes('/assets/'))).toEqual([])
+
+  await expect(page.locator('#status')).toHaveText(
+    'Injected from ./svg-injector.mjs',
+  )
+  await expect(page.locator('#global')).toHaveText(
+    "typeof window.SVGInjector === 'undefined'",
+  )
 })
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {

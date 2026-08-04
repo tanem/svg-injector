@@ -200,6 +200,7 @@ Each name links to the example source, and the sandbox column opens it on CodeSa
 | [Error Handling](https://github.com/tanem/svg-injector/tree/master/examples/error-handling)     | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/error-handling)   |
 | [Eval Scripts](https://github.com/tanem/svg-injector/tree/master/examples/eval-scripts)         | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/eval-scripts)     |
 | [IRI Renumeration](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/iri-renumeration) |
+| [No Bundler](https://github.com/tanem/svg-injector/tree/master/examples/no-bundler)             | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/no-bundler)       |
 | [Sprite Usage](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage)         | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/sprite-usage)     |
 
 ## Installation
@@ -209,6 +210,30 @@ $ npm install @tanem/svg-injector
 ```
 
 The package ships an ES module and a CommonJS build behind an `exports` map, with type declarations for each, and has no runtime dependencies.
+
+### Without a bundler
+
+There is no UMD build and no `window.SVGInjector`: v11 had both and 12.0.0 dropped them. A page with no build step loads the ES module directly instead, either from a CDN:
+
+```html
+<script type="module">
+  import { SVGInjector } from 'https://esm.sh/@tanem/svg-injector'
+
+  SVGInjector(document.getElementById('inject-me'))
+</script>
+```
+
+or from a copy of `dist/svg-injector.mjs` served alongside the page:
+
+```html
+<script type="module">
+  import { SVGInjector } from './svg-injector.mjs'
+
+  SVGInjector(document.getElementById('inject-me'))
+</script>
+```
+
+Either way the specifier is a URL. A bare specifier such as `'@tanem/svg-injector'` needs a bundler or an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap) to resolve. The [No Bundler](https://github.com/tanem/svg-injector/tree/master/examples/no-bundler) example is a worked version of the second form.
 
 > ⚠️This library is tested against current Chromium, Firefox and WebKit via Playwright. A browser is supported if the suite covers it.
 

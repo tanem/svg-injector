@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SVGInjector No Bundler Example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 2rem auto;
+        color: #1e293b;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      p {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #475569;
+      }
+      pre {
+        font-size: 0.75rem;
+        line-height: 1.5;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        padding: 0.75rem;
+        overflow-x: auto;
+      }
+      #inject-me {
+        margin: 1.5rem 0;
+      }
+      #status,
+      #global {
+        font-family: ui-monospace, monospace;
+        font-size: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>No Bundler</h1>
+    <p>
+      Nothing on this page is bundled. It is served as a static file and loads
+      the library with a <code>&lt;script type="module"&gt;</code> tag, from a
+      copy of <code>dist/svg-injector.mjs</code> sitting next to
+      <code>index.html</code>:
+    </p>
+    <pre>&lt;script type="module"&gt;
+  import { SVGInjector } from './svg-injector.mjs'
+
+  SVGInjector(document.getElementById('inject-me'))
+&lt;/script&gt;</pre>
+    <div id="inject-me" data-src="svg.svg"></div>
+    <p id="status">Injecting&hellip;</p>
+    <p id="global"></p>
+    <p>
+      There is no <code>window.SVGInjector</code>. v11 defined one through its
+      UMD builds, which 12.0.0 removed; an ES module exports its bindings to
+      whatever imports it and puts nothing on the global object.
+    </p>
+
+    <!-- The specifier is a URL, not a package name. A bare specifier such as
+         '@tanem/svg-injector' needs either a bundler or an import map to
+         resolve, and this page has neither. -->
+    <script type="module">
+      import { SVGInjector } from './svg-injector.mjs'
+
+      document.getElementById('global').textContent =
+        `typeof window.SVGInjector === '${typeof window.SVGInjector}'`
+
+      SVGInjector(document.getElementById('inject-me'), {
+        afterEach(error) {
+          document.getElementById('status').textContent = error
+            ? `Injection failed: ${error.message}`
+            : 'Injected from ./svg-injector.mjs'
+        },
+      })
+    </script>
+  </body>
+</html>
