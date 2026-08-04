@@ -1,0 +1,21 @@
+{
+  "name": "error-handling",
+  "version": "1.0.0",
+  "description": "SVGInjector Error Handling Example",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@tanem/svg-injector": "latest"
+  },
+  "keywords": [
+    "@tanem/svg-injector"
+  ],
+  "devDependencies": {
+    "vite": "^8.2.0"
+  }
+}

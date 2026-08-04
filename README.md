@@ -197,6 +197,7 @@ Each name links to the example source, and the sandbox column opens it on CodeSa
 | [API Usage](https://github.com/tanem/svg-injector/tree/master/examples/api-usage)               | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/api-usage)        |
 | [Basic Usage](https://github.com/tanem/svg-injector/tree/master/examples/basic-usage)           | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/basic-usage)      |
 | [Data URL Usage](https://github.com/tanem/svg-injector/tree/master/examples/data-url-usage)     | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/data-url-usage)   |
+| [Error Handling](https://github.com/tanem/svg-injector/tree/master/examples/error-handling)     | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/error-handling)   |
 | [IRI Renumeration](https://github.com/tanem/svg-injector/tree/master/examples/iri-renumeration) | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/iri-renumeration) |
 | [Sprite Usage](https://github.com/tanem/svg-injector/tree/master/examples/sprite-usage)         | [Open](https://codesandbox.io/p/devbox/github/tanem/svg-injector/tree/master/examples/sprite-usage)     |
 

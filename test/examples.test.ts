@@ -27,6 +27,10 @@ const examples = [
     expectedSvgCount: 6,
   },
   {
+    name: 'error-handling',
+    expectedSvgCount: 1,
+  },
+  {
     name: 'iri-renumeration',
     expectedSvgCount: 3,
   },
@@ -81,6 +85,43 @@ test('data-url-usage: the bundler-inlined icon is injected from a data URL', asy
     /^data:image\/svg\+xml[,;]/,
   )
   await expect(injected.locator('path')).toHaveCount(1)
+})
+
+// The only example whose failures come from a real static server rather than
+// from a fixture override or a Playwright route: `missing.svg` is absent from
+// `public/`, and `markup.html` is an SVG document that any server sends as
+// `text/html`. Both messages are asserted verbatim, so a change to either
+// shows up here as well as in the library suite.
+test('error-handling: failures report verbatim and render a fallback', async ({
+  page,
+}) => {
+  const pageErrors: string[] = []
+  page.on('pageerror', (err) => pageErrors.push(err.message))
+
+  await page.goto('/error-handling/dist/')
+
+  // Sorted, because the two requests fail in whichever order they finish.
+  await expect
+    .poll(async () =>
+      (await page.locator('#reported li').allTextContents()).sort(),
+    )
+    .toEqual([
+      'Invalid content type: text/html',
+      'Unable to load SVG file: missing.svg',
+    ])
+
+  await expect(page.locator('.fallback')).toHaveText([
+    'Could not load missing.svg',
+    'Could not load markup.html',
+  ])
+
+  // The count covers processed elements, failures included.
+  await expect(page.locator('#processed')).toHaveText(
+    'afterAll(3): 1 injected, 2 failed',
+  )
+  await expect(page.locator('svg.injected-svg')).toHaveCount(1)
+
+  expect(pageErrors).toEqual([])
 })
 
 test('api-usage: beforeEach applies stroke attribute', async ({ page }) => {
