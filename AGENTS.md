@@ -22,6 +22,8 @@ constrains belongs there, not here.
 - `README.md` follows
   [standard-readme](https://github.com/RichardLitt/standard-readme). Per-feature
   detail belongs in `examples/*/README.md`, linked from there.
+- `README.md` states current behaviour; `MIGRATION.md` states what changed and
+  keeps the upgrade steps in full. Neither re-derives the other.
 - Code comments record non-obvious behaviour, constraints and decisions, not
   what the line already says.
 
@@ -33,12 +35,10 @@ split the sprite fragment off the URL, load, transform, swap.
 - `svg-injector.ts` owns the `afterEach` and `afterAll` accounting. Every path
   out of `injectElement`, errors included, calls back exactly once. Add one
   that doesn't and `afterAll` silently never fires.
-- `defer.ts` is how "no callback fires before `SVGInjector` returns" is
-  enforced. Every synchronously-reachable path defers, so a new one that calls
-  back without it reintroduces the sometimes-synchronous timing v12 removed.
-  `grep defer src/` lists the deferral sites. A path already running inside an
-  XHR event or a deferred task calls back directly, which is why
-  `load-svg-uncached.ts` and the `handleLoadedSvg` error paths hold no `defer`.
+- `defer.ts` enforces the callback timing `svg-injector.ts` documents. A path
+  already running inside an XHR event or a deferred task calls back directly,
+  which is why `load-svg-uncached.ts` and the `handleLoadedSvg` error paths
+  hold no `defer`.
 - `inject-element.ts` is that per-element pipeline, and the only module that
   chooses a load path.
 - `parse-data-url.ts` intercepts `data:image/svg+xml` before any request is
@@ -49,30 +49,24 @@ split the sprite fragment off the URL, load, transform, swap.
 - `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and
   `eval-svg-scripts.ts` are the transform steps, applied in that order.
 
-XHR is a decision, not leftover legacy. In WebKit a `file://` load reports
-status 0 and carries no `Content-Type`, and the content-type check runs at
+XHR is a decision, not leftover legacy. It carries the `file://` allowances
+`make-ajax-request.ts` documents, and its content-type check runs at
 `readyState` 2 so a rejected response aborts before its body arrives. fetch
-does neither. Don't migrate it without new evidence.
-
-Safari is the engine that decides anything `file://`. Chromium and Gecko now
-report status 200 with a synthesised `Content-Type` for a local file, so the
-status-0 allowance and the `.svg` extension bypass in `make-ajax-request.ts`
-both look like dead code until Safari is tried, where they are the only reason
-a local file injects. Measured on Chrome 151, Safari 26.5 and Firefox 146.
+does neither. Don't migrate it without new evidence. Safari is the engine that
+decides anything `file://` and the only one those allowances are load-bearing
+in; measured on Chrome 151, Safari 26.5 and Firefox 146.
 
 ## Known limitations
 
-Not visible in the source, and they shape what can be built on top.
+The consumer-facing ones are in `examples/sprite-usage/README.md`,
+`examples/data-url-usage/README.md` and the `renumerateIRIElements` section of
+`README.md` (background on that one:
+[#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023)).
+These are the ones stated nowhere else, and they shape what can be built on
+top.
 
 ### SVG sprites
 
-- Self-contained symbols only. Shared root-level `<defs>` (gradients, filters
-  and clip paths referenced by several symbols) are not resolved into the
-  extracted SVG.
-- Only `<symbol>` elements are extracted. A fragment ID matching a `<g>` or a
-  nested `<svg>` is not.
-- `<use>` chains inside a symbol are not resolved, so a symbol that references
-  another symbol breaks once extracted.
 - The fragment is matched verbatim against the symbol id, so a percent-encoded
   fragment (`sprite.svg#caf%C3%A9`) never matches the decoded id and fails with
   `Symbol "caf%C3%A9" not found in ...`. Browsers decode the fragment for a
@@ -81,8 +75,6 @@ Not visible in the source, and they shape what can be built on top.
 
 ### Data URLs
 
-- Only `data:image/svg+xml` is handled. Other image data URLs fall through to
-  XHR, which then fails.
 - The scheme and media type are matched case-sensitively, though RFC 2397 makes
   both case-insensitive, so `data:IMAGE/SVG+XML,...` falls through to XHR.
   Browsers fetch such a URL over XHR without complaint, so the only exposure is
@@ -92,11 +84,6 @@ Not visible in the source, and they shape what can be built on top.
 
 ### IRI renumeration
 
-- All matching element types are renumerated, not only those inside `<defs>`.
-  A `<path id="TX">` in the body of a US map is rewritten too. Consumers who
-  query injected elements by their original IDs need
-  `renumerateIRIElements: false`. See
-  [#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023).
 - String references inside `<script>` blocks are not updated, so
   `document.getElementById('oldId')` keeps pointing at the old ID.
 - CSS ID selectors in `<style>` elements are not updated. Only `url(#id)`
@@ -119,14 +106,10 @@ overrides the response header, and `?content-type=missing` drops it. Responses
 no fixture file can express, such as a 404, a non-SVG body or an extra header,
 come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
 
-That mocking is the suite's blind spot: real-server and `file://` behaviour is
-simulated, so a change to `make-ajax-request.ts` needs checking by hand against
-an actual server or an actual `file://` load before it is believed.
-`test/manual/` is that check. It is not run by `npm test` and not wired into
-CI, deliberately: nothing in it is mocked, which is the whole point. Run it and
-record the result in the PR when you touch `make-ajax-request.ts` or
-`load-svg-cached.ts`, and update its expected values in the same commit as any
-deliberate change to either.
+`test/manual/` covers what that mocking cannot; see its README for why it is
+not in CI. Run it and record the result in the PR when you touch
+`make-ajax-request.ts` or `load-svg-cached.ts`, and update its expected values
+in the same commit as any deliberate change to either.
 
 All three browser projects must pass. Coverage numbers come from chromium
 alone, because Playwright's `page.coverage` is Chromium-only, but the whole
