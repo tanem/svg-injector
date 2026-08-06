@@ -7,6 +7,8 @@ constrains belongs there, not here.
 ## Writing
 
 - NZ English everywhere ("colour", "behaviour", "initialise").
+- Match a document's length to what it needs. Cover the substance, then
+  stop: no filler sections, restated summaries or boilerplate.
 - Simple, direct technical language. No marketing speak.
 - Commit subjects are one capitalised line, `git log --oneline` style. Add a
   body whenever the change had a reason the diff does not show: what it fixes,
