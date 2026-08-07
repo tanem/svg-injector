@@ -1,5 +1,24 @@
 # Changelog
 
+## [v12.1.0](https://github.com/tanem/svg-injector/tree/v12.1.0) (2026-08-07)
+[Full Changelog](https://github.com/tanem/svg-injector/compare/v12.0.0...v12.1.0)
+
+#### :memo: Documentation
+
+- [#1576](https://github.com/tanem/svg-injector/pull/1576) Trim the documentation ([@tanem](https://github.com/tanem))
+- [#1574](https://github.com/tanem/svg-injector/pull/1574) Add a no-bundler example ([@tanem](https://github.com/tanem))
+- [#1573](https://github.com/tanem/svg-injector/pull/1573) Add an evalScripts example ([@tanem](https://github.com/tanem))
+- [#1572](https://github.com/tanem/svg-injector/pull/1572) Add an error-handling example ([@tanem](https://github.com/tanem))
+
+#### :rocket: Enhancement
+
+- [#1575](https://github.com/tanem/svg-injector/pull/1575) Pass the element to afterEach ([@tanem](https://github.com/tanem))
+
+#### :house: Internal
+
+- [#1571](https://github.com/tanem/svg-injector/pull/1571) Commit the manual transport checks as test/manual ([@tanem](https://github.com/tanem))
+- [#1565](https://github.com/tanem/svg-injector/pull/1565) Lock file maintenance ([@renovate[bot]](https://github.com/apps/renovate))
+
 ## [v12.0.0](https://github.com/tanem/svg-injector/tree/v12.0.0) (2026-08-03)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v11.3.2...v12.0.0)
 
