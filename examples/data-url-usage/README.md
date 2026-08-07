@@ -57,7 +57,7 @@ Fragment identifiers work with data URLs the same way as with regular URLs. If a
 
 ## Caching
 
-Data URLs bypass the request cache entirely since the SVG content is already embedded in the URL. The `cacheRequests` option has no effect on data URL elements.
+Data URLs bypass the request cache entirely, so `cacheRequests` has no effect on them: the SVG content is already in the URL.
 
 ## Limitations
 

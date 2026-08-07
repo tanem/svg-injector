@@ -91,7 +91,7 @@ Called once per `SVGInjector` call, after every element has been processed. `ele
 
 Called once per element, after it has been injected or after its injection failed. On success `error` is `null` and `svg` is the injected SVG DOM element. On failure `error` is the `Error` and `svg` is `undefined`.
 
-`element` is the element that was passed in, and is present on every call including the failures. It is how a caller that passed a collection tells which placeholder a failure belongs to: on failure there is no `svg` to identify it, several of the error messages don't name their URL, and a URL wouldn't be enough anyway, since two placeholders sharing one `data-src` is the normal case for a sprite. On success it is the original placeholder, already detached and replaced by `svg`.
+`element` is the element that was passed in, and is present on every call including the failures, which is how a caller that passed a collection tells which placeholder a failure belongs to. On success it is the original placeholder, already detached and replaced by `svg`. The [error handling example](https://github.com/tanem/svg-injector/tree/master/examples/error-handling) works through pairing failures back to their placeholders.
 
 For every element and every argument, `afterEach` and `afterAll` fire after the `SVGInjector` call has returned. DOM reads placed between the call and the callbacks therefore always see the pre-injection DOM.
 
@@ -241,7 +241,7 @@ Either way the specifier is a URL. A bare specifier such as `'@tanem/svg-injecto
 
 > ⚠️This library is tested against current Chromium, Firefox and WebKit via Playwright. A browser is supported if the suite covers it.
 
-> ⚠️The published build is es2019, so the oldest browsers it runs in are Chrome 66, Firefox 58, Safari 11.1 and Edge 79. A polyfill cannot extend that: the syntax itself will not parse. v11 was published as es5 and reaches Chrome 45, Firefox 32 and Safari 9, and v10 is the last line that supports IE. Bundlers do not transpile `node_modules` by default, so a project targeting older browsers than these has to opt this package in: see [MIGRATION.md](MIGRATION.md#v1200).
+> ⚠️The published build is es2019, so the oldest browsers it runs in are Chrome 66, Firefox 58, Safari 11.1 and Edge 79. A polyfill cannot extend that: the syntax itself will not parse. Bundlers do not transpile `node_modules` by default, so a project targeting older browsers has to opt this package in: see [MIGRATION.md](MIGRATION.md#v1200), which also covers what v11 and v10 reach.
 
 > ⚠️This library targets browsers and uses APIs that [jsdom](https://github.com/jsdom/jsdom) does not provide, so a test suite running under jsdom (Jest's default environment) needs polyfills: [`CSS.escape`](https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape_static) for sprite support, and [`TextDecoder`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder) for base64 data URLs. In a Jest setup file:
 >
