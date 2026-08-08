@@ -70,7 +70,6 @@
     "serve": "14.2.6",
     "shx": "0.4.0",
     "size-limit": "13.0.2",
-    "tanem-scripts": "8.0.7",
     "tsdown": "0.22.14",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.1"
@@ -89,7 +88,6 @@
     "package:attw": "attw --pack .",
     "package:publint": "publint",
     "postbuild": "run-s package:*",
-    "release": "tanem-scripts release",
     "size": "size-limit",
     "test": "run-s check:* lint build size test:playwright build:examples test:examples:playwright",
     "test:coverage": "run-s check:* lint build size test:playwright:coverage",

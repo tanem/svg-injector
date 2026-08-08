@@ -1,5 +1,9 @@
 # Changelog
 
+This file is frozen history: it covers releases up to and including v12.1.0, and
+is not regenerated any more. Everything released after that lives on
+[GitHub Releases](https://github.com/tanem/svg-injector/releases).
+
 ## [v12.1.0](https://github.com/tanem/svg-injector/tree/v12.1.0) (2026-08-07)
 [Full Changelog](https://github.com/tanem/svg-injector/compare/v12.0.0...v12.1.0)
 
