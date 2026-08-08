@@ -18,8 +18,8 @@ constrains belongs there, not here.
   subjects or PR titles. Write a plain capitalised sentence. Nothing reads the
   prefix: the version bump comes from the PR label, and renovate is set to
   `semanticCommits: "disabled"` to match.
-- PR titles are copied verbatim into `CHANGELOG.md`, so write them as the
-  changelog line you want readers to see.
+- PR titles are copied verbatim into the generated release notes, so write them
+  as the changelog line you want readers to see.
 - Hard-wrap commit message bodies at 72 columns; `git log` does not reflow
   them. Do not hard-wrap PR or issue descriptions: GitHub reflows markdown,
   and its web editor leaves wrapped source ragged once anyone edits it.
@@ -124,24 +124,29 @@ what grew first, and say why in the commit message.
 
 ## Releases
 
-`npm run release` runs on a Monday cron against `master`. It takes the version
-bump from the labels on PRs merged since the last tag, then regenerates
-`CHANGELOG.md` and `AUTHORS` and bumps `version` in `package.json` and
-`package-lock.json`.
+[`tanem/release-action`](https://github.com/tanem/release-action) runs on a
+Monday cron against `master`. It takes the version bump from the labels on PRs
+merged since the last tag, bumps `version` in `package.json` and
+`package-lock.json` through `npm version`, tags, then publishes the GitHub
+Release and the npm package.
 
 - **Never leave `master` half-migrated.** The cron publishes whatever is sitting
   on it, so breaking work landing in pieces ships a partial major. Stage it on
   a long-lived version branch (`v12`, `v13`, ...) and merge in one PR. CI runs
   on `v*` branches, and the release workflow's
   `if: github.ref == 'refs/heads/master'` guard stops them self-publishing.
-- Exactly one label per PR, not counting `safe to test`, which the release
-  script filters out before it counts. None, or more than one, throws and
-  blocks the release for everything merged alongside it. `breaking` gives a major,
+- Exactly one label per PR, not counting `safe to test`, which the action
+  filters out before it counts. None, or more than one, throws and blocks the
+  release for everything merged alongside it. `breaking` gives a major,
   `enhancement` a minor, `bug` / `documentation` / `internal` a patch. Tooling,
   CI and dependency work is `internal`.
-- Never hand-edit `CHANGELOG.md`, `AUTHORS` or either `version` field.
+- The changelog is
+  [GitHub Releases](https://github.com/tanem/svg-injector/releases), generated
+  from those same labels via `.github/release.yml`. `CHANGELOG.md` is closed at
+  v12.1.0 — nothing appends to it and nothing should, including you. `AUTHORS`
+  is stale for the same reason. Never hand-edit either `version` field.
 - Breaking changes need a `MIGRATION.md` entry in the same PR: the generated
-  changelog is only a list of PR titles.
+  release notes are only a list of PR titles.
 
 ## Support policy
 
