@@ -191,5 +191,4 @@ export const injectSvg = async (
   )
 }
 
-export { baseUrl }
 export type { SvgInjectorWindow }
