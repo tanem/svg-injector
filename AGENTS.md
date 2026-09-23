@@ -40,17 +40,18 @@ split the sprite fragment off the URL, load, transform, swap.
   counts on every injection settling exactly once.
 - `defer.ts` is what `settle` and the empty-collection `afterAll(0)` paths use
   to keep every callback after `SVGInjector` returns.
-- `inject-element.ts` is that per-element pipeline, and the only module that
-  chooses a load path. It owns `settle`, the single completion of an
-  injection: it calls back once, deferred, and releases the in-flight guard.
-  Every path out of `injectElement`, errors included, settles exactly once.
-  Add one that doesn't and `afterAll` silently never fires. The loaders below
-  it may call back synchronously; `settle` makes that safe.
-- `parse-data-url.ts` intercepts `data:image/svg+xml` before any request is
-  made, so data URLs never reach the XHR layer.
-- `load-svg-cached.ts` and `load-svg-uncached.ts` wrap `make-ajax-request.ts`.
-  The cache key is the URL with the fragment stripped, so every symbol taken
-  from one sprite shares a single request.
+- `inject-element.ts` is that per-element pipeline. It owns `settle`, the
+  single completion of an injection: it calls back once, deferred, and
+  releases the in-flight guard. Every path out of `injectElement`, errors
+  included, settles exactly once. Add one that doesn't and `afterAll` silently
+  never fires. The load path below it may call back synchronously; `settle`
+  makes that safe.
+- `load-svg.ts` is the load path, and the only module that chooses how a
+  document is obtained: a data URL, the cache, or the transport. The cache key
+  is the URL with the fragment stripped, so every symbol taken from one sprite
+  shares a single request.
+- `make-ajax-request.ts` is the transport. `parse-data-url.ts` sits under the
+  load path beside it, so data URLs never reach it.
 - `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and
   `eval-svg-scripts.ts` are the transform steps, applied in that order.
 
@@ -113,7 +114,7 @@ come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
 
 `test/manual/` covers what that mocking cannot; see its README for why it is
 not in CI. Run it and record the result in the PR when you touch
-`make-ajax-request.ts` or `load-svg-cached.ts`, and update its expected values
+`make-ajax-request.ts` or `load-svg.ts`, and update its expected values
 in the same commit as any deliberate change to either.
 
 All three browser projects must pass. Coverage numbers come from chromium

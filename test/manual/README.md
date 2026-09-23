@@ -3,7 +3,7 @@
 `test/playwright/test-utils.ts` routes every request, so the Playwright suite
 never talks to a server. Real-server and `file://` behaviour is simulated there,
 which makes it the suite's blind spot: a change to `make-ajax-request.ts` or
-`load-svg-cached.ts` is not under test until it has been run against a genuine
+`load-svg.ts` is not under test until it has been run against a genuine
 response.
 
 These checks are that run. They are deliberately not wired into CI: their value
@@ -28,7 +28,7 @@ open http://localhost:4180/
 
 22 cases plus a refetch check, 23 rows. The page tabulates expected against
 actual and prints a pass/fail summary. Expected values are derived from `src/make-ajax-request.ts` and
-`src/load-svg-cached.ts`, so changing either deliberately means updating the
+`src/load-svg.ts`, so changing either deliberately means updating the
 expectations here in the same commit.
 
 Every case asserts the number of `afterEach` calls as well as the outcome.

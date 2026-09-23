@@ -1,9 +1,7 @@
 import defer from './defer'
 import evalSvgScripts from './eval-svg-scripts'
 import extractSymbol from './extract-symbol'
-import loadSvgCached from './load-svg-cached'
-import loadSvgUncached from './load-svg-uncached'
-import parseDataUrl from './parse-data-url'
+import loadSvg from './load-svg'
 import renumerateSvgIriElements from './renumerate-svg-iri-elements'
 import type { Errback, InjectOptions } from './types'
 
@@ -71,21 +69,7 @@ const injectElement = (
   const baseUrl = hashIndex !== -1 ? elUrl.slice(0, hashIndex) : elUrl
   const symbolId = hashIndex !== -1 ? elUrl.slice(hashIndex + 1) : null
 
-  // Data URLs already contain the SVG content, so parse them directly instead
-  // of making a pointless XHR. This avoids CSP violations that occur when
-  // browsers (or bundlers like Vite) inline SVGs as data URIs.
-  const dataUrlResult = parseDataUrl(baseUrl)
-  if (dataUrlResult instanceof Error) {
-    settle(dataUrlResult)
-    return
-  }
-
-  const handleLoadedSvg = (error: Error | null, loadedSvg?: SVGSVGElement) => {
-    if (!loadedSvg) {
-      settle(error)
-      return
-    }
-
+  const handleLoadedSvg = (loadedSvg: SVGSVGElement) => {
     let svg = loadedSvg
 
     if (symbolId) {
@@ -184,27 +168,25 @@ const injectElement = (
     settle(null, svg)
   }
 
-  // The transform runs consumer code (`beforeEach`, and SVG scripts under
-  // `evalScripts`), so it gets a task of its own. A data URL and a cache hit
-  // deliver synchronously, where running it inline would swap the DOM before
-  // `SVGInjector` returns and let a throw escape the call, stopping the rest of
-  // a collection. The XHR paths deliver from inside the `onreadystatechange`
-  // try block in `make-ajax-request.ts`, which would catch the throw and report
-  // it as a load failure.
+  // Only a loaded element takes a task of its own, because only the transform
+  // runs consumer code (`beforeEach`, and SVG scripts under `evalScripts`). An
+  // error goes to `settle` directly, which already defers the callback. The
+  // load path delivers a data URL and a cache hit synchronously, where running
+  // the transform inline would swap the DOM before `SVGInjector` returns and
+  // let a throw escape the call, stopping the rest of a collection. It delivers
+  // an XHR load from inside the transport's event handler, which would catch
+  // the throw and report it as a load failure.
   const onLoaded: Errback = (error, loadedSvg) => {
+    if (!loadedSvg) {
+      settle(error)
+      return
+    }
     defer(() => {
-      handleLoadedSvg(error, loadedSvg)
+      handleLoadedSvg(loadedSvg)
     })
   }
 
-  if (dataUrlResult) {
-    onLoaded(null, dataUrlResult)
-    return
-  }
-
-  const loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached
-
-  loadSvg(baseUrl, httpRequestWithCredentials, onLoaded)
+  loadSvg(baseUrl, { cacheRequests, httpRequestWithCredentials }, onLoaded)
 }
 
 export default injectElement

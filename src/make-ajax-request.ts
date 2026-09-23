@@ -1,17 +1,23 @@
-import isLocal from './is-local'
+import type { Errback } from './types'
+
+// The transport (Transport in CONTEXT.md): the layer under the load path that
+// makes the XHR for one URL and answers with an SVG document or an error. The
+// cache in `load-svg.ts` sits above it.
+
+const isLocal = () => window.location.protocol === 'file:'
 
 // Matched against the pathname rather than the whole URL: a `.svg` in a query
 // parameter (`?file=logo.svgz`) or a hostname label (`foo.svg.example.com`) is
 // not an extension. Relative URLs resolve against the document base URL, the
 // same base XHR itself uses. Data URLs never reach here: `parse-data-url`
-// intercepts them.
+// intercepts them in `load-svg.ts`.
 const hasSvgExtension = (url: string) =>
   /\.svg$/i.test(new URL(url, document.baseURI).pathname)
 
 const makeAjaxRequest = (
   url: string,
   httpRequestWithCredentials: boolean,
-  callback: (error: Error | null, httpRequest: XMLHttpRequest) => void,
+  callback: Errback,
 ) => {
   const httpRequest = new XMLHttpRequest()
   // Every failure below aborts the request, and `abort()` re-enters this
@@ -69,7 +75,14 @@ const makeAjaxRequest = (
           (isLocal() && httpRequest.status === 0)
         ) {
           settled = true
-          callback(null, httpRequest)
+          const documentElement = httpRequest.responseXML.documentElement
+          if (documentElement instanceof SVGSVGElement) {
+            callback(null, documentElement)
+          } else {
+            // The request succeeded but the body is not an SVG document, e.g.
+            // an HTML page served with a 200 at the SVG's URL.
+            callback(new Error(`Unable to parse SVG from response: ${url}`))
+          }
         } else {
           throw new Error(
             'There was a problem injecting the SVG: ' +
@@ -83,7 +96,7 @@ const makeAjaxRequest = (
       settled = true
       httpRequest.abort()
       if (error instanceof Error) {
-        callback(error, httpRequest)
+        callback(error)
       } else {
         throw error
       }
@@ -107,7 +120,7 @@ const makeAjaxRequest = (
     if (error instanceof Error) {
       // This calls back synchronously, before `makeAjaxRequest` returns. That
       // is safe because the injection's `settle` defers every completion.
-      callback(error, httpRequest)
+      callback(error)
     } else {
       throw error
     }
