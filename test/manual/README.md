@@ -110,6 +110,15 @@ the output so their failures do not read as regressions.
 
 Recorded so a later run has something to compare against.
 
+- 12.1.3, 2026-09-24, after the load path moved behind `load-svg.ts` and the
+  SVG check into the transport: 23/23 HTTP in Playwright chromium, firefox and
+  webkit; 3/3 `file://` in Safari 26.6.2, and in Playwright chromium with
+  `--allow-file-access-from-files` and firefox.
+
+  Safari again reported status 0 with no `Content-Type` on all three rows, with
+  `./icon.svg` injecting and `./icon-no-extension` rejected as `Content type
+  not found`. Unchanged from the previous run.
+
 - 12.0.0, 2026-08-04, after the move to `test/manual/`: 23/23 HTTP in Chrome
   151 and in all three Playwright engines; 3/3 `file://` in Safari 26.5, and in
   Playwright chromium with `--allow-file-access-from-files` and firefox.
