@@ -21,8 +21,12 @@ The set of placeholders with an injection running. A second call for a placehold
 _Avoid_: Lock, dedupe, elementsInFlight
 
 **Load path**:
-The way an injection obtains its SVG document: a data URL, a cached request, or an uncached request.
-_Avoid_: Loader, fetch, transport
+The step that obtains an injection's SVG document and hands it over as an element the injection owns. Which way it went, a data URL, a cached request, or an uncached request, is its own business; the rest of the pipeline does not see it.
+_Avoid_: Loader, fetch, source
+
+**Transport**:
+The layer under the load path that makes the XHR for one URL and answers with an SVG document or an error. Data URLs never reach it. The cache sits between it and the load path.
+_Avoid_: Ajax, request, XHR layer
 
 **Transform**:
 The steps applied to a loaded SVG before the swap: extract the symbol, transfer the placeholder's attributes, renumerate IRIs, evaluate scripts.
