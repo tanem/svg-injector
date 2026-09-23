@@ -1,7 +1,12 @@
 import * as path from 'path'
 import { pathToFileURL } from 'url'
 import { expect, test } from './playwright/coverage'
-import { addSvgInjector, formatHtml, injectSvg } from './playwright/test-utils'
+import {
+  addSvgInjector,
+  formatHtml,
+  injectSvg,
+  scriptXhr,
+} from './playwright/test-utils'
 
 const fixturesDir = path.resolve(__dirname, 'fixtures')
 const thumbUpPath =
@@ -12,14 +17,10 @@ const blankFileUrl = pathToFileURL(
   path.join(fixturesDir, 'blank.html'),
 ).toString()
 
-interface LocalWindow extends Window {
-  __originalXHR?: typeof XMLHttpRequest
-}
-
 test.describe('local', () => {
   // Lets the real XHR fail naturally on a file:// page. The browser's
   // cross-origin restrictions cause the request to fail, triggering the
-  // local-specific error message via isLocal() in make-ajax-request.ts.
+  // local-specific error message in make-ajax-request.ts.
   test('not found', async ({ page }) => {
     await addSvgInjector(page)
     await page.goto(blankFileUrl)
@@ -43,55 +44,16 @@ test.describe('local', () => {
   })
 
   // Playwright browsers enforce cross-origin restrictions on file:// pages, so
-  // a real XHR to a local SVG file would fail. The mock below simulates what a
-  // successful local XHR looks like: status 0 (not 200), no Content-Type
-  // header, and a populated responseXML. This exercises the `isLocal() &&
-  // httpRequest.status === 0` success path in make-ajax-request.ts.
+  // a real XHR to a local SVG file would fail. The script plays back what a
+  // successful local load looks like in WebKit: status 0 (not 200), no
+  // Content-Type header, and a parseable body. This exercises the status 0
+  // allowance in make-ajax-request.ts.
   test('ok', async ({ page }) => {
     await addSvgInjector(page)
     await page.goto(blankFileUrl)
-
-    await page.evaluate(
-      ({ svg }) => {
-        const originalXHR = window.XMLHttpRequest
-
-        class MockXHR {
-          readyState = 0
-          status = 0
-          responseXML: Document | null = null
-          responseText = ''
-          onreadystatechange: (() => void) | null = null
-
-          open() {
-            this.readyState = 1
-          }
-
-          send() {
-            this.responseText = svg
-            this.responseXML = new DOMParser().parseFromString(
-              svg,
-              'image/svg+xml',
-            )
-            this.readyState = 4
-            if (this.onreadystatechange) {
-              this.onreadystatechange()
-            }
-          }
-
-          abort() {}
-
-          getResponseHeader() {
-            return null
-          }
-
-          overrideMimeType() {}
-        }
-
-        ;(window as unknown as LocalWindow).__originalXHR = originalXHR
-        window.XMLHttpRequest = MockXHR as unknown as typeof XMLHttpRequest
-      },
-      { svg: localSvgResponse },
-    )
+    await scriptXhr(page, {
+      steps: [{ readyState: 4, status: 0, body: localSvgResponse }],
+    })
 
     const result = await injectSvg(page, {
       html: `
@@ -111,12 +73,5 @@ test.describe('local', () => {
     expect(result.afterEachCalls[0]!.error).toBe(null)
     expect(formatHtml(result.afterEachCalls[0]!.svg ?? '')).toBe(actual)
     expect(result.elementsLoaded).toBe(1)
-
-    await page.evaluate(() => {
-      const localWindow = window as unknown as LocalWindow
-      if (localWindow.__originalXHR) {
-        window.XMLHttpRequest = localWindow.__originalXHR
-      }
-    })
   })
 })

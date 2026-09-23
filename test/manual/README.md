@@ -38,7 +38,7 @@ understanding:
 
 | Case | Why it is here |
 | --- | --- |
-| `cacheRequests: false` with a rejected content type | Rejecting the header aborts the request, and the abort re-enters the readystate handler. Route interception does not reproduce that second event, so this is the only place the exactly-once accounting is really tested. |
+| `cacheRequests: false` with a rejected content type | Rejecting the header aborts the request, and the abort re-enters the readystate handler. Route interception does not reproduce that second event, so this is the only place it is tested against a real abort. |
 | 200 with well-formed non-SVG XML | Reaches the non-SVG-root branch, which needs a body that parses cleanly. A lowercase `<!doctype` fails XML parsing outright and lands in the unparseable branch instead, so both bodies are served. |
 | Same URL injected twice after a parse failure | That a failed load is not cached. Asserted by counting server hits, because nothing on the page distinguishes a refetch from a cache entry parked on the loading sentinel. |
 | `.svg` only in the query string | The extension bypass matches the pathname, not the whole URL, against a genuine server header. |

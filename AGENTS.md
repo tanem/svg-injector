@@ -111,6 +111,10 @@ in that directory and nothing else. A `?content-type=` query on a fixture URL
 overrides the response header, and `?content-type=missing` drops it. Responses
 no fixture file can express, such as a 404, a non-SVG body or an extra header,
 come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
+The scripted `XMLHttpRequest` double in `test-utils.ts` (`scriptXhr`) is for
+the transport branches route interception cannot reach, such as the abort
+re-entry, a `file://` status 0 or a throwing `open()`; `test/manual` is still
+the real-response check.
 
 `test/manual/` covers what that mocking cannot; see its README for why it is
 not in CI. Run it and record the result in the PR when you touch
