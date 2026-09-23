@@ -1,4 +1,3 @@
-import defer from './defer'
 import isLocal from './is-local'
 
 // Matched against the pathname rather than the whole URL: a `.svg` in a query
@@ -106,13 +105,9 @@ const makeAjaxRequest = (
   } catch (error) {
     settled = true
     if (error instanceof Error) {
-      // Deferred where the `onreadystatechange` path is not: the loaders call
-      // back directly on the assumption that they are only reached from XHR
-      // events, so a synchronous failure here would otherwise report before
-      // `SVGInjector` returns.
-      defer(() => {
-        callback(error, httpRequest)
-      })
+      // This calls back synchronously, before `makeAjaxRequest` returns. That
+      // is safe because the injection's `settle` defers every completion.
+      callback(error, httpRequest)
     } else {
       throw error
     }

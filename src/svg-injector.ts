@@ -6,6 +6,7 @@ import type {
   BeforeEach,
   Elements,
   EvalScripts,
+  InjectOptions,
 } from './types'
 
 interface OptionalArgs {
@@ -19,10 +20,11 @@ interface OptionalArgs {
 }
 
 // Callback timing does not depend on what was passed in or on cache state.
-// Every path out of here defers, so `afterEach` and `afterAll` never fire
-// before `SVGInjector` returns and code that reads DOM state in between sees
-// the pre-injection DOM in every case. `grep defer src/` lists the places that
-// enforce it.
+// `settle` in `inject-element.ts` defers every injection's completion, so
+// `afterEach` and `afterAll` never fire before `SVGInjector` returns and code
+// that reads DOM state in between sees the pre-injection DOM in every case.
+// The two `afterAll(0)` defers below are the only completions with no
+// injection behind them.
 //
 // The completion accounting sits in a `finally` for the same reason: `afterEach`
 // is consumer code, and a throw from it must not cost the collection its
@@ -43,6 +45,14 @@ const SVGInjector = (
     renumerateIRIElements = true,
   }: OptionalArgs = {},
 ) => {
+  const injectOptions: InjectOptions = {
+    beforeEach,
+    cacheRequests,
+    evalScripts,
+    httpRequestWithCredentials,
+    renumerateIRIElements,
+  }
+
   // A single element is recognised before a collection is, because
   // `HTMLFormElement` and `HTMLSelectElement` carry a `length` property:
   // deciding on `length` first sends a lone form or select down the collection
@@ -53,21 +63,13 @@ const SVGInjector = (
   // another library has replaced, fails `instanceof` and would be mistaken for
   // a collection.
   if (elements && 'nodeType' in elements) {
-    injectElement(
-      elements,
-      evalScripts,
-      renumerateIRIElements,
-      cacheRequests,
-      httpRequestWithCredentials,
-      beforeEach,
-      (error, svg) => {
-        try {
-          afterEach(error, svg, elements)
-        } finally {
-          afterAll(1)
-        }
-      },
-    )
+    injectElement(elements, injectOptions, (error, svg) => {
+      try {
+        afterEach(error, svg, elements)
+      } finally {
+        afterAll(1)
+      }
+    })
   } else if (elements) {
     // Snapshot up front: a live `HTMLCollection` shrinks as its elements are
     // replaced by their injected SVGs, so the completion count has to come
@@ -83,23 +85,15 @@ const SVGInjector = (
 
     let elementsLoaded = 0
     for (const element of elementList) {
-      injectElement(
-        element,
-        evalScripts,
-        renumerateIRIElements,
-        cacheRequests,
-        httpRequestWithCredentials,
-        beforeEach,
-        (error, svg) => {
-          try {
-            afterEach(error, svg, element)
-          } finally {
-            if (elementList.length === ++elementsLoaded) {
-              afterAll(elementsLoaded)
-            }
+      injectElement(element, injectOptions, (error, svg) => {
+        try {
+          afterEach(error, svg, element)
+        } finally {
+          if (elementList.length === ++elementsLoaded) {
+            afterAll(elementsLoaded)
           }
-        },
-      )
+        }
+      })
     }
   } else {
     defer(() => {

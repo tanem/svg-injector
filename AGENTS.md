@@ -36,15 +36,16 @@ constrains belongs there, not here.
 `SVGInjector` normalises its argument, then runs one pipeline per element:
 split the sprite fragment off the URL, load, transform, swap.
 
-- `svg-injector.ts` owns the `afterEach` and `afterAll` accounting. Every path
-  out of `injectElement`, errors included, calls back exactly once. Add one
-  that doesn't and `afterAll` silently never fires.
-- `defer.ts` enforces the callback timing `svg-injector.ts` documents. A path
-  already running inside an XHR event or a deferred task calls back directly,
-  which is why `load-svg-uncached.ts` and the `handleLoadedSvg` error paths
-  hold no `defer`.
+- `svg-injector.ts` owns the `afterEach` and `afterAll` accounting, which
+  counts on every injection settling exactly once.
+- `defer.ts` is what `settle` and the empty-collection `afterAll(0)` paths use
+  to keep every callback after `SVGInjector` returns.
 - `inject-element.ts` is that per-element pipeline, and the only module that
-  chooses a load path.
+  chooses a load path. It owns `settle`, the single completion of an
+  injection: it calls back once, deferred, and releases the in-flight guard.
+  Every path out of `injectElement`, errors included, settles exactly once.
+  Add one that doesn't and `afterAll` silently never fires. The loaders below
+  it may call back synchronously; `settle` makes that safe.
 - `parse-data-url.ts` intercepts `data:image/svg+xml` before any request is
   made, so data URLs never reach the XHR layer.
 - `load-svg-cached.ts` and `load-svg-uncached.ts` wrap `make-ajax-request.ts`.
