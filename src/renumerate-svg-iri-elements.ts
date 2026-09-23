@@ -1,5 +1,3 @@
-import uniqueId from './unique-id'
-
 const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
 // IRI-addressable elements mapped to referencing properties per the SVG spec:
@@ -44,6 +42,9 @@ const replaceHrefReference = (value: string, iriIdMap: Map<string, string>) => {
   return newId ? '#' + newId : value
 }
 
+// Shared by every injection on the page, so no two renumerated ids collide.
+let idCounter = 0
+
 // Rewrite IRI element ids to be unique across injection instances. Browsers
 // skip clipPaths in hidden parent elements, so duplicate ids cause all but the
 // first instance to lose clipping. Reference:
@@ -56,7 +57,7 @@ const renumerateSvgIriElements = (svg: SVGSVGElement) => {
 
   for (const tagName of Object.keys(iriElementsAndProperties)) {
     for (const element of svg.querySelectorAll(`${tagName}[id]`)) {
-      const newId = `${element.id}-${uniqueId()}`
+      const newId = `${element.id}-${++idCounter}`
       iriIdMap.set(element.id, newId)
       renumeratedElements.push({ element, newId })
     }
