@@ -200,3 +200,17 @@ harness needs from an example is an `npm run build` that fills
 - Never `any`. Use `unknown` when the type is genuinely dynamic.
 - Non-null assertions only where a runtime guarantee backs them.
 - `//` comments, not `/* */`, except for eslint directives.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are GitHub Issues on `tanem/svg-injector`, driven through the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), applied to issues only. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root, created lazily. See `docs/agents/domain.md`.
