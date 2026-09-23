@@ -1,5 +1,4 @@
 import cloneSvg from './clone-svg'
-import defer from './defer'
 import makeAjaxRequest from './make-ajax-request'
 import type { Errback } from './types'
 
@@ -20,13 +19,11 @@ const notifyWaiters = (
   svg?: SVGSVGElement,
 ) => {
   for (const waiter of waiters) {
-    // Deferred so a hit on an already-loaded entry, which comes through here
-    // too, calls back no earlier than a first load does. Each waiter gets its
-    // own clone so it can modify the SVG without affecting the cached
-    // original.
-    defer(() => {
-      waiter(error, svg ? cloneSvg(svg) : undefined)
-    })
+    // Called synchronously on a hit on an already-loaded entry, and from the
+    // XHR event otherwise; callback timing is the caller's concern (`settle`
+    // in `inject-element.ts`). Each waiter still gets its own clone so it can
+    // modify the SVG without affecting the cached original.
+    waiter(error, svg ? cloneSvg(svg) : undefined)
   }
 }
 

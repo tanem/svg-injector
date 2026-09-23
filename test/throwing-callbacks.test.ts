@@ -122,53 +122,71 @@ test.describe('throwing consumer callbacks', () => {
     await expect.poll(() => pageErrors.join('\n')).toContain('afterEach boom')
   })
 
-  test('a throwing beforeEach reports the error and leaves the placeholder', async ({
-    page,
-  }) => {
-    await setupPage(page)
+  // Both load paths: the uncached one delivers from inside the XHR event, where
+  // a throw used to be caught by the transport and reported a second time as a
+  // load failure.
+  for (const cacheRequests of [true, false]) {
+    test(`a throwing beforeEach reports the error and leaves the placeholder (cacheRequests: ${cacheRequests})`, async ({
+      page,
+    }) => {
+      await setupPage(page)
 
-    const result = await page.evaluate(() => {
-      return new Promise<{
-        error: string | null
-        html: string
-        elementsLoaded: number
-      }>((resolve, reject) => {
-        document.body.innerHTML = ''
-        const container = document.createElement('div')
-        container.innerHTML =
-          '<div class="inject-me" data-src="/fixtures/thumb-up.svg"></div>'
-        document.body.appendChild(container)
+      const result = await page.evaluate((cacheRequests) => {
+        return new Promise<{
+          error: string | null
+          afterEachCalls: number
+          html: string
+          elementsLoaded: number
+        }>((resolve, reject) => {
+          document.body.innerHTML = ''
+          const container = document.createElement('div')
+          container.innerHTML =
+            '<div class="inject-me" data-src="/fixtures/thumb-up.svg"></div>'
+          document.body.appendChild(container)
 
-        let error: string | null = null
+          let error: string | null = null
+          let afterEachCalls = 0
 
-        const timeoutId = setTimeout(() => {
-          reject(new Error('`afterAll` did not fire.'))
-        }, 5000)
+          const timeoutId = setTimeout(() => {
+            reject(new Error('`afterAll` did not fire.'))
+          }, 5000)
 
-        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
-          .SVGInjector
-        SVGInjector(container.querySelector('.inject-me'), {
-          beforeEach: () => {
-            throw new Error('beforeEach boom')
-          },
-          afterEach: (injectionError: Error | null) => {
-            error = injectionError ? injectionError.message : null
-          },
-          afterAll: (elementsLoaded: number) => {
-            clearTimeout(timeoutId)
-            resolve({ error, html: container.innerHTML, elementsLoaded })
-          },
+          const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+            .SVGInjector
+          SVGInjector(container.querySelector('.inject-me'), {
+            cacheRequests,
+            beforeEach: () => {
+              throw new Error('beforeEach boom')
+            },
+            afterEach: (injectionError: Error | null) => {
+              afterEachCalls += 1
+              error = injectionError ? injectionError.message : null
+            },
+            afterAll: (elementsLoaded: number) => {
+              clearTimeout(timeoutId)
+              // One more tick, so a second afterEach would be counted.
+              setTimeout(() => {
+                resolve({
+                  error,
+                  afterEachCalls,
+                  html: container.innerHTML,
+                  elementsLoaded,
+                })
+              }, 0)
+            },
+          })
         })
-      })
-    })
+      }, cacheRequests)
 
-    expect(result.error).toBe('beforeEach boom')
-    expect(result.elementsLoaded).toBe(1)
-    // A failed injection leaves the DOM as it found it, so the placeholder is
-    // still there to retry with.
-    expect(result.html).toContain('class="inject-me"')
-    expect(result.html).not.toContain('<svg')
-  })
+      expect(result.error).toBe('beforeEach boom')
+      expect(result.afterEachCalls).toBe(1)
+      expect(result.elementsLoaded).toBe(1)
+      // A failed injection leaves the DOM as it found it, so the placeholder is
+      // still there to retry with.
+      expect(result.html).toContain('class="inject-me"')
+      expect(result.html).not.toContain('<svg')
+    })
+  }
 
   test('an element whose beforeEach threw can be injected again', async ({
     page,

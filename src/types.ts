@@ -32,3 +32,13 @@ export type Elements =
 export type Errback = (error: Error | null, svg?: SVGSVGElement) => void
 
 export type EvalScripts = 'always' | 'once' | 'never'
+
+// The options `svg-injector.ts` resolves once per call and hands to each
+// injection, defaults already applied.
+export interface InjectOptions {
+  beforeEach: BeforeEach
+  cacheRequests: boolean
+  evalScripts: EvalScripts
+  httpRequestWithCredentials: boolean
+  renumerateIRIElements: boolean
+}
