@@ -276,4 +276,150 @@ test.describe('throwing consumer callbacks', () => {
 
     await expect.poll(() => pageErrors.join('\n')).toContain('beforeEach boom')
   })
+
+  // A script in the SVG is consumer code too, and runs under `evalScripts`
+  // from the same task as `beforeEach`.
+  for (const cacheRequests of [true, false]) {
+    test(`a throwing SVG script reports the error and leaves the placeholder (cacheRequests: ${cacheRequests})`, async ({
+      page,
+    }) => {
+      await setupPage(page)
+
+      const result = await page.evaluate((cacheRequests) => {
+        return new Promise<{
+          error: string | null
+          afterEachCalls: number
+          html: string
+          elementsLoaded: number
+        }>((resolve, reject) => {
+          document.body.innerHTML = ''
+          const container = document.createElement('div')
+          container.innerHTML =
+            '<div class="inject-me" data-src="/fixtures/throwing-script.svg"></div>'
+          document.body.appendChild(container)
+
+          let error: string | null = null
+          let afterEachCalls = 0
+
+          const timeoutId = setTimeout(() => {
+            reject(new Error('`afterAll` did not fire.'))
+          }, 5000)
+
+          const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+            .SVGInjector
+          SVGInjector(container.querySelector('.inject-me'), {
+            cacheRequests,
+            evalScripts: 'always',
+            afterEach: (injectionError: Error | null) => {
+              afterEachCalls += 1
+              error = injectionError ? injectionError.message : null
+            },
+            afterAll: (elementsLoaded: number) => {
+              clearTimeout(timeoutId)
+              // One more tick, so a second afterEach would be counted.
+              setTimeout(() => {
+                resolve({
+                  error,
+                  afterEachCalls,
+                  html: container.innerHTML,
+                  elementsLoaded,
+                })
+              }, 0)
+            },
+          })
+        })
+      }, cacheRequests)
+
+      expect(result.error).toBe('script boom')
+      expect(result.afterEachCalls).toBe(1)
+      expect(result.elementsLoaded).toBe(1)
+      expect(result.html).toContain('class="inject-me"')
+      expect(result.html).not.toContain('<svg')
+    })
+  }
+
+  test('an element whose SVG script threw can be injected again', async ({
+    page,
+  }) => {
+    await setupPage(page)
+
+    const result = await page.evaluate(() => {
+      return new Promise<{ errors: Array<string | null>; html: string }>(
+        (resolve, reject) => {
+          document.body.innerHTML = ''
+          const container = document.createElement('div')
+          container.innerHTML =
+            '<div class="inject-me" data-src="/fixtures/throwing-script.svg"></div>'
+          document.body.appendChild(container)
+          const el = container.querySelector('.inject-me')
+
+          const errors: Array<string | null> = []
+
+          const timeoutId = setTimeout(() => {
+            reject(
+              new Error(
+                `Both injections did not complete. Errors so far: ${JSON.stringify(
+                  errors,
+                )}`,
+              ),
+            )
+          }, 5000)
+
+          const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+            .SVGInjector
+
+          const record = (injectionError: Error | null) => {
+            errors.push(injectionError ? injectionError.message : null)
+          }
+
+          SVGInjector(el, {
+            evalScripts: 'always',
+            afterEach: record,
+            afterAll: () => {
+              SVGInjector(el, {
+                evalScripts: 'never',
+                afterEach: record,
+                afterAll: () => {
+                  clearTimeout(timeoutId)
+                  resolve({ errors, html: container.innerHTML })
+                },
+              })
+            },
+          })
+        },
+      )
+    })
+
+    // As with `beforeEach`, the failed attempt released the guard it took.
+    expect(result.errors).toEqual(['script boom', null])
+    expect(result.html).toContain('<svg')
+  })
+
+  test('a throwing SVG script surfaces uncaught', async ({ page }) => {
+    await setupPage(page)
+
+    const pageErrors: string[] = []
+    page.on('pageerror', (error) => pageErrors.push(error.message))
+
+    await page.evaluate(() => {
+      return new Promise<void>((resolve) => {
+        document.body.innerHTML = ''
+        const el = document.createElement('div')
+        el.setAttribute('data-src', '/fixtures/throwing-script.svg')
+        document.body.appendChild(el)
+
+        // See the note in the `afterEach` counterpart above.
+        setTimeout(resolve, 2000)
+
+        const { SVGInjector } = (window as unknown as SvgInjectorWindow)
+          .SVGInjector
+        SVGInjector(el, {
+          evalScripts: 'always',
+          afterAll: () => resolve(),
+        })
+      })
+    })
+
+    await expect.poll(() => pageErrors.join('\n')).toContain('script boom')
+  })
 })

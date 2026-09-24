@@ -79,29 +79,31 @@ const injectElement = (
       return
     }
     defer(() => {
-      const svg = transformSvg(loadedSvg, el, {
-        evalScripts,
-        renumerateIRIElements,
-        url: elUrl,
-        baseUrl,
-        symbolId,
-      })
-
-      if (svg instanceof Error) {
-        settle(svg)
-        return
-      }
-
+      let svg: SVGSVGElement
       try {
+        const transformed = transformSvg(loadedSvg, el, {
+          evalScripts,
+          renumerateIRIElements,
+          url: elUrl,
+          baseUrl,
+          symbolId,
+        })
+
+        if (transformed instanceof Error) {
+          settle(transformed)
+          return
+        }
+
+        svg = transformed
         beforeEach(svg)
       } catch (error) {
-        // A throwing `beforeEach` is a failed injection like any other: settle
-        // with the error, which releases the guard so the element is
-        // retryable, and leave the placeholder in the DOM. The rethrow keeps
-        // the consumer's bug uncaught, which is where it belongs; it escapes
-        // the current task, so it costs the other elements in the collection
-        // nothing. `afterEach` sees the error afterwards, in the deferred
-        // settle task.
+        // A throwing `beforeEach`, or a throwing SVG script under
+        // `evalScripts`, is a failed injection like any other: settle with the
+        // error, which releases the guard so the element is retryable, and
+        // leave the placeholder in the DOM. The rethrow keeps the consumer's
+        // bug uncaught, which is where it belongs; it escapes the current
+        // task, so it costs the other elements in the collection nothing.
+        // `afterEach` sees the error afterwards, in the deferred settle task.
         settle(error instanceof Error ? error : new Error(String(error)))
         throw error
       }
