@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <mask id="MaskTest" x="0" y="0" width="100" height="100">
+      <rect x="0" y="0" width="64" height="32" style="stroke:none; fill:white"/>
+    </mask>
+  </defs>
+  <path id="TX" d="M0 0h32v32H0z" fill="plum" mask="url(#MaskTest)"/>
+  <path id="CA" d="M32 32h32v32H32z" fill="gray"/>
+</svg>

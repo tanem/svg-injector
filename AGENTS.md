@@ -86,9 +86,11 @@ top.
 
 - String references inside `<script>` blocks are not updated, so
   `document.getElementById('oldId')` keeps pointing at the old ID.
-- CSS ID selectors in `<style>` elements are not updated. Only `url(#id)`
-  references within the style text are rewritten, so a rule like
-  `#myId { fill: red }` still references the old ID.
+- CSS ID selectors in `<style>` elements are not updated, and do not count
+  as a reference. Only `url(#id)` references within the style text are
+  rewritten, so a rule like `#myId { fill: red }` keeps working while nothing
+  else references `myId`, and goes stale once something does and the id is
+  renumerated.
 
 ## Build & test
 
