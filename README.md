@@ -135,7 +135,7 @@ Whether cross-site Access-Control requests for the SVG are made using credential
 
 Whether SVG IRI addressable elements are renumerated. When enabled, IDs on IRI-addressable elements (`clipPath`, `linearGradient`, `mask`, `path`, etc.) are made unique, and all references to them (presentation attributes, `href`/`xlink:href`, inline `style` attributes, and `url(#id)` references in `<style>` element text) are updated. This is what stops two injections of the same file fighting over one `id`.
 
-All matching element types are renumerated, not only those inside `<defs>`. Set to `false` if you need to query injected elements by their original IDs.
+An element is renumerated only when something in the SVG references it through one of those surfaces, wherever it sits in the tree. An IRI element nothing references keeps its ID, so a `<path id="TX">` in a map stays queryable, while a `<mask>` outside `<defs>` is still renumerated once something uses it. Two injections of a file with an unreferenced gradient or mask therefore share that ID on the page, as every non-IRI element with an ID already does. Set to `false` if you need to query a referenced element by its original ID; that disables renumeration entirely.
 
 ### Injected markup
 

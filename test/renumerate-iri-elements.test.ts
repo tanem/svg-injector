@@ -147,6 +147,74 @@ test.describe('renumerate iri elements', () => {
     expect(actual).toBe(expected)
   })
 
+  test('unreferenced path keeps its id', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/unreferenced-path.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" class="injected-svg inject-me" data-src="/fixtures/unreferenced-path.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><mask id="MaskTest-1" x="0" y="0" width="100" height="100"><rect x="0" y="0" width="64" height="32" style="stroke:none; fill:white"></rect></mask></defs><path id="TX" d="M0 0h32v32H0z" fill="plum" mask="url(#MaskTest-1)"></path><path id="CA" d="M32 32h32v32H32z" fill="gray"></path></svg>'
+
+    expect(actual).toBe(expected)
+  })
+
+  test('unreferenced gradient keeps its id', async ({ page }) => {
+    await setupPage(page)
+
+    const result = await injectSvg(page, {
+      html: `
+        <div
+          class="inject-me"
+          data-src="/fixtures/unreferenced-gradient.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    const expected =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" class="injected-svg inject-me" data-src="/fixtures/unreferenced-gradient.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="unused"><stop offset="0%" stop-color="#000"></stop><stop offset="100%" stop-color="#fff"></stop></linearGradient></defs><rect x="0" y="0" width="64" height="64" fill="plum"></rect></svg>'
+
+    expect(actual).toBe(expected)
+  })
+
+  test('id referenced only from outside the svg keeps its id', async ({
+    page,
+  }) => {
+    await setupPage(page, {
+      fixtureOverrides: {
+        '/fixtures/page-referenced.svg': {
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><defs><clipPath id="clip"><rect width="5" height="5"></rect></clipPath><clipPath id="page-clip"><rect width="2" height="2"></rect></clipPath></defs><rect width="10" height="10" clip-path="url(#clip)"></rect></svg>',
+        },
+      },
+    })
+
+    const result = await injectSvg(page, {
+      html: `
+        <style>.page-shape { clip-path: url(#page-clip); }</style>
+        <div
+          class="inject-me"
+          data-src="/fixtures/page-referenced.svg"
+        ></div>
+      `,
+      selector: '.inject-me',
+    })
+
+    const actual = formatHtml(result.html)
+    expect(actual).toContain('clipPath id="clip-1"')
+    expect(actual).toContain('clip-path="url(#clip-1)"')
+    expect(actual).toContain('clipPath id="page-clip"')
+  })
+
   test('xlink href', async ({ page }) => {
     await setupPage(page, {
       fixtureOverrides: {

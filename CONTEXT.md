@@ -31,3 +31,7 @@ _Avoid_: Ajax, request, XHR layer
 **Transform**:
 The steps applied to a loaded SVG before the swap: extract the symbol, transfer the placeholder's attributes, renumerate IRIs, evaluate scripts.
 _Avoid_: Processing, post-processing, prepare
+
+**Renumeration**:
+The transform step that makes IRI element ids unique across injections and rewrites the references to them. An IRI element is renumerated only when something in the SVG references it, through a referencing presentation attribute, a `url(#id)` in a `style` attribute or `<style>` text, or an `href` / `xlink:href` of the form `#id`. Position in the tree plays no part: an unreferenced element keeps its id wherever it sits, and a referenced one is renumerated inside or outside `<defs>`.
+_Avoid_: Renaming, id rewriting, scoping
