@@ -40,20 +40,14 @@ split the sprite fragment off the URL, load, transform, swap.
   counts on every injection settling exactly once.
 - `defer.ts` is what `settle` and the empty-collection `afterAll(0)` paths use
   to keep every callback after `SVGInjector` returns.
-- `inject-element.ts` is that per-element pipeline. It owns `settle`, the
-  single completion of an injection: it calls back once, deferred, and
-  releases the in-flight guard. Every path out of `injectElement`, errors
-  included, settles exactly once. Add one that doesn't and `afterAll` silently
-  never fires. The load path below it may call back synchronously; `settle`
-  makes that safe.
+- `inject-element.ts` is that per-element pipeline. It owns `settle`, the single completion of an injection: it calls back once, deferred, and releases the in-flight guard. Every path out of `injectElement`, errors included, settles exactly once. Add one that doesn't and `afterAll` silently never fires. The load path below it may call back synchronously; `settle` makes that safe. The transform and `beforeEach` run consumer code, and are the two paths where a throw has to settle before it escapes.
 - `load-svg.ts` is the load path, and the only module that chooses how a
   document is obtained: a data URL, the cache, or the transport. The cache key
   is the URL with the fragment stripped, so every symbol taken from one sprite
   shares a single request.
 - `make-ajax-request.ts` is the transport. `parse-data-url.ts` sits under the
   load path beside it, so data URLs never reach it.
-- `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and
-  `eval-svg-scripts.ts` are the transform steps, applied in that order.
+- `transform-svg.ts` is the transform, and the only caller of `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and `eval-svg-scripts.ts`, applied in that order. It returns the element to swap in or an error, and does not settle.
 
 XHR is a decision, not leftover legacy. It carries the `file://` allowances
 `make-ajax-request.ts` documents, and its content-type check runs at

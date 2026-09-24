@@ -1,8 +1,6 @@
 import defer from './defer'
-import evalSvgScripts from './eval-svg-scripts'
-import extractSymbol from './extract-symbol'
 import loadSvg from './load-svg'
-import renumerateSvgIriElements from './renumerate-svg-iri-elements'
+import transformSvg from './transform-svg'
 import type { Errback, InjectOptions } from './types'
 
 // Tracks elements currently being injected. Prevents duplicate injection if
@@ -10,8 +8,6 @@ import type { Errback, InjectOptions } from './types'
 // completes. An entry is removed only by the settle of the injection that added
 // it.
 const elementsInFlight = new Set<Element>()
-const svgNamespace = 'http://www.w3.org/2000/svg'
-const xlinkNamespace = 'http://www.w3.org/1999/xlink'
 
 const injectElement = (
   el: Element,
@@ -69,105 +65,6 @@ const injectElement = (
   const baseUrl = hashIndex !== -1 ? elUrl.slice(0, hashIndex) : elUrl
   const symbolId = hashIndex !== -1 ? elUrl.slice(hashIndex + 1) : null
 
-  const handleLoadedSvg = (loadedSvg: SVGSVGElement) => {
-    let svg = loadedSvg
-
-    if (symbolId) {
-      const symbolSvg = extractSymbol(loadedSvg, symbolId)
-
-      if (!symbolSvg) {
-        settle(new Error(`Symbol "${symbolId}" not found in ${baseUrl}`))
-        return
-      }
-
-      svg = symbolSvg
-    }
-
-    const elId = el.getAttribute('id')
-    if (elId) {
-      svg.setAttribute('id', elId)
-    }
-
-    const elTitle = el.getAttribute('title')
-    if (elTitle) {
-      svg.setAttribute('title', elTitle)
-    }
-
-    const elWidth = el.getAttribute('width')
-    if (elWidth) {
-      svg.setAttribute('width', elWidth)
-    }
-
-    const elHeight = el.getAttribute('height')
-    if (elHeight) {
-      svg.setAttribute('height', elHeight)
-    }
-
-    const mergedClasses = Array.from(
-      new Set([
-        ...(svg.getAttribute('class') ?? '').split(' '),
-        'injected-svg',
-        ...(el.getAttribute('class') ?? '').split(' '),
-      ]),
-    )
-      .join(' ')
-      .trim()
-    svg.setAttribute('class', mergedClasses)
-
-    const elStyle = el.getAttribute('style')
-    if (elStyle) {
-      svg.setAttribute('style', elStyle)
-    }
-
-    svg.setAttribute('data-src', elUrl)
-
-    for (const attribute of el.attributes) {
-      if (/^data-\w[\w-]*$/.test(attribute.name) && attribute.value) {
-        svg.setAttribute(attribute.name, attribute.value)
-      }
-    }
-
-    if (renumerateIRIElements) {
-      renumerateSvgIriElements(svg)
-    }
-
-    // Remove invalid namespaces that SVG editing tools may have added.
-    svg.removeAttribute('xmlns:a')
-
-    evalSvgScripts(svg, evalScripts, elUrl)
-
-    // Some browsers don't evaluate <style> tags in SVGs that are dynamically
-    // added to the page. This triggers a re-read. Reference:
-    // https://github.com/iconic/SVGInjector/issues/23.
-    for (const styleTag of svg.querySelectorAll('style')) {
-      styleTag.textContent += ''
-    }
-
-    svg.setAttribute('xmlns', svgNamespace)
-    svg.setAttribute('xmlns:xlink', xlinkNamespace)
-
-    try {
-      beforeEach(svg)
-    } catch (error) {
-      // A throwing `beforeEach` is a failed injection like any other: settle
-      // with the error, which releases the guard so the element is retryable,
-      // and leave the placeholder in the DOM. The rethrow keeps the consumer's
-      // bug uncaught, which is where it belongs; it escapes the current task,
-      // so it costs the other elements in the collection nothing. `afterEach`
-      // sees the error afterwards, in the deferred settle task.
-      settle(error instanceof Error ? error : new Error(String(error)))
-      throw error
-    }
-
-    if (!el.parentNode) {
-      settle(new Error('Parent node is null'))
-      return
-    }
-
-    el.parentNode.replaceChild(svg, el)
-    settle(null, svg)
-  }
-
   // Only a loaded element takes a task of its own, because only the transform
   // runs consumer code (`beforeEach`, and SVG scripts under `evalScripts`). An
   // error goes to `settle` directly, which already defers the callback. The
@@ -182,7 +79,42 @@ const injectElement = (
       return
     }
     defer(() => {
-      handleLoadedSvg(loadedSvg)
+      let svg: SVGSVGElement
+      try {
+        const transformed = transformSvg(loadedSvg, el, {
+          evalScripts,
+          renumerateIRIElements,
+          url: elUrl,
+          baseUrl,
+          symbolId,
+        })
+
+        if (transformed instanceof Error) {
+          settle(transformed)
+          return
+        }
+
+        svg = transformed
+        beforeEach(svg)
+      } catch (error) {
+        // A throwing `beforeEach`, or a throwing SVG script under
+        // `evalScripts`, is a failed injection like any other: settle with the
+        // error, which releases the guard so the element is retryable, and
+        // leave the placeholder in the DOM. The rethrow keeps the consumer's
+        // bug uncaught, which is where it belongs; it escapes the current
+        // task, so it costs the other elements in the collection nothing.
+        // `afterEach` sees the error afterwards, in the deferred settle task.
+        settle(error instanceof Error ? error : new Error(String(error)))
+        throw error
+      }
+
+      if (!el.parentNode) {
+        settle(new Error('Parent node is null'))
+        return
+      }
+
+      el.parentNode.replaceChild(svg, el)
+      settle(null, svg)
     })
   }
 
