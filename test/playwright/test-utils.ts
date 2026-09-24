@@ -94,6 +94,121 @@ export const setupPage = async (
   await page.goto(baseUrl)
 }
 
+// One `onreadystatechange` event from the scripted `XMLHttpRequest`. The
+// double's properties take these values before the handler is called.
+type XhrStep = {
+  readyState: number
+  status?: number
+  statusText?: string
+  headers?: Record<string, string>
+  body?: string
+}
+
+type XhrScript = {
+  steps?: XhrStep[]
+  // When set, `open()` throws an `Error` with this message.
+  openThrows?: string
+}
+
+// `events` lists the `readyState` each `onreadystatechange` call saw.
+type ScriptedXhrLog = Array<{
+  url: string
+  aborted: boolean
+  events: number[]
+}>
+
+interface ScriptedXhrWindow extends Window {
+  __scriptedXhrLog: ScriptedXhrLog
+}
+
+// Replaces `XMLHttpRequest` on the current page with a double that plays back
+// `steps`, for the transport branches route interception cannot reach: a
+// fulfilled route cannot stop at `readyState` 2, report status 0 with no
+// `Content-Type`, or make `open()` throw. Call it after navigating and before
+// injecting. Every request made afterwards plays the same script.
+export const scriptXhr = async (page: Page, script: XhrScript) => {
+  await page.evaluate(({ steps = [], openThrows }) => {
+    const log: ScriptedXhrLog = []
+    ;(window as unknown as ScriptedXhrWindow).__scriptedXhrLog = log
+
+    // A class because it stands in for a constructor.
+    class ScriptedXhr {
+      readyState = 0
+      status = 0
+      statusText = ''
+      responseXML: Document | null = null
+      withCredentials = false
+      onreadystatechange: (() => void) | null = null
+      private headers: Record<string, string> = {}
+      private entry = { url: '', aborted: false, events: [] as number[] }
+
+      open(_method: string, url: string) {
+        if (openThrows !== undefined) {
+          throw new Error(openThrows)
+        }
+        this.entry.url = url
+        log.push(this.entry)
+        this.readyState = 1
+      }
+
+      overrideMimeType() {}
+
+      getResponseHeader(name: string) {
+        const match = Object.keys(this.headers).find(
+          (key) => key.toLowerCase() === name.toLowerCase(),
+        )
+        return match === undefined ? null : this.headers[match]!
+      }
+
+      private fire() {
+        this.entry.events.push(this.readyState)
+        this.onreadystatechange?.()
+      }
+
+      // Events are delivered from a later task, as a real request's are.
+      send() {
+        setTimeout(() => {
+          for (const step of steps) {
+            if (this.entry.aborted) return
+            this.readyState = step.readyState
+            this.status = step.status ?? 0
+            this.statusText = step.statusText ?? ''
+            this.headers = step.headers ?? {}
+            this.responseXML =
+              step.body === undefined
+                ? null
+                : new DOMParser().parseFromString(step.body, 'image/svg+xml')
+            this.fire()
+          }
+        })
+      }
+
+      // A real XHR aborted at `readyState` 1, 2 or 3 fires one more event at
+      // `readyState` 4 with status 0, then drops to 0 silently. Aborted at 0 or
+      // 4 it fires nothing and just drops to 0.
+      abort() {
+        const firesEvent = this.readyState >= 1 && this.readyState <= 3
+        this.entry.aborted = true
+        this.status = 0
+        this.statusText = ''
+        this.headers = {}
+        this.responseXML = null
+        if (firesEvent) {
+          this.readyState = 4
+          this.fire()
+        }
+        this.readyState = 0
+      }
+    }
+
+    window.XMLHttpRequest = ScriptedXhr as unknown as typeof XMLHttpRequest
+  }, script)
+}
+
+// The requests the scripted `XMLHttpRequest` has opened, in order.
+export const getScriptedXhrLog = async (page: Page) =>
+  page.evaluate(() => (window as unknown as ScriptedXhrWindow).__scriptedXhrLog)
+
 type InjectOptions = {
   cacheRequests?: boolean
   evalScripts?: 'always' | 'once' | 'never'

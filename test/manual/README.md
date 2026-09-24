@@ -3,7 +3,7 @@
 `test/playwright/test-utils.ts` routes every request, so the Playwright suite
 never talks to a server. Real-server and `file://` behaviour is simulated there,
 which makes it the suite's blind spot: a change to `make-ajax-request.ts` or
-`load-svg-cached.ts` is not under test until it has been run against a genuine
+`load-svg.ts` is not under test until it has been run against a genuine
 response.
 
 These checks are that run. They are deliberately not wired into CI: their value
@@ -28,7 +28,7 @@ open http://localhost:4180/
 
 22 cases plus a refetch check, 23 rows. The page tabulates expected against
 actual and prints a pass/fail summary. Expected values are derived from `src/make-ajax-request.ts` and
-`src/load-svg-cached.ts`, so changing either deliberately means updating the
+`src/load-svg.ts`, so changing either deliberately means updating the
 expectations here in the same commit.
 
 Every case asserts the number of `afterEach` calls as well as the outcome.
@@ -38,7 +38,7 @@ understanding:
 
 | Case | Why it is here |
 | --- | --- |
-| `cacheRequests: false` with a rejected content type | Rejecting the header aborts the request, and the abort re-enters the readystate handler. Route interception does not reproduce that second event, so this is the only place the exactly-once accounting is really tested. |
+| `cacheRequests: false` with a rejected content type | Rejecting the header aborts the request, and the abort re-enters the readystate handler. Route interception does not reproduce that second event, so this is the only place it is tested against a real abort. |
 | 200 with well-formed non-SVG XML | Reaches the non-SVG-root branch, which needs a body that parses cleanly. A lowercase `<!doctype` fails XML parsing outright and lands in the unparseable branch instead, so both bodies are served. |
 | Same URL injected twice after a parse failure | That a failed load is not cached. Asserted by counting server hits, because nothing on the page distinguishes a refetch from a cache entry parked on the loading sentinel. |
 | `.svg` only in the query string | The extension bypass matches the pathname, not the whole URL, against a genuine server header. |
@@ -109,6 +109,15 @@ the output so their failures do not read as regressions.
 ## Last run
 
 Recorded so a later run has something to compare against.
+
+- 12.1.3, 2026-09-24, after the load path moved behind `load-svg.ts` and the
+  SVG check into the transport: 23/23 HTTP in Playwright chromium, firefox and
+  webkit; 3/3 `file://` in Safari 26.6.2, and in Playwright chromium with
+  `--allow-file-access-from-files` and firefox.
+
+  Safari again reported status 0 with no `Content-Type` on all three rows, with
+  `./icon.svg` injecting and `./icon-no-extension` rejected as `Content type
+  not found`. Unchanged from the previous run.
 
 - 12.0.0, 2026-08-04, after the move to `test/manual/`: 23/23 HTTP in Chrome
   151 and in all three Playwright engines; 3/3 `file://` in Safari 26.5, and in

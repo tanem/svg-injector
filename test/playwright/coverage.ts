@@ -24,7 +24,7 @@ const test = base.extend<{ _collectCoverage: void }>({
 
       const report = new CoverageReport(coverageOptions)
       // Drop the page's other scripts before caching: every entry carries its
-      // own source, and `unique-id.test.ts` never loads a page at all, which
+      // own source, and a test that never loads a page leaves nothing, which
       // `add()` rejects as empty data.
       const entries = (await page.coverage.stopJSCoverage()).filter(
         report.getEntryFilter(),
