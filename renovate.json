@@ -43,6 +43,5 @@
       ]
     }
   ],
-  "prConcurrentLimit": 1,
   "semanticCommits": "disabled"
 }
