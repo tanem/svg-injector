@@ -135,11 +135,7 @@ Release and the npm package.
   a long-lived version branch (`v12`, `v13`, ...) and merge in one PR. CI runs
   on `v*` branches, and the release workflow's
   `if: github.ref == 'refs/heads/master'` guard stops them self-publishing.
-- Exactly one label per PR, not counting `safe to test`, which the action
-  filters out before it counts. None, or more than one, throws and blocks the
-  release for everything merged alongside it. `breaking` gives a major,
-  `enhancement` a minor, `bug` / `documentation` / `internal` a patch. Tooling,
-  CI and dependency work is `internal`.
+- Exactly one label per PR, not counting `safe to test`, which the action filters out before it counts. None, or more than one, throws and blocks the release for everything merged alongside it. `breaking` gives a major, `enhancement` a minor, `bug` / `documentation` / `internal` a patch. Tooling, CI and dependency work is `internal`. The `PR labels` workflow fails a PR that breaks this rule or carries any label outside those five, and re-runs as labels change.
 - The changelog is
   [GitHub Releases](https://github.com/tanem/svg-injector/releases), generated
   from those same labels via `.github/release.yml`. `CHANGELOG.md` is closed at

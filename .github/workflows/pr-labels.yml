@@ -1,0 +1,49 @@
+name: PR labels
+
+# The release action reads the version bump from the labels on the PRs merged
+# since the last tag, and throws on a PR with no release label or more than
+# one, which blocks the release for everything merged alongside it. This fails
+# the PR instead, so a mislabelled PR is caught before the Monday cron reads
+# it. Runs on label changes so the status follows the labels, and on
+# synchronize so every head commit carries the status branch protection reads.
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+
+# Labels usually arrive right after the PR opens, from `gh pr create --label`
+# or renovate, so the `opened` run and the `labeled` run race on one head
+# commit. Cancelling the older run keeps the status the newer label set gives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  release-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require exactly one release label
+        env:
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        # The rule the release action applies, with the label set closed to
+        # the five the Releases section of AGENTS.md names. That section, the
+        # action and `.github/release.yml` each hold their own copy, so a new
+        # label means editing all of them. `safe to test` authorises CI runs
+        # and says nothing about the release, so it is ignored before the
+        # count.
+        run: |
+          allowed='["breaking", "enhancement", "bug", "documentation", "internal"]'
+          error=$(jq -r --argjson allowed "$allowed" '
+            map(select(. != "safe to test"))
+            | if length == 0 then "This PR has no release label"
+              elif length > 1 then "This PR has more than one label (\(join(", ")))"
+              elif (.[0] | IN($allowed[]) | not) then "\"\(.[0])\" is not a release label"
+              else empty
+              end
+          ' <<< "$LABELS")
+          if [ -n "$error" ]; then
+            echo "::error::$error. Add exactly one of: $(jq -r 'join(", ")' <<< "$allowed")."
+            exit 1
+          fi
