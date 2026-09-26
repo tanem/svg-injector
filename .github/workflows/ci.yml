@@ -27,7 +27,7 @@ jobs:
       - run: npm run test:coverage
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report
@@ -38,7 +38,7 @@ jobs:
       - run: npm run test:examples:playwright
       - name: Upload examples Playwright report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-examples
           path: playwright-report-examples
