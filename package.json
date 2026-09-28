@@ -66,7 +66,7 @@
     "monocart-coverage-reports": "2.12.12",
     "npm-run-all2": "8.0.4",
     "prettier": "3.8.1",
-    "publint": "0.3.22",
+    "publint": "0.3.24",
     "serve": "14.2.6",
     "shx": "0.4.0",
     "size-limit": "13.0.2",
