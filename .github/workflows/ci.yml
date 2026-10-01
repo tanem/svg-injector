@@ -43,7 +43,7 @@ jobs:
           name: playwright-report-examples
           path: playwright-report-examples
           if-no-files-found: ignore
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         with:
           # The action defaults this to false, which turned a dead coverage
           # pipeline into a green build.
