@@ -14,4 +14,4 @@ When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the 
 
 Edit the right-hand column to match whatever vocabulary you actually use.
 
-These labels are for issues only. The release action counts labels on merged PRs and fails the release when a PR carries anything other than exactly one of `breaking`, `enhancement`, `bug`, `documentation` or `internal` (plus `safe to test`), so never apply a triage label to a PR. None of the five exist in the repo yet; `gh label create` them on first use.
+These labels are for issues only. The release action counts labels on merged PRs and fails the release when a PR carries anything other than exactly one of `breaking`, `enhancement`, `bug`, `documentation` or `internal` (plus `safe to test`), so never apply a triage label to a PR. Only `ready-for-agent` exists in the repo so far; `gh label create` the others on first use.
