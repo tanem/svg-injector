@@ -61,7 +61,7 @@
     "@playwright/test": "1.63.0",
     "@size-limit/file": "14.1.0",
     "@types/node": "25.9.8",
-    "eslint": "10.0.0",
+    "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "monocart-coverage-reports": "2.13.0",
     "npm-run-all2": "9.0.3",
@@ -72,7 +72,7 @@
     "size-limit": "14.1.0",
     "tsdown": "0.22.14",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.56.1"
+    "typescript-eslint": "8.71.0"
   },
   "scripts": {
     "build": "run-s clean bundle",
