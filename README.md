@@ -280,7 +280,7 @@ SVGInjector(document.getElementById('inject-me'), {
 
 ## Credit
 
-This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://useiconic.com/tools/iconic-js/), part of the [Iconic](https://useiconic.com/) icon system.
+This is a fork of a [library](https://github.com/iconic/SVGInjector) originally developed by [Waybury](http://waybury.com/) for use in [iconic.js](https://web.archive.org/web/20220522072553/https://useiconic.com/tools/iconic-js), part of the [Iconic](https://web.archive.org/web/20210119013748/https://useiconic.com/) icon system.
 
 ## Contributing
 

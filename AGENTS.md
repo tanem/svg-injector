@@ -1,86 +1,37 @@
 # AGENTS.md
 
-Rules for coding agents that the code and config don't already state. Keep it
-that way: a constraint that can live in a comment next to the thing it
-constrains belongs there, not here.
+Rules for coding agents that the code and config don't already state. Keep it that way: a constraint that can live in a comment next to the thing it constrains belongs there, not here.
 
 ## Writing
 
 - NZ English everywhere ("colour", "behaviour", "initialise").
-- Match a document's length to what it needs. Cover the substance, then
-  stop: no filler sections, restated summaries or boilerplate.
-- Simple, direct technical language. No marketing speak.
-- Commit subjects are one capitalised line, `git log --oneline` style. Add a
-  body whenever the change had a reason the diff does not show: what it fixes,
-  what it rules out, what constraint forced the shape it has. Mechanical
-  changes need none.
-- No conventional-commit prefixes (`feat:`, `fix:`, `chore(deps):`) in commit
-  subjects or PR titles. Write a plain capitalised sentence. Nothing reads the
-  prefix: the version bump comes from the PR label, and renovate is set to
-  `semanticCommits: "disabled"` to match.
-- PR titles are copied verbatim into the generated release notes, so write them
-  as the changelog line you want readers to see.
-- Hard-wrap commit message bodies at 72 columns; `git log` does not reflow
-  them. Do not hard-wrap PR or issue descriptions: GitHub reflows markdown,
-  and its web editor leaves wrapped source ragged once anyone edits it.
-- `README.md` follows
-  [standard-readme](https://github.com/RichardLitt/standard-readme). Per-feature
-  detail belongs in `examples/*/README.md`, linked from there.
-- `README.md` states current behaviour; `MIGRATION.md` states what changed and
-  keeps the upgrade steps in full. Neither re-derives the other.
-- Code comments record non-obvious behaviour, constraints and decisions, not
-  what the line already says.
+- Commit subjects and PR titles are one plain capitalised sentence, `git log --oneline` style, with no conventional-commit prefix (`feat:`, `fix:`, `chore(deps):`). Nothing reads a prefix: the version bump comes from the PR label.
+- Add a commit body whenever the change had a reason the diff does not show: what it fixes, what it rules out, what constraint forced the shape it has. Hard-wrap it at 72 columns.
+- PR titles are copied verbatim into the generated release notes, so write them as the changelog line you want readers to see.
+- Do not hard-wrap markdown files, PR descriptions or issue descriptions.
+- `README.md` follows [standard-readme](https://github.com/RichardLitt/standard-readme). Per-feature detail belongs in `examples/*/README.md`, linked from there.
+- `README.md` states current behaviour; `MIGRATION.md` states what changed and keeps the upgrade steps in full. Neither re-derives the other.
 
 ## Architecture
 
-`SVGInjector` normalises its argument, then runs one pipeline per element:
-split the sprite fragment off the URL, load, transform, swap.
+`SVGInjector` runs one pipeline per element: split the sprite fragment off the URL, load, transform, swap, settle. `CONTEXT.md` names the stages. `inject-element.ts` is that pipeline, and the header comments of the modules under it say what each owns.
 
-- `svg-injector.ts` owns the `afterEach` and `afterAll` accounting, which
-  counts on every injection settling exactly once.
-- `defer.ts` is what `settle` and the empty-collection `afterAll(0)` paths use
-  to keep every callback after `SVGInjector` returns.
-- `inject-element.ts` is that per-element pipeline. It owns `settle`, the single completion of an injection: it calls back once, deferred, and releases the in-flight guard. Every path out of `injectElement`, errors included, settles exactly once. Add one that doesn't and `afterAll` silently never fires. The load path below it may call back synchronously; `settle` makes that safe. The transform and `beforeEach` run consumer code, and are the two paths where a throw has to settle before it escapes.
-- `load-svg.ts` is the load path, and the only module that chooses how a
-  document is obtained: a data URL, the cache, or the transport. The cache key
-  is the URL with the fragment stripped, so every symbol taken from one sprite
-  shares a single request.
-- `make-ajax-request.ts` is the transport. `parse-data-url.ts` sits under the
-  load path beside it, so data URLs never reach it.
-- `transform-svg.ts` is the transform, and the only caller of `extract-symbol.ts`, `renumerate-svg-iri-elements.ts` and `eval-svg-scripts.ts`, applied in that order. It returns the element to swap in or an error, and does not settle.
+Every path out of `injectElement`, errors included, settles exactly once. Add one that doesn't and `afterAll` silently never fires. The transform and `beforeEach` run consumer code, and are the two paths where a throw has to settle before it escapes.
 
-XHR is a decision, not leftover legacy. It carries the `file://` allowances
-`make-ajax-request.ts` documents, and its content-type check runs at
-`readyState` 2 so a rejected response aborts before its body arrives. fetch
-does neither. Don't migrate it without new evidence. Safari is the engine that
-decides anything `file://` and the only one those allowances are load-bearing
-in; measured on Chrome 151, Safari 26.5 and Firefox 146.
+XHR is a decision, not leftover legacy. It carries the `file://` allowances `make-ajax-request.ts` documents, and its content-type check runs at `readyState` 2 so a rejected response aborts before its body arrives. fetch does neither. Don't migrate it without new evidence. Safari is the engine that decides anything `file://` and the only one those allowances are load-bearing in; measured on Chrome 151, Safari 26.5 and Firefox 146.
 
 ## Known limitations
 
-The consumer-facing ones are in `examples/sprite-usage/README.md`,
-`examples/data-url-usage/README.md` and the `renumerateIRIElements` section of
-`README.md` (background on that one:
-[#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023)).
-These are the ones stated nowhere else, and they shape what can be built on
-top.
+The consumer-facing ones are in `examples/sprite-usage/README.md`, `examples/data-url-usage/README.md` and the `renumerateIRIElements` section of `README.md` (background on that one: [#14 (comment)](https://github.com/tanem/svg-injector/issues/14#issuecomment-457270023)). These are the ones stated nowhere else, and they shape what can be built on top.
 
 ### SVG sprites
 
-- The fragment is matched verbatim against the symbol id, so a percent-encoded
-  fragment (`sprite.svg#caf%C3%A9`) never matches the decoded id and fails with
-  `Symbol "caf%C3%A9" not found in ...`. Browsers decode the fragment for a
-  native `<use>`, so this diverges from platform behaviour. The literal form
-  (`sprite.svg#café`) works.
+- The fragment is matched verbatim against the symbol id, so a percent-encoded fragment (`sprite.svg#caf%C3%A9`) never matches the decoded id and fails with `Symbol "caf%C3%A9" not found in ...`. Browsers decode the fragment for a native `<use>`, so this diverges from platform behaviour. The literal form (`sprite.svg#café`) works.
 
 ### Data URLs
 
-- The scheme and media type are matched case-sensitively, though RFC 2397 makes
-  both case-insensitive, so `data:IMAGE/SVG+XML,...` falls through to XHR.
-  Browsers fetch such a URL over XHR without complaint, so the only exposure is
-  a context where a strict CSP blocks the request.
-- `DOMParser` error detection is best effort: browsers embed a `<parsererror>`
-  element rather than throwing, and its message format varies by browser.
+- The scheme and media type are matched case-sensitively, though RFC 2397 makes both case-insensitive, so `data:IMAGE/SVG+XML,...` falls through to XHR. Browsers fetch such a URL over XHR without complaint, so the only exposure is a context where a strict CSP blocks the request.
+- `DOMParser` error detection is best effort: browsers embed a `<parsererror>` element rather than throwing, and its message format varies by browser.
 
 ### IRI renumeration
 
@@ -89,108 +40,57 @@ top.
 
 ## Build & test
 
-`npm run test:playwright` is the development loop, run against a current
-`npm run build`: the suite loads the built IIFE bundle, so an unbuilt source
-change is not under test. `npm test` is the full gate, and also builds and
-verifies every example; `npm run test:examples` is the shorter loop for a
-change confined to `examples/`. `npm run size` and the `package:*` checks read
-`dist/` too; `postbuild` runs the latter.
+`npm run test:playwright` is the development loop, run against a current `npm run build`: the suite loads the built IIFE bundle, so an unbuilt source change is not under test. `npm test` is the full gate, and also builds and verifies every example; `npm run test:examples` is the shorter loop for a change confined to `examples/`.
 
-Tests never reach the network. `test/playwright/test-utils.ts` routes
-`**/fixtures/**` to `test/fixtures/`, so adding a fixture means adding a file
-in that directory and nothing else. A `?content-type=` query on a fixture URL
-overrides the response header, and `?content-type=missing` drops it. Responses
-no fixture file can express, such as a 404, a non-SVG body or an extra header,
-come from `setupPage(page, { fixtureOverrides })`, keyed by fixture path.
-The scripted `XMLHttpRequest` double in `test-utils.ts` (`scriptXhr`) is for
-the transport branches route interception cannot reach, such as the abort
-re-entry, a `file://` status 0 or a throwing `open()`; `test/manual` is still
-the real-response check.
+Tests never reach the network: `test/playwright/test-utils.ts` routes `**/fixtures/**` to `test/fixtures/`. Use the lightest tool that can express the response:
 
-`test/manual/` covers what that mocking cannot; see its README for why it is
-not in CI. Run it and record the result in the PR when you touch
-`make-ajax-request.ts` or `load-svg.ts`, and update its expected values
-in the same commit as any deliberate change to either.
+1. A file in `test/fixtures/`, which needs nothing else.
+2. A `?content-type=` query on the fixture URL to override the response header, or `?content-type=missing` to drop it.
+3. `setupPage(page, { fixtureOverrides })`, keyed by URL pathname (`/fixtures/icon.svg`), for a 404, a non-SVG body or an extra header.
+4. `scriptXhr`, the scripted `XMLHttpRequest` double, for the transport branches route interception cannot reach, such as the abort re-entry, a `file://` status 0 or a throwing `open()`.
 
-All three browser projects must pass. Coverage numbers come from chromium
-alone, because Playwright's `page.coverage` is Chromium-only, but the whole
-suite still runs in each.
+`test/manual/` covers what that mocking cannot; see its README for why it is not in CI. Run it and record the result in the PR when you touch `make-ajax-request.ts` or `load-svg.ts`, and update its expected values in the same commit as any deliberate change to either.
 
-Raising a `size-limit` budget in `package.json` is a decision, not a fix. Find
-what grew first, and say why in the commit message.
+Raising a `size-limit` budget in `package.json` is a decision, not a fix. Find what grew first, and say why in the commit message.
 
 ## Releases
 
-[`tanem/release-action`](https://github.com/tanem/release-action) runs on a
-Monday cron against `master`. It takes the version bump from the labels on PRs
-merged since the last tag, bumps `version` in `package.json` and
-`package-lock.json` through `npm version`, tags, then publishes the GitHub
-Release and the npm package.
+[`tanem/release-action`](https://github.com/tanem/release-action) runs on a Monday cron against `master`. It takes the version bump from the labels on PRs merged since the last tag, bumps `version` in `package.json` and `package-lock.json` through `npm version`, tags, then publishes the GitHub Release and the npm package.
 
-- **Never leave `master` half-migrated.** The cron publishes whatever is sitting
-  on it, so breaking work landing in pieces ships a partial major. Stage it on
-  a long-lived version branch (`v12`, `v13`, ...) and merge in one PR. CI runs
-  on `v*` branches, and the release workflow's
-  `if: github.ref == 'refs/heads/master'` guard stops them self-publishing.
+- **Never leave `master` half-migrated.** The cron publishes whatever is sitting on it, so breaking work landing in pieces ships a partial major. Stage it on a long-lived version branch (`v12`, `v13`, ...) and merge in one PR. CI runs on `v*` branches, and the release workflow's default-branch guard stops them self-publishing.
 - Exactly one label per PR, not counting `safe to test`, which the action filters out before it counts. None, or more than one, throws and blocks the release for everything merged alongside it. `breaking` gives a major, `enhancement` a minor, `bug` / `documentation` / `internal` a patch. Tooling, CI and dependency work is `internal`. The `PR labels` workflow fails a PR that breaks this rule or carries any label outside those five, and re-runs as labels change.
-- The changelog is
-  [GitHub Releases](https://github.com/tanem/svg-injector/releases), generated
-  from those same labels via `.github/release.yml`. `CHANGELOG.md` is closed at
-  v12.1.0 — nothing appends to it and nothing should, including you. `AUTHORS`
-  is stale for the same reason. Never hand-edit either `version` field.
-- Breaking changes need a `MIGRATION.md` entry in the same PR: the generated
-  release notes are only a list of PR titles.
+- The changelog is [GitHub Releases](https://github.com/tanem/svg-injector/releases), generated from those same labels via `.github/release.yml`. `CHANGELOG.md` is closed at v12.1.0 — nothing appends to it and nothing should, including you. `AUTHORS` is stale for the same reason. Never hand-edit either `version` field.
+- Breaking changes need a `MIGRATION.md` entry in the same PR: the generated release notes are only a list of PR titles.
 
 ## Support policy
 
-Evergreen browsers only, which in practice means the Chromium, Firefox and
-WebKit builds the pinned `@playwright/test` ships. There is no separate support
-matrix and no browserslist config: a browser is supported if the suite covers
-it. `v10` is the legacy line for anyone who still needs IE.
+Evergreen browsers only: a browser is supported if the suite covers it, which means the Chromium, Firefox and WebKit builds the pinned `@playwright/test` ships. `v10` is the legacy line for anyone who still needs IE.
 
-`@tanem/react-svg` is the primary consumer and accounts for almost all npm
-traffic. Check anything risky against it before release: `npm pack` here,
-install the tarball there, run its suite.
+`@tanem/react-svg` is the primary consumer and accounts for almost all npm traffic. Check anything risky against it before release: `npm pack` here, install the tarball there, run its suite.
 
 ## Dependencies
 
-Pin `devDependencies` to exact versions. Keep `dependencies` on caret ranges,
-though there are none: the package ships zero runtime dependencies and should
-stay that way. A bare specifier in `dist/svg-injector.mjs` would stop a browser
-loading it directly as a module.
+Pin `devDependencies` to exact versions. The package ships zero runtime dependencies and should stay that way: a bare specifier in `dist/svg-injector.mjs` would stop a browser loading it directly as a module.
 
-- Update `eslint` and `typescript-eslint` together.
 - After updating `@playwright/test`, run `npx playwright install`.
 - After updating `prettier`, run `npm run format`.
-- When adding or removing a dependency, check `renovate.json`, `codecov.yml`
-  and the CI workflows for rules that named it.
-- One commit per logical group: `Update dependency <name> to v<version>`, or
-  `Update <monorepo> monorepo to v<version>`.
+- When adding or removing a dependency, check `renovate.json`, `codecov.yml` and the CI workflows for rules that named it.
+- One commit per logical group: `Update dependency <name> to v<version>`, or `Update <monorepo> monorepo to v<version>`.
 
 ## Examples
 
 Renovate skips `examples/**`, so their dependencies are updated by hand.
 
-They are Vite apps, built and verified by `test/examples.test.ts`. Adding,
-renaming or removing one means editing the `examples` array in both that file
-and `scripts/build-examples.js`; the script's copy is what gets the example
-built against the local library first. Any SVG the injector fetches at runtime
-has to live in `<example>/public/`, because `data-src` is an opaque string to
-the bundler and nothing links it.
+Adding, renaming or removing an example means editing the `examples` array in both `test/examples.test.ts` and `scripts/build-examples.js`. All the harness needs from an example is an `npm run build` that fills `<example>/dist/`.
 
-`no-bundler` is the exception, and has to be: Vite bundles every
-`<script type="module">` in `index.html`, `public/` included, so a Vite build
-would replace the module import that is the whole point of it. Its `build.js`
-copies the page and `dist/svg-injector.mjs` into `dist/` instead. All the
-harness needs from an example is an `npm run build` that fills
-`<example>/dist/`.
+Any SVG the injector fetches at runtime has to live in `<example>/public/`, because `data-src` is an opaque string to the bundler and nothing links it.
+
+`no-bundler` is deliberately not a Vite app; its `build.js` says why.
 
 ## Conventions
 
-- One default export per module in `src/`, apart from `index.ts` (barrel) and
-  `types.ts` (types only).
+- One default export per module in `src/`, apart from `index.ts` (barrel) and `types.ts` (types only).
 - Functions, not classes.
-- Never `any`. Use `unknown` when the type is genuinely dynamic.
 - Non-null assertions only where a runtime guarantee backs them.
 - `//` comments, not `/* */`, except for eslint directives.
 
