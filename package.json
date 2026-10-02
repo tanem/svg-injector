@@ -70,7 +70,7 @@
     "serve": "14.2.6",
     "shx": "0.4.0",
     "size-limit": "14.1.0",
-    "tsdown": "0.22.14",
+    "tsdown": "0.23.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.1"
   },
