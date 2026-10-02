@@ -59,7 +59,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
     "@playwright/test": "1.63.0",
-    "@size-limit/file": "13.1.1",
+    "@size-limit/file": "14.1.0",
     "@types/node": "25.9.8",
     "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
@@ -69,7 +69,7 @@
     "publint": "0.3.24",
     "serve": "14.2.6",
     "shx": "0.4.0",
-    "size-limit": "13.1.1",
+    "size-limit": "14.1.0",
     "tsdown": "0.22.14",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.1"
