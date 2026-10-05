@@ -60,7 +60,7 @@
     "@arethetypeswrong/cli": "0.18.5",
     "@playwright/test": "1.63.0",
     "@size-limit/file": "14.1.0",
-    "@types/node": "25.9.8",
+    "@types/node": "25.9.9",
     "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
     "monocart-coverage-reports": "2.13.0",
