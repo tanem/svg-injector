@@ -1,6 +1,6 @@
 {
   "name": "@tanem/svg-injector",
-  "version": "12.2.0",
+  "version": "12.2.1",
   "description": "Fast, caching, dynamic inline SVG DOM injection library.",
   "author": "Tane Morgan (https://github.com/tanem)",
   "type": "commonjs",
