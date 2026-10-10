@@ -63,7 +63,7 @@
     "@types/node": "25.9.9",
     "eslint": "10.0.0",
     "eslint-config-prettier": "10.1.8",
-    "monocart-coverage-reports": "2.13.0",
+    "monocart-coverage-reports": "2.13.2",
     "npm-run-all2": "9.0.3",
     "prettier": "3.9.9",
     "publint": "0.3.25",
