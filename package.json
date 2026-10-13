@@ -65,7 +65,7 @@
     "eslint-config-prettier": "10.1.8",
     "monocart-coverage-reports": "2.13.2",
     "npm-run-all2": "9.0.3",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "publint": "0.3.25",
     "serve": "14.2.6",
     "shx": "0.4.0",
