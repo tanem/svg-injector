@@ -67,7 +67,7 @@
     "npm-run-all2": "9.0.4",
     "prettier": "3.9.10",
     "publint": "0.3.25",
-    "serve": "14.2.6",
+    "serve": "14.2.7",
     "shx": "0.4.0",
     "size-limit": "14.3.0",
     "tsdown": "0.22.14",
